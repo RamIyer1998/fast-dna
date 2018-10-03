@@ -25,6 +25,7 @@ import {
 } from "../utilities/colors";
 import Chroma from "chroma-js";
 import { density } from "../utilities/density";
+import { maxHeight, minHeight } from "../utilities/height";
 
 function applyTransaprentBackplateStyles(): ICSSRules<IDesignSystem> {
     return {
@@ -168,6 +169,8 @@ const styles: ComponentStyles<IMSFTButtonClassNameContract, IDesignSystem> = (
             justifyContent: "center",
             alignItems: "center",
             padding: `0 ${density(config.designUnit * 3)(designSystem)}`,
+            minHeight: toPx(minHeight),
+            maxHeight: toPx(maxHeight),
             height: density(config.designUnit * 11)(designSystem),
             border: "2px solid",
             borderColor: "transparent",
