@@ -47,7 +47,7 @@ const styles: ComponentStyles<IRadioClassNameContract, IDesignSystem> = (config:
             },
             "&:checked": {
                 "& + span": {
-                    "&::after, &::before": {
+                    "&::before": {
                         position: "absolute",
                         zIndex: "1",
                         content: "\"\"",
@@ -65,15 +65,12 @@ const styles: ComponentStyles<IRadioClassNameContract, IDesignSystem> = (config:
             height: "20px",
             flexShrink: "0",
             marginRight: "5px",
-            "&::before, &::after": {
-                width: "2px"
-           },
             "&::before": {
                 top: "4px",
                 left: "4px",
                 height: "12px",
                 width: "12px"
-            }
+           }
         },
         radio__disabled: {
             cursor: "not-allowed",
