@@ -1,7 +1,13 @@
-import designSystemDefaults, { IDesignSystem, withDesignSystemDefaults } from "../design-system";
-import { ComponentStyles, ComponentStyleSheet, ICSSRules } from "@microsoft/fast-jss-manager";
-import { IButtonClassNameContract } from "@microsoft/fast-components-class-name-contracts-base";
-import { IMSFTButtonClassNameContract } from "@microsoft/fast-components-class-name-contracts-msft";
+import designSystemDefaults, {
+    DesignSystem,
+    withDesignSystemDefaults,
+} from "../design-system";
+import {
+    ComponentStyles,
+    ComponentStyleSheet,
+    CSSRules,
+} from "@microsoft/fast-jss-manager";
+import { ButtonClassNameContract } from "@microsoft/fast-components-class-name-contracts-msft";
 import {
     adjustContrast,
     applyLocalizedProperty,
@@ -9,7 +15,7 @@ import {
     Direction,
     ensureContrast,
     localizeSpacing,
-    toPx
+    toPx,
 } from "@microsoft/fast-jss-utilities";
 import { curry, get } from "lodash-es";
 import { applyType } from "../utilities/typography";
@@ -21,66 +27,77 @@ import {
     hoverContrast,
     largeContrast,
     normalContrast,
-    scaleContrastNormal
+    scaleContrastNormal,
 } from "../utilities/colors";
 import Chroma from "chroma-js";
 import { density } from "../utilities/density";
+import { defaultHeight, maxHeight, minHeight } from "../utilities/height";
 
-function applyTransaprentBackplateStyles(): ICSSRules<IDesignSystem> {
+function applyTransaprentBackplateStyles(): CSSRules<DesignSystem> {
     return {
-        color: (config: IDesignSystem): string => {
-            const designSystem: IDesignSystem = withDesignSystemDefaults(config);
-            return ensureNormalContrast(designSystem.contrast, designSystem.brandColor, designSystem.backgroundColor);
+        color: (config: DesignSystem): string => {
+            const designSystem: DesignSystem = withDesignSystemDefaults(config);
+            return ensureNormalContrast(
+                designSystem.contrast,
+                designSystem.brandColor,
+                designSystem.backgroundColor
+            );
         },
         ...applyTransaprentBackground(),
         "&:hover, &:focus": {
             borderColor: "transparent",
             boxShadow: "none",
-            ...applyTransaprentBackground()
+            ...applyTransaprentBackground(),
         },
         "&:focus span::before, &:active span::before, &:hover span::before": {
-            background: (config: IDesignSystem): string => {
-                const designSystem: IDesignSystem = withDesignSystemDefaults(config);
-                return ensureNormalContrast(designSystem.contrast, designSystem.brandColor, designSystem.backgroundColor);
-            }
+            background: (config: DesignSystem): string => {
+                const designSystem: DesignSystem = withDesignSystemDefaults(config);
+                return ensureNormalContrast(
+                    designSystem.contrast,
+                    designSystem.brandColor,
+                    designSystem.backgroundColor
+                );
+            },
         },
-        "&$button__disabled $button_span::before, &$button__disabled $button_span::before": {
+        "&$button__disabled $button_contentRegion::before, &$button__disabled $button_contentRegion::before": {
             ...applyTransaprentBackground(),
         },
         "&:disabled, &[aria-disabled]": {
             ...applyTransaprentBackground(),
             borderColor: "transparent",
-            color: (config: IDesignSystem): string => {
-                const designSystem: IDesignSystem = withDesignSystemDefaults(config);
+            color: (config: DesignSystem): string => {
+                const designSystem: DesignSystem = withDesignSystemDefaults(config);
 
                 return disabledContrast(
                     designSystem.contrast,
                     designSystem.foregroundColor,
                     designSystem.brandColor
                 );
-            }
-        }
+            },
+        },
     };
 }
 
-function applyTransaprentBackground(): ICSSRules<IDesignSystem> {
+function applyTransaprentBackground(): CSSRules<DesignSystem> {
     return {
-        backgroundColor: "transparent"
+        backgroundColor: "transparent",
     };
 }
 
-const styles: ComponentStyles<IMSFTButtonClassNameContract, IDesignSystem> = (
-    config: IDesignSystem
-): ComponentStyleSheet<IMSFTButtonClassNameContract, IDesignSystem> => {
+const styles: ComponentStyles<ButtonClassNameContract, DesignSystem> = (
+    config: DesignSystem
+): ComponentStyleSheet<ButtonClassNameContract, DesignSystem> => {
     type ContrastFunction = (operandColor: string, referenceColor: string) => string;
-    const designSystem: IDesignSystem = withDesignSystemDefaults(config);
+    const designSystem: DesignSystem = withDesignSystemDefaults(config);
     const contrastScale: number = designSystem.contrast;
     const foregroundColor: string = designSystem.foregroundColor;
     const backgroundColor: string = designSystem.backgroundColor;
     const brandColor: string = designSystem.brandColor;
     const direction: Direction = designSystem.direction;
     const scaledNormalContrast: ContrastFunction = curry(normalContrast)(contrastScale);
-    const scaledEnsureNormalContrast: ContrastFunction = curry(ensureNormalContrast)(contrastScale);
+    const scaledEnsureNormalContrast: ContrastFunction = curry(ensureNormalContrast)(
+        contrastScale
+    );
     const focusBoxShadowDefaults: string = "inset 0 0 0 2px";
 
     // Define secondary button colors
@@ -99,12 +116,15 @@ const styles: ComponentStyles<IMSFTButtonClassNameContract, IDesignSystem> = (
         secondaryBackgroundColor
     );
 
-    const secondaryFocusBoxShadow: string = Chroma.contrast(
-        secondaryBackgroundColor,
-        secondaryFocusBorderColor
-    ) < scaleContrastNormal(contrastScale)
-        ? `${focusBoxShadowDefaults} ${ensureNormalContrast(contrastScale, secondaryBackgroundColor, secondaryFocusBorderColor)}`
-        : "none";
+    const secondaryFocusBoxShadow: string =
+        Chroma.contrast(secondaryBackgroundColor, secondaryFocusBorderColor) <
+        scaleContrastNormal(contrastScale)
+            ? `${focusBoxShadowDefaults} ${ensureNormalContrast(
+                  contrastScale,
+                  secondaryBackgroundColor,
+                  secondaryFocusBorderColor
+              )}`
+            : "none";
     const secondaryDisabledBackgroundColor: string = disabledContrast(
         contrastScale,
         secondaryBackgroundColor,
@@ -132,12 +152,15 @@ const styles: ComponentStyles<IMSFTButtonClassNameContract, IDesignSystem> = (
         scaledEnsureNormalContrast(foregroundColor, backgroundColor),
         primaryRestBackgroundColor
     );
-    const primaryFocusBoxShadow: string = Chroma.contrast(
-        primaryRestBackgroundColor,
-        primaryFocusBorderColor
-    ) < scaleContrastNormal(contrastScale)
-        ? `${focusBoxShadowDefaults} ${ensureNormalContrast(contrastScale, primaryRestBackgroundColor, primaryFocusBorderColor)}`
-        : "none";
+    const primaryFocusBoxShadow: string =
+        Chroma.contrast(primaryRestBackgroundColor, primaryFocusBorderColor) <
+        scaleContrastNormal(contrastScale)
+            ? `${focusBoxShadowDefaults} ${ensureNormalContrast(
+                  contrastScale,
+                  primaryRestBackgroundColor,
+                  primaryFocusBorderColor
+              )}`
+            : "none";
     const primaryDisabledBackground: string = disabledContrast(
         contrastScale,
         primaryRestBackgroundColor,
@@ -149,8 +172,14 @@ const styles: ComponentStyles<IMSFTButtonClassNameContract, IDesignSystem> = (
         primaryDisabledBackground
     );
 
-    const outlineColor: string = scaledEnsureNormalContrast(foregroundColor, backgroundColor);
-    const outlineBorderColor: string = scaledNormalContrast(foregroundColor, backgroundColor);
+    const outlineColor: string = scaledEnsureNormalContrast(
+        foregroundColor,
+        backgroundColor
+    );
+    const outlineBorderColor: string = scaledNormalContrast(
+        foregroundColor,
+        backgroundColor
+    );
     const outlineDisabledColor: string = disabledContrast(
         designSystem.contrast,
         outlineColor,
@@ -167,8 +196,9 @@ const styles: ComponentStyles<IMSFTButtonClassNameContract, IDesignSystem> = (
             display: "inline-flex",
             justifyContent: "center",
             alignItems: "center",
-            padding: `0 ${density(config.designUnit * 3)(designSystem)}`,
-            height: density(config.designUnit * 11)(designSystem),
+            height: density(defaultHeight)(designSystem),
+            minHeight: toPx(minHeight),
+            maxHeight: toPx(maxHeight),
             border: "2px solid",
             borderColor: "transparent",
             borderRadius: "2px",
@@ -180,7 +210,7 @@ const styles: ComponentStyles<IMSFTButtonClassNameContract, IDesignSystem> = (
             color,
             backgroundColor: secondaryBackgroundColor,
             "&:hover": {
-                backgroundColor: secondaryHoverBackgroundColor
+                backgroundColor: secondaryHoverBackgroundColor,
             },
             "&:focus": {
                 outline: "none",
@@ -190,25 +220,25 @@ const styles: ComponentStyles<IMSFTButtonClassNameContract, IDesignSystem> = (
             "&$button__disabled": {
                 cursor: "not-allowed",
                 backgroundColor: secondaryDisabledBackgroundColor,
-                color: secondaryDisabledColor
-            }
+                color: secondaryDisabledColor,
+            },
         },
-        button_primary: {
+        button__primary: {
             color,
             backgroundColor: primaryRestBackgroundColor,
             "&:hover": {
-                backgroundColor: primaryHoverBackground
+                backgroundColor: primaryHoverBackground,
             },
             "&:focus": {
                 borderColor: primaryFocusBorderColor,
-                boxShadow: primaryFocusBoxShadow
+                boxShadow: primaryFocusBoxShadow,
             },
             "&$button__disabled": {
                 color: primaryDisabledColor,
-                backgroundColor: primaryDisabledBackground
-            }
+                backgroundColor: primaryDisabledBackground,
+            },
         },
-        button_outline: {
+        button__outline: {
             borderWidth: "1px",
             "&, &:hover": {
                 color: outlineColor,
@@ -218,24 +248,24 @@ const styles: ComponentStyles<IMSFTButtonClassNameContract, IDesignSystem> = (
             "&:focus": {
                 ...applyTransaprentBackground(),
                 borderColor: outlineBorderColor,
-                boxShadow: `inset 0 0 0 1px ${outlineBorderColor}`
+                boxShadow: `inset 0 0 0 1px ${outlineBorderColor}`,
             },
             "&$button__disabled": {
                 ...applyTransaprentBackground(),
                 color: outlineDisabledColor,
-                borderColor: outlineDisabledBorderColor
-            }
+                borderColor: outlineDisabledBorderColor,
+            },
         },
-        button_lightweight: {
-            ...applyTransaprentBackplateStyles()
+        button__lightweight: {
+            ...applyTransaprentBackplateStyles(),
         },
-        button_justified: {
+        button__justified: {
             ...applyTransaprentBackplateStyles(),
             minWidth: "74px",
             [applyLocalizedProperty("paddingLeft", "paddingRight", direction)]: "0",
-            justifyContent: "flex-start"
+            justifyContent: "flex-start",
         },
-        button_span: {
+        button_contentRegion: {
             position: "relative",
             "&::before": {
                 content: "''",
@@ -244,10 +274,10 @@ const styles: ComponentStyles<IMSFTButtonClassNameContract, IDesignSystem> = (
                 position: "absolute",
                 bottom: "-1px",
                 width: "100%",
-                [applyLocalizedProperty("left", "right", direction)]: "0"
-            }
+                [applyLocalizedProperty("left", "right", direction)]: "0",
+            },
         },
-        button__disabled: {}
+        button__disabled: {},
     };
 };
 

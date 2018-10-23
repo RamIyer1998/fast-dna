@@ -1,26 +1,26 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { get } from "lodash-es";
-import { Button, Foundation, HandledProps, IButtonHandledProps, IButtonUnhandledProps } from "@microsoft/fast-components-react-base";
+import Foundation, { HandledProps } from "@microsoft/fast-components-foundation-react";
+import { Button, ButtonProps } from "@microsoft/fast-components-react-base";
 import {
     FlipperDirection,
-    IFlipperHandledProps,
-    IFlipperManagedClasses,
-    IFlipperUnhandledProps
+    FlipperHandledProps,
+    FlipperManagedClasses,
+    FlipperUnhandledProps,
 } from "./flipper.props";
-import { IFlipperClassNameContract, IManagedClasses } from "@microsoft/fast-components-class-name-contracts-msft";
+import {
+    FlipperClassNameContract,
+    ManagedClasses,
+} from "@microsoft/fast-components-class-name-contracts-msft";
 
-class Flipper extends Foundation<
-    IFlipperHandledProps & IManagedClasses<IFlipperClassNameContract>,
-    React.HTMLAttributes<HTMLButtonElement>,
-    {}
-> {
+class Flipper extends Foundation<FlipperHandledProps, FlipperUnhandledProps, {}> {
     public static displayName: string = "Flipper";
 
-    protected handledProps: HandledProps<IFlipperHandledProps & IManagedClasses<IFlipperClassNameContract>> = {
+    protected handledProps: HandledProps<FlipperHandledProps> = {
         label: void 0,
-        visible: void 0,
-        managedClasses: void 0
+        visibleToAssistiveTechnologies: void 0,
+        managedClasses: void 0,
     };
 
     /**
@@ -31,10 +31,11 @@ class Flipper extends Foundation<
             <Button
                 {...this.unhandledProps()}
                 {...this.coerceButtonProps()}
-                managedClasses={this.props.managedClasses}
                 className={this.generateClassNames()}
             >
-                <span className={this.props.managedClasses.flipper_glyph}>{this.props.children}</span>
+                <span className={get(this.props, "managedClasses.flipper_glyph")}>
+                    {this.props.children}
+                </span>
             </Button>
         );
     }
@@ -43,20 +44,25 @@ class Flipper extends Foundation<
      * Generates class names based on props
      */
     protected generateClassNames(): string {
-        const classes: string = this.props.managedClasses[`flipper_${this.props.direction || FlipperDirection.next}`];
+        const classes: string = get(
+            this.props,
+            `managedClasses.flipper__${this.props.direction || FlipperDirection.next}`
+        );
 
-        return super.generateClassNames(classes);
+        return super.generateClassNames(
+            `${get(this.props, "managedClasses.flipper")} ${classes}`
+        );
     }
 
     /**
      * Generates class names based on props
      */
-    protected coerceButtonProps(): IButtonHandledProps & Partial<IButtonUnhandledProps> {
-        const coercedProps: Partial<IButtonHandledProps> & IButtonUnhandledProps = {
+    protected coerceButtonProps(): Partial<ButtonProps> {
+        const coercedProps: Partial<ButtonProps> = {
             href: void 0,
         };
 
-        if (!this.props.visible) {
+        if (!this.props.visibleToAssistiveTechnologies) {
             coercedProps["aria-hidden"] = true;
             coercedProps.tabIndex = -1;
         }
@@ -71,4 +77,4 @@ class Flipper extends Foundation<
 
 export default Flipper;
 export * from "./flipper.props";
-export { IFlipperClassNameContract };
+export { FlipperClassNameContract };

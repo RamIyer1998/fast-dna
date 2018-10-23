@@ -1,26 +1,26 @@
-import { ComponentStyles, ICSSRules } from "@microsoft/fast-jss-manager";
+import { ComponentStyles, CSSRules } from "@microsoft/fast-jss-manager";
 import {
     applyInputStyle,
     applyLabelStyle,
     applySelectInputStyles,
     applySelectSpanStyles,
-    applyWrapperStyle
+    applyWrapperStyle,
 } from "../utilities/form-input.style";
-import { IFormItemSelectClassNameContract } from "../class-name-contracts/";
+import { FormItemSelectClassNameContract } from "../class-name-contracts/";
 
-const styles: ComponentStyles<IFormItemSelectClassNameContract, {}> = {
+const styles: ComponentStyles<FormItemSelectClassNameContract, {}> = {
     formItemSelect: {
-        ...applyWrapperStyle()
+        ...applyWrapperStyle(),
     },
     formItemSelect_label: {
-        ...applyLabelStyle()
+        ...applyLabelStyle(),
     },
     formItemSelect_span: {
-        ...applySelectSpanStyles()
+        ...applySelectSpanStyles(),
     },
     formItemSelect_input: {
-        ...applySelectInputStyles()
-    }
+        ...applySelectInputStyles(),
+    },
 };
 
 export default styles;

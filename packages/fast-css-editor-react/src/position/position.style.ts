@@ -1,7 +1,7 @@
 import { ComponentStyles } from "@microsoft/fast-jss-manager";
 import { toPx } from "@microsoft/fast-jss-utilities";
 
-export interface ICSSPositionClassNameContract {
+export interface CSSPositionClassNameContract {
     cssPosition: string;
     cssPosition_selectContainer: string;
     cssPosition_selectContainer_select: string;
@@ -14,9 +14,8 @@ export interface ICSSPositionClassNameContract {
     absoluteInput_row_center__activeRight: string;
 }
 
-const styles: ComponentStyles<ICSSPositionClassNameContract, {}> = {
-    cssPosition: {
-    },
+const styles: ComponentStyles<CSSPositionClassNameContract, {}> = {
+    cssPosition: {},
     cssPosition_selectContainer: {
         display: "flex",
         position: "relative",
@@ -28,16 +27,16 @@ const styles: ComponentStyles<ICSSPositionClassNameContract, {}> = {
             zIndex: "1",
             position: "absolute",
             background: "#000",
-            borderRadius: toPx(2)
+            borderRadius: toPx(2),
         },
         "&::before": {
             right: toPx(15),
-            transform: "rotate(45deg)"
+            transform: "rotate(45deg)",
         },
         "&::after": {
             right: toPx(22),
-            transform: "rotate(-45deg)"
-        }
+            transform: "rotate(-45deg)",
+        },
     },
     cssPosition_selectContainer_select: {
         marginBottom: toPx(5),
@@ -51,7 +50,7 @@ const styles: ComponentStyles<ICSSPositionClassNameContract, {}> = {
         lineHeight: toPx(16),
         borderRadius: toPx(2),
         backgroundColor: "rgba(0, 0, 0, 0.04)",
-        appearance: "none"
+        appearance: "none",
     },
     cssPosition_input: {
         width: toPx(46),
@@ -63,29 +62,29 @@ const styles: ComponentStyles<ICSSPositionClassNameContract, {}> = {
         boxShadow: `inset 0 0 ${toPx(9)} 0 rgba(0, 0, 0, 0.08)`,
         lineHeight: toPx(16),
         borderRadius: toPx(2),
-        backgroundColor: "rgba(0, 0, 0, 0.04)"
+        backgroundColor: "rgba(0, 0, 0, 0.04)",
     },
     absoluteInput_row: {
         display: "flex",
-        justifyContent: "center"
+        justifyContent: "center",
     },
     absoluteInput_row_center: {
         width: toPx(50),
         height: toPx(25),
-        border: `${toPx(5)} solid transparent`
+        border: `${toPx(5)} solid transparent`,
     },
     absoluteInput_row_center__activeTop: {
-        borderTopColor: "#FB356D"
+        borderTopColor: "#FB356D",
     },
     absoluteInput_row_center__activeBottom: {
-        borderBottomColor: "#FB356D"
+        borderBottomColor: "#FB356D",
     },
     absoluteInput_row_center__activeLeft: {
-        borderLeftColor: "#FB356D"
+        borderLeftColor: "#FB356D",
     },
     absoluteInput_row_center__activeRight: {
-        borderRightColor: "#FB356D"
-    }
+        borderRightColor: "#FB356D",
+    },
 };
 
 export default styles;

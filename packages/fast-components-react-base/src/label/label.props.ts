@@ -1,12 +1,18 @@
 import * as React from "react";
-import { ILabelClassNameContract, IManagedClasses } from "@microsoft/fast-components-class-name-contracts-base";
+import {
+    LabelClassNameContract,
+    ManagedClasses,
+} from "@microsoft/fast-components-class-name-contracts-base";
 
 export enum LabelTag {
     label = "label",
-    legend = "legend"
+    legend = "legend",
 }
 
-export interface ILabelHandledProps {
+export interface LabelManagedClasses extends ManagedClasses<LabelClassNameContract> {}
+export interface LabelUnhandledProps
+    extends React.HTMLAttributes<HTMLLabelElement | HTMLLegendElement> {}
+export interface LabelHandledProps extends LabelManagedClasses {
     /**
      * Label content
      */
@@ -23,6 +29,4 @@ export interface ILabelHandledProps {
     tag?: LabelTag;
 }
 
-export interface ILabelUnhandledProps extends React.HTMLAttributes<HTMLLabelElement> {}
-export interface ILabelManagedClasses extends IManagedClasses<ILabelClassNameContract> {}
-export type LabelProps = ILabelHandledProps & ILabelUnhandledProps & ILabelManagedClasses;
+export type LabelProps = LabelHandledProps & LabelUnhandledProps;

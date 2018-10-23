@@ -1,8 +1,13 @@
 import * as React from "react";
-import { IManagedClasses, ITabClassNameContract } from "@microsoft/fast-components-class-name-contracts-base";
+import {
+    ManagedClasses,
+    TabClassNameContract,
+} from "@microsoft/fast-components-class-name-contracts-base";
 import { TabsSlot } from "./tabs";
 
-export interface ITabHandledProps {
+export interface TabManagedClasses extends ManagedClasses<TabClassNameContract> {}
+export interface TabUnhandledProps extends React.AllHTMLAttributes<HTMLElement> {}
+export interface TabHandledProps extends TabManagedClasses {
     /**
      * The slot identifying this component to the Tab component as a tab
      * the default string passed must be "tab"
@@ -10,11 +15,14 @@ export interface ITabHandledProps {
     slot: TabsSlot.tab | string;
 
     /**
+     * The tab active state
+     */
+    active?: boolean;
+
+    /**
      * The tab content
      */
-    children?: React.ReactNode | React.ReactNode[];
+    children?: React.ReactNode;
 }
 
-export interface ITabManagedClasses extends IManagedClasses<ITabClassNameContract> {}
-export interface ITabUnhandledProps extends React.AllHTMLAttributes<HTMLElement> {}
-export type TabProps = ITabHandledProps & ITabUnhandledProps & ITabManagedClasses;
+export type TabProps = TabHandledProps & TabUnhandledProps;

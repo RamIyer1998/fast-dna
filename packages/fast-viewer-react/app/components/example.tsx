@@ -1,4 +1,3 @@
-
 import * as React from "react";
 import jss from "jss";
 import preset from "jss-preset-default";
@@ -24,20 +23,19 @@ const styles: any = {
     },
 };
 
-const stylesheet: any = jss.createStyleSheet(styles, {link: true}).update(theme);
+const stylesheet: any = jss.createStyleSheet(styles, { link: true }).update(theme);
 
 export type update = (data: any) => void;
 
 export type styles = (style: string) => void;
 
-export interface IExampleProps {
+export interface ExampleProps {
     textValue: string;
     onChange: any;
     getStyles: styles;
 }
 
-class Example extends React.Component<IExampleProps, {}> {
-
+class Example extends React.Component<ExampleProps, {}> {
     public componentWillMount(): void {
         manager.add("div", stylesheet);
         manager.manage("div");
@@ -51,20 +49,27 @@ class Example extends React.Component<IExampleProps, {}> {
         manager.unmanage("div");
     }
 
-    public componentWillReceiveProps(nextProps: IExampleProps): void {
+    public componentWillReceiveProps(nextProps: ExampleProps): void {
         nextProps.getStyles(stylesheet.toString());
     }
 
     public handleLabelUpdate = ({ target: { value } }: any): void => {
         this.props.onChange(value);
-    }
+    };
 
     public render(): JSX.Element {
         return (
             <div className={stylesheet.classes.div} key={2}>
-                <input type="text" value={this.props.textValue} onChange={this.handleLabelUpdate} />
+                <input
+                    type="text"
+                    value={this.props.textValue}
+                    onChange={this.handleLabelUpdate}
+                />
                 <img src="https://placehold.it/300x300" />
-                <link href="https://fluentweb.com/fw-d192a11b84ce02288037ba0722f3ee33.min.css" rel="stylesheet" />
+                <link
+                    href="https://fluentweb.com/fw-d192a11b84ce02288037ba0722f3ee33.min.css"
+                    rel="stylesheet"
+                />
             </div>
         );
     }

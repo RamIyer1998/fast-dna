@@ -1,5 +1,4 @@
-export default interface IFormItemCommon {
-
+export default interface FormItemCommon {
     /**
      * The unique key for React components
      */
@@ -33,7 +32,12 @@ export default interface IFormItemCommon {
     /**
      * The passed onChange function
      */
-    onChange: (dataLocation: string, value: any, isArray?: boolean, index?: number) => void;
+    onChange: (
+        dataLocation: string,
+        value: any,
+        isArray?: boolean,
+        index?: number
+    ) => void;
 
     /**
      * The defaut data (if available)
@@ -49,10 +53,10 @@ export enum mappingName {
     fileUpload = "fileUpload",
     theme = "theme",
     glyphPicker = "glyphPicker",
-    textarea = "textarea"
+    textarea = "textarea",
 }
 
-export interface IFormItemComponentMappingToProperyNamesProps extends IFormItemCommon {
+export interface FormItemComponentMappingToProperyNamesProps extends FormItemCommon {
     /**
      * The type of layout to map to a layout component
      */

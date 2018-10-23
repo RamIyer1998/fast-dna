@@ -1,17 +1,10 @@
 import * as React from "react";
-import { IManagedClasses } from "@microsoft/fast-jss-manager-react";
-import { Button } from "./index";
-import { IButtonHandledProps as IBaseButtonHandledProps } from "@microsoft/fast-components-react-base";
-import {
-    ButtonAppearance,
-    ButtonProps,
-    IButtonHandledProps,
-    IButtonManagedClasses,
-    IButtonUnhandledProps
-} from "./button.props";
+import { ManagedClasses } from "@microsoft/fast-jss-manager-react";
+import { Button, ButtonAppearance, ButtonProps } from "./index";
+import { ButtonHandledProps as BaseButtonHandledProps } from "@microsoft/fast-components-react-base";
 import schema from "./button.schema.json";
 import Documentation from "./.tmp/documentation";
-import { IComponentFactoryExample } from "@microsoft/fast-development-site-react";
+import { ComponentFactoryExample } from "@microsoft/fast-development-site-react";
 import ReactHTMLElementSchema from "../../app/components/react-html-element.schema.json";
 import { ButtonSlot } from "./button";
 
@@ -19,16 +12,16 @@ const beforeSlotExample: any = {
     id: ReactHTMLElementSchema.id,
     props: {
         slot: ButtonSlot.before,
-        children: "<"
-    }
+        children: "<",
+    },
 };
 
 const afterSlotExample: any = {
     id: ReactHTMLElementSchema.id,
     props: {
         slot: ButtonSlot.after,
-        children: ">"
-    }
+        children: ">",
+    },
 };
 
 export default {
@@ -37,57 +30,47 @@ export default {
     schema: schema as any,
     documentation: <Documentation />,
     detailData: {
-        children: "Button"
+        children: "Button",
     },
     data: [
         {
             children: "Secondary button",
-            "data-sketch-symbol": "Button - secondary"
+            "data-sketch-symbol": "Button - secondary",
         },
         {
             appearance: ButtonAppearance.primary,
             children: "Primary button",
-            "data-sketch-symbol": "Button - primary"
+            "data-sketch-symbol": "Button - primary",
         },
         {
             appearance: ButtonAppearance.outline,
             children: "Outline button",
-            "data-sketch-symbol": "Button - outline"
+            "data-sketch-symbol": "Button - outline",
         },
         {
             appearance: ButtonAppearance.lightweight,
             children: "Lightweight button",
-            "data-sketch-symbol": "Button - lightweight"
+            "data-sketch-symbol": "Button - lightweight",
         },
         {
             appearance: ButtonAppearance.justified,
-            children: "Justified button"
+            children: "Justified button",
         },
         {
             href: "#",
-            children: "Anchor"
+            children: "Anchor",
         },
         {
             href: "#",
-            children: [
-                "Before slot only",
-                beforeSlotExample
-            ]
+            children: ["Before slot only", beforeSlotExample],
         },
         {
             href: "#",
-            children: [
-                "After slot only",
-                afterSlotExample
-            ]
+            children: ["After slot only", afterSlotExample],
         },
         {
             href: "#",
-            children: [
-                beforeSlotExample,
-                "Both slots",
-                afterSlotExample
-            ]
+            children: [beforeSlotExample, "Both slots", afterSlotExample],
         },
         {
             href: "#",
@@ -96,8 +79,8 @@ export default {
                 beforeSlotExample,
                 "Mutliple both slots",
                 afterSlotExample,
-                afterSlotExample
-            ]
+                afterSlotExample,
+            ],
         },
         {
             href: "#",
@@ -105,41 +88,41 @@ export default {
                 beforeSlotExample,
                 beforeSlotExample,
                 afterSlotExample,
-                afterSlotExample
-            ]
+                afterSlotExample,
+            ],
         },
         {
             disabled: true,
             children: "Secondary button (disabled)",
-            "data-sketch-symbol": "Button - secondary disabled"
+            "data-sketch-symbol": "Button - secondary disabled",
         },
         {
             disabled: true,
             appearance: ButtonAppearance.primary,
             children: "Primary button (disabled)",
-            "data-sketch-symbol": "Button - primary disabled"
+            "data-sketch-symbol": "Button - primary disabled",
         },
         {
             disabled: true,
             appearance: ButtonAppearance.outline,
             children: "Outline button (disabled)",
-            "data-sketch-symbol": "Button - outline disabled"
+            "data-sketch-symbol": "Button - outline disabled",
         },
         {
             disabled: true,
             appearance: ButtonAppearance.lightweight,
             children: "Lightweight button (disabled)",
-            "data-sketch-symbol": "Button - lightweight disabled"
+            "data-sketch-symbol": "Button - lightweight disabled",
         },
         {
             disabled: true,
             appearance: ButtonAppearance.justified,
-            children: "Justified button (disabled)"
+            children: "Justified button (disabled)",
         },
         {
             disabled: true,
             href: "#",
-            children: "Anchor (disabled)"
-        }
-    ]
-} as IComponentFactoryExample<IButtonHandledProps>;
+            children: "Anchor (disabled)",
+        },
+    ],
+} as ComponentFactoryExample<ButtonProps>;

@@ -1,26 +1,26 @@
 import * as React from "react";
-import { IManagedClasses } from "@microsoft/fast-components-class-name-contracts-base";
-import manageJss, { IJSSManagerProps } from "@microsoft/fast-jss-manager-react";
-import style, { ICSSPositionClassNameContract } from "./position.style";
+import { ManagedClasses } from "@microsoft/fast-components-class-name-contracts-base";
+import manageJss, { ManagedJSSProps } from "@microsoft/fast-jss-manager-react";
+import style, { CSSPositionClassNameContract } from "./position.style";
 
 export enum PositionValue {
     static = "static",
-    absolute = "absolute"
+    absolute = "absolute",
 }
 
 export enum Location {
     top = "top",
     left = "left",
     right = "right",
-    bottom = "bottom"
+    bottom = "bottom",
 }
 
-export interface ILocationsMappedToClassNames {
+export interface LocationsMappedToClassNames {
     location: Location;
     className: string;
 }
 
-export interface ICSSPositionProps {
+export interface CSSPositionProps {
     position?: PositionValue;
     left?: string;
     right?: string;
@@ -29,7 +29,10 @@ export interface ICSSPositionProps {
     onChange?: (positionValues: any) => void;
 }
 
-class CSSPosition extends React.Component<ICSSPositionProps & IManagedClasses<ICSSPositionClassNameContract>, {}> {
+class CSSPosition extends React.Component<
+    CSSPositionProps & ManagedClasses<CSSPositionClassNameContract>,
+    {}
+> {
     private positionKey: string = "position";
 
     public render(): JSX.Element {
@@ -37,10 +40,16 @@ class CSSPosition extends React.Component<ICSSPositionProps & IManagedClasses<IC
             <div className={this.props.managedClasses.cssPosition}>
                 <span className={this.props.managedClasses.cssPosition_selectContainer}>
                     <select
-                        className={this.props.managedClasses.cssPosition_selectContainer_select}
+                        className={
+                            this.props.managedClasses.cssPosition_selectContainer_select
+                        }
                         data-location={this.positionKey}
                         onChange={this.handleOnChange}
-                        value={this.props.position ? this.props.position : PositionValue.static}
+                        value={
+                            this.props.position
+                                ? this.props.position
+                                : PositionValue.static
+                        }
                     >
                         <option value={PositionValue.static}>Static</option>
                         <option value={PositionValue.absolute}>Absolute</option>
@@ -93,41 +102,57 @@ class CSSPosition extends React.Component<ICSSPositionProps & IManagedClasses<IC
         [
             {
                 location: Location.top,
-                className: this.props.managedClasses.absoluteInput_row_center__activeTop
+                className: this.props.managedClasses.absoluteInput_row_center__activeTop,
             },
             {
                 location: Location.bottom,
-                className: this.props.managedClasses.absoluteInput_row_center__activeBottom
+                className: this.props.managedClasses
+                    .absoluteInput_row_center__activeBottom,
             },
             {
                 location: Location.left,
-                className: this.props.managedClasses.absoluteInput_row_center__activeLeft
+                className: this.props.managedClasses.absoluteInput_row_center__activeLeft,
             },
             {
                 location: Location.right,
-                className: this.props.managedClasses.absoluteInput_row_center__activeRight
+                className: this.props.managedClasses
+                    .absoluteInput_row_center__activeRight,
+            },
+        ].forEach(
+            (locationsMappedToClassNames: LocationsMappedToClassNames): void => {
+                classNames = this.props[locationsMappedToClassNames.location]
+                    ? `${classNames} ${locationsMappedToClassNames.className}`
+                    : classNames;
             }
-        ].forEach((locationsMappedToClassNames: ILocationsMappedToClassNames): void => {
-            classNames = this.props[locationsMappedToClassNames.location]
-                ? `${classNames} ${locationsMappedToClassNames.className}`
-                : classNames;
-        });
+        );
 
         return classNames;
     }
 
-    private handleOnChange = (e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>): void => {
-        const updatedProps: Partial<ICSSPositionProps> = this.assignUpdatedProps(
-            [this.positionKey, Location.top, Location.left, Location.right, Location.bottom],
+    private handleOnChange = (
+        e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
+    ): void => {
+        const updatedProps: Partial<CSSPositionProps> = this.assignUpdatedProps(
+            [
+                this.positionKey,
+                Location.top,
+                Location.left,
+                Location.right,
+                Location.bottom,
+            ],
             e.target.dataset.location,
             e.target.value
         );
 
         this.props.onChange(updatedProps);
-    }
+    };
 
-    private assignUpdatedProps(props: string[], updatedPropKey: string, updatedPropValue: string): Partial<ICSSPositionProps> {
-        let updatedProps: Partial<ICSSPositionProps> = {};
+    private assignUpdatedProps(
+        props: string[],
+        updatedPropKey: string,
+        updatedPropValue: string
+    ): Partial<CSSPositionProps> {
+        let updatedProps: Partial<CSSPositionProps> = {};
 
         switch (updatedPropKey) {
             case "position":
@@ -137,22 +162,32 @@ class CSSPosition extends React.Component<ICSSPositionProps & IManagedClasses<IC
             case Location.right:
             case Location.top:
             case Location.bottom:
-                updatedProps = this.getUpdatedPositions(props, updatedPropKey, updatedPropValue);
+                updatedProps = this.getUpdatedPositions(
+                    props,
+                    updatedPropKey,
+                    updatedPropValue
+                );
                 break;
         }
 
         return updatedProps;
     }
 
-    private getUpdatedPositions(props: string[], updatedPropKey: Location, updatedPropValue: string): Partial<ICSSPositionProps> {
-        const updatedProps: Partial<ICSSPositionProps> = {};
+    private getUpdatedPositions(
+        props: string[],
+        updatedPropKey: Location,
+        updatedPropValue: string
+    ): Partial<CSSPositionProps> {
+        const updatedProps: Partial<CSSPositionProps> = {};
         const excludedProp: Location = this.getExcludedLocation(updatedPropKey);
 
-        props.forEach((prop: string): void => {
-            if (this.props[prop] && prop !== excludedProp) {
-                updatedProps[prop] = this.props[prop];
+        props.forEach(
+            (prop: string): void => {
+                if (this.props[prop] && prop !== excludedProp) {
+                    updatedProps[prop] = this.props[prop];
+                }
             }
-        });
+        );
 
         updatedProps[updatedPropKey] = updatedPropValue;
 
@@ -166,10 +201,10 @@ class CSSPosition extends React.Component<ICSSPositionProps & IManagedClasses<IC
         return updatedPropKey === Location.left
             ? Location.right
             : updatedPropKey === Location.right
-            ? Location.left
-            : updatedPropKey === Location.top
-            ? Location.bottom
-            : Location.top;
+                ? Location.left
+                : updatedPropKey === Location.top
+                    ? Location.bottom
+                    : Location.top;
     }
 }
 

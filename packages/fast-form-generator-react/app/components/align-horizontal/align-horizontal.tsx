@@ -2,10 +2,10 @@ import * as React from "react";
 
 export enum AlignHorizontalPositions {
     left = "left",
-    right = "right"
+    right = "right",
 }
 
-export interface IAlignHorizontalProps {
+export interface AlignHorizontalProps {
     alignHorizontal: AlignHorizontalPositions;
 }
 
@@ -13,12 +13,8 @@ export interface IAlignHorizontalProps {
  * This test components API should have:
  * - a required property which maps to a configuration
  */
-export default class AlignHorizontal extends React.Component<IAlignHorizontalProps, {}> {
+export default class AlignHorizontal extends React.Component<AlignHorizontalProps, {}> {
     public render(): JSX.Element {
-        return (
-            <span>
-                {this.props.alignHorizontal}
-            </span>
-        );
+        return <span>{this.props.alignHorizontal}</span>;
     }
 }

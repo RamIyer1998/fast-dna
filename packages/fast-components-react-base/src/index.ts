@@ -26,12 +26,8 @@ import Hypertext from "./hypertext";
 export { Hypertext };
 export * from "./hypertext";
 
-import Foundation from "./foundation";
-export { Foundation };
-export * from "./foundation";
-
 import Image from "./image";
-export {Image};
+export { Image };
 export * from "./image";
 
 import Label from "./label";
@@ -41,6 +37,10 @@ export * from "./label";
 import Progress from "./progress";
 export { Progress };
 export * from "./progress";
+
+import Radio from "./radio";
+export { Radio };
+export * from "./radio";
 
 import Tabs from "./tabs";
 export { Tabs };

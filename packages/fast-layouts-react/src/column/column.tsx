@@ -1,38 +1,50 @@
 import * as React from "react";
-import manageJss, { ComponentStyles, ICSSRules, IJSSManagerProps, IManagedClasses } from "@microsoft/fast-jss-manager-react";
+import manageJss, {
+    ComponentStyles,
+    CSSRules,
+    ManagedClasses,
+    ManagedJSSProps,
+} from "@microsoft/fast-jss-manager-react";
 import BreakpointTracker from "../utilities/breakpoint-tracker";
-import { Breakpoint, getValueByBreakpoint, identifyBreakpoint } from "../utilities/breakpoints";
+import {
+    Breakpoint,
+    getValueByBreakpoint,
+    identifyBreakpoint,
+} from "../utilities/breakpoints";
 import { canUseDOM, canUseViewport } from "exenv-es6";
-import Foundation, { IFoundationProps } from "../foundation";
-import { ColumnProps, IColumnHandledProps } from "./column.props";
+import Foundation, {
+    FoundationProps,
+    HandledProps,
+} from "@microsoft/fast-components-foundation-react";
+import { ColumnHandledProps, ColumnProps, ColumnUnhandledProps } from "./column.props";
 
-export interface IColumnClassNamesContract {
+export interface ColumnClassNamesContract {
     column: string;
 }
 
-const styles: ComponentStyles<IColumnClassNamesContract, undefined> = {
+export const columnStyleSheet: ComponentStyles<ColumnClassNamesContract, undefined> = {
     column: {
         // Fixes issue found in firefox where columns that have overflow
         // or full width content cause scroll bars
-        minWidth: "0"
-    }
+        minWidth: "0",
+    },
 };
 
-class Column extends Foundation<ColumnProps, {}> {
+export class Column extends Foundation<ColumnHandledProps, ColumnUnhandledProps, {}> {
     /**
      * Define default props
      */
-    public static defaultProps: Partial<IColumnHandledProps> = {
-        span: 12
+    public static defaultProps: Partial<ColumnProps> = {
+        span: 12,
     };
 
-    protected handledProps: IColumnHandledProps & IManagedClasses<IColumnClassNamesContract> = {
+    protected handledProps: HandledProps<ColumnHandledProps> = {
         managedClasses: void 0,
         span: void 0,
         position: void 0,
         row: void 0,
         order: void 0,
-        gutter: void 0
+        gutter: void 0,
     };
 
     /**
@@ -55,10 +67,16 @@ class Column extends Foundation<ColumnProps, {}> {
      * Component has updated
      */
     public componentDidUpdate(previousProps: ColumnProps): void {
-        if (this.shouldTrackBreakpoints(this.props) && !this.shouldTrackBreakpoints(previousProps)) {
+        if (
+            this.shouldTrackBreakpoints(this.props) &&
+            !this.shouldTrackBreakpoints(previousProps)
+        ) {
             // If we should be tracking breakpoints but previously weren't, subscribe to changes
             BreakpointTracker.subscribe(this.update);
-        } else if (!this.shouldTrackBreakpoints(this.props) && this.shouldTrackBreakpoints(previousProps)) {
+        } else if (
+            !this.shouldTrackBreakpoints(this.props) &&
+            this.shouldTrackBreakpoints(previousProps)
+        ) {
             // If we were tracking breakpoints but we shouldn't be now, unsubscribe from changes
             BreakpointTracker.unsubscribe(this.update);
         }
@@ -145,7 +163,7 @@ class Column extends Foundation<ColumnProps, {}> {
             return value;
         }
 
-        return value === 1 ? 1 : (value * 2) - 1;
+        return value === 1 ? 1 : value * 2 - 1;
     }
 
     /**
@@ -155,13 +173,19 @@ class Column extends Foundation<ColumnProps, {}> {
         const position: number = this.generateColumnPosition();
         const row: string = this.generateRow();
         const span: number = this.generateColumnSpan();
-        const gridColumnValue: string = [position, `span ${span}`].filter((item: string | number) => Boolean(item)).join(" / ");
+        const gridColumnValue: string = [position, `span ${span}`]
+            .filter((item: string | number) => Boolean(item))
+            .join(" / ");
         let order: number | null;
 
         if (!canUseDOM()) {
-            order = Array.isArray(this.props.order) ? this.props.order[0] : this.props.order;
+            order = Array.isArray(this.props.order)
+                ? this.props.order[0]
+                : this.props.order;
         } else {
-            order = Array.isArray(this.props.order) ? this.getValueByBreakpoint(this.props.order) : this.props.order;
+            order = Array.isArray(this.props.order)
+                ? this.getValueByBreakpoint(this.props.order)
+                : this.props.order;
         }
 
         return Object.assign({}, this.unhandledProps().style, {
@@ -170,7 +194,7 @@ class Column extends Foundation<ColumnProps, {}> {
             msGridColumn: this.augmentMsGrid(position),
             msGridColumnSpan: this.augmentMsGrid(span),
             msGridRow: row,
-            order: typeof order === "number" ? order : null
+            order: typeof order === "number" ? order : null,
         });
     }
 
@@ -178,7 +202,10 @@ class Column extends Foundation<ColumnProps, {}> {
      * Determines if we should be tracking breakpoints based on a set of props
      */
     private shouldTrackBreakpoints(props: ColumnProps): boolean {
-        return Array.isArray(props.span) && props.span.length > 1 || Array.isArray(props.position) && props.position.length > 1;
+        return (
+            (Array.isArray(props.span) && props.span.length > 1) ||
+            (Array.isArray(props.position) && props.position.length > 1)
+        );
     }
 
     /**
@@ -186,7 +213,7 @@ class Column extends Foundation<ColumnProps, {}> {
      */
     private update = (): void => {
         this.forceUpdate();
-    }
+    };
 }
 
-export default manageJss(styles)(Column);
+export * from "./column.props";

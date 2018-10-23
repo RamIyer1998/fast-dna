@@ -1,15 +1,16 @@
 import * as React from "react";
-import { IFoundationProps } from "@microsoft/fast-components-react-base";
 import MSFTCaption, {
-    CaptionLevel,
+    CaptionHandledProps as MSFTCaptionHandledProps,
+    CaptionManagedClasses,
+    CaptionProps as MSFTCaptionProps,
+    CaptionSize,
     CaptionTag,
-    ICaptionClassNameContract,
-    ICaptionHandledProps,
-    ICaptionManagedClasses,
-    ICaptionUnhandledProps
+    CaptionUnhandledProps,
 } from "./caption";
-import manageJss, { IJSSManagerProps } from "@microsoft/fast-jss-manager-react";
-import { CaptionStyles, IDesignSystem } from "@microsoft/fast-components-styles-msft";
+import { CaptionClassNameContract } from "@microsoft/fast-components-class-name-contracts-msft";
+import manageJss, { ManagedJSSProps } from "@microsoft/fast-jss-manager-react";
+import { CaptionStyles, DesignSystem } from "@microsoft/fast-components-styles-msft";
+import { Subtract } from "utility-types";
 
 /*
  * The type returned by manageJss type is very complicated so we'll let the
@@ -17,6 +18,22 @@ import { CaptionStyles, IDesignSystem } from "@microsoft/fast-components-styles-
  */
 /* tslint:disable-next-line:typedef */
 const Caption = manageJss(CaptionStyles)(MSFTCaption);
-type Caption = InstanceType<typeof Caption>;
+type Caption = typeof Caption;
 
-export { Caption };
+interface CaptionHandledProps
+    extends Subtract<MSFTCaptionHandledProps, CaptionManagedClasses> {}
+type CaptionProps = ManagedJSSProps<
+    MSFTCaptionProps,
+    CaptionClassNameContract,
+    DesignSystem
+>;
+
+export {
+    Caption,
+    CaptionProps,
+    CaptionSize,
+    CaptionTag,
+    CaptionClassNameContract,
+    CaptionHandledProps,
+    CaptionUnhandledProps,
+};

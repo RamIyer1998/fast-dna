@@ -1,34 +1,42 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { get } from "lodash-es";
-import { Foundation, HandledProps, TypeLevel, TypographyTag } from "@microsoft/fast-components-react-base";
-import { CaptionLevel, CaptionTag, ICaptionHandledProps, ICaptionUnhandledProps } from "./caption.props";
-import { ICaptionClassNameContract, IManagedClasses } from "@microsoft/fast-components-class-name-contracts-msft";
+import Foundation, { HandledProps } from "@microsoft/fast-components-foundation-react";
+import { TypographySize, TypographyTag } from "@microsoft/fast-components-react-base";
+import {
+    CaptionHandledProps,
+    CaptionProps,
+    CaptionSize,
+    CaptionTag,
+    CaptionUnhandledProps,
+} from "./caption.props";
 import { Typography } from "../typography";
 
-class Caption extends Foundation<ICaptionHandledProps & IManagedClasses<ICaptionClassNameContract>, ICaptionUnhandledProps, {}> {
-    public static defaultProps: Partial<ICaptionHandledProps> = {
+class Caption extends Foundation<CaptionHandledProps, CaptionUnhandledProps, {}> {
+    public static defaultProps: Partial<CaptionProps> = {
         tag: CaptionTag.p,
-        level: CaptionLevel._1
+        size: CaptionSize._1,
     };
 
     public static displayName: string = "Caption";
 
-    protected handledProps: HandledProps<ICaptionHandledProps & IManagedClasses<ICaptionClassNameContract>> = {
-        level: void 0,
+    protected handledProps: HandledProps<CaptionHandledProps> = {
+        size: void 0,
         managedClasses: void 0,
-        tag: void 0
+        tag: void 0,
     };
 
     /**
      * Renders the component
      */
-    public render(): React.ReactElement<HTMLHeadingElement | HTMLParagraphElement | HTMLSpanElement | HTMLElement> {
+    public render(): React.ReactElement<
+        HTMLHeadingElement | HTMLParagraphElement | HTMLSpanElement | HTMLElement
+    > {
         return (
             <Typography
                 {...this.unhandledProps()}
                 tag={TypographyTag[this.props.tag]}
-                typeLevel={this.level()}
+                size={this.size()}
                 className={this.generateClassNames()}
             >
                 {this.props.children}
@@ -37,19 +45,18 @@ class Caption extends Foundation<ICaptionHandledProps & IManagedClasses<ICaption
     }
 
     protected generateClassNames(): string {
-        const classes: string =
-            `${get(this.props, `managedClasses.caption`)} ${get(this.props, `managedClasses.caption_${this.props.level}`)}`;
+        const classes: string = `${get(this.props, `managedClasses.caption`)} ${get(
+            this.props,
+            `managedClasses.caption__${this.props.size}`
+        )}`;
 
         return super.generateClassNames(classes);
     }
 
-    private level(): TypeLevel {
-        return this.props.level === CaptionLevel._2
-            ? TypeLevel._9
-            : TypeLevel._8;
+    private size(): TypographySize {
+        return this.props.size === CaptionSize._2 ? TypographySize._9 : TypographySize._8;
     }
 }
 
 export default Caption;
 export * from "./caption.props";
-export { ICaptionClassNameContract };

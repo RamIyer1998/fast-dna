@@ -1,7 +1,17 @@
 import * as React from "react";
-import { IImageClassNameContract, IManagedClasses } from "@microsoft/fast-components-class-name-contracts-base";
+import {
+    ImageClassNameContract,
+    ManagedClasses,
+} from "@microsoft/fast-components-class-name-contracts-base";
+import { Omit } from "utility-types";
 
-export interface IImageHandledProps {
+export interface ImageUnhandledProps
+    extends Omit<
+            React.HTMLAttributes<HTMLImageElement | HTMLPictureElement>,
+            "children"
+        > {}
+export interface ImageManagedClasses extends ManagedClasses<ImageClassNameContract> {}
+export interface ImageHandledProps extends ImageManagedClasses {
     /**
      * The HTML alt attribute value is important for overall accessibility, providing a textual
      * alternative to non-text content
@@ -9,23 +19,12 @@ export interface IImageHandledProps {
     alt: string;
 
     /**
-     * The HTML itemScope attribute defines the scope of associated metadata and is used for associating the
-     * element context with definitions on schema.org (important for seach engine optimization)
-     */
-    itemScope?: boolean;
-
-    /**
-     * The round image option
-     */
-    round?: boolean;
-
-    /**
      * The HTML sizes attribute for the image element
      */
     sizes?: string;
 
     /**
-     * The HTML src attribute for the image element (specifying src will chose the image element rather than the picture element)
+     * The HTML src attribute for the image element
      */
     src?: string;
 
@@ -35,36 +34,11 @@ export interface IImageHandledProps {
     srcSet?: string;
 
     /**
-     * The viewport 1 (320px-539px) source address
+     * The image children
      */
-    vp1?: string;
-
-    /**
-     * The viewport 2 (540px-767px) source address
-     */
-    vp2?: string;
-
-    /**
-     * The viewport 3 (768px-1083px) source address
-     */
-    vp3?: string;
-
-    /**
-     * The viewport 4 (1084px-1399px) source address
-     */
-    vp4?: string;
-
-    /**
-     * The viewport 5 (1400px-1778px) source address
-     */
-    vp5?: string;
-
-    /**
-     * The viewport 6 (1779px+) source address
-     */
-    vp6?: string;
+    children?:
+        | React.ReactElement<HTMLSourceElement>
+        | Array<React.ReactElement<HTMLSourceElement>>;
 }
 
-export interface IImageUnhandledProps extends React.HTMLAttributes<HTMLImageElement | HTMLPictureElement> {}
-export interface IImageManagedClasses extends IManagedClasses<IImageClassNameContract> {}
-export type ImageProps = IImageHandledProps & IImageUnhandledProps & IImageManagedClasses;
+export type ImageProps = ImageHandledProps & ImageUnhandledProps;

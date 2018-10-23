@@ -1,30 +1,31 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { get } from "lodash-es";
-import { Foundation, HandledProps, TypeLevel, TypographyTag } from "@microsoft/fast-components-react-base";
+import Foundation, { HandledProps } from "@microsoft/fast-components-foundation-react";
+import { TypographySize, TypographyTag } from "@microsoft/fast-components-react-base";
 import {
-    IMetatextHandledProps,
-    IMetatextManagedClasses,
-    IMetatextUnhandledProps,
-    MetatextTag
+    MetatextHandledProps,
+    MetatextManagedClasses,
+    MetatextProps,
+    MetatextTag,
+    MetatextUnhandledProps,
 } from "./metatext.props";
 import { Typography } from "../typography";
-import { IManagedClasses, IMetatextClassNameContract } from "@microsoft/fast-components-class-name-contracts-msft";
+import {
+    ManagedClasses,
+    MetatextClassNameContract,
+} from "@microsoft/fast-components-class-name-contracts-msft";
 
-class Metatext extends Foundation<
-    IMetatextHandledProps & IManagedClasses<IMetatextClassNameContract>,
-    React.HTMLAttributes<HTMLSpanElement | HTMLParagraphElement>,
-    {}
-> {
-    public static defaultProps: Partial<IMetatextHandledProps> = {
-        tag: MetatextTag.span
+class Metatext extends Foundation<MetatextHandledProps, MetatextUnhandledProps, {}> {
+    public static defaultProps: Partial<MetatextProps> = {
+        tag: MetatextTag.span,
     };
 
     public static displayName: string = "Metatext";
 
-    protected handledProps: HandledProps<IMetatextHandledProps & IManagedClasses<IMetatextClassNameContract>> = {
+    protected handledProps: HandledProps<MetatextHandledProps> = {
         managedClasses: void 0,
-        tag: void 0
+        tag: void 0,
     };
 
     /**
@@ -35,7 +36,7 @@ class Metatext extends Foundation<
             <Typography
                 {...this.unhandledProps()}
                 tag={TypographyTag[this.props.tag]}
-                typeLevel={TypeLevel._7}
+                size={TypographySize._7}
                 className={this.generateClassNames()}
             >
                 {this.props.children}
@@ -53,4 +54,4 @@ class Metatext extends Foundation<
 
 export default Metatext;
 export * from "./metatext.props";
-export { IMetatextClassNameContract };
+export { MetatextClassNameContract };

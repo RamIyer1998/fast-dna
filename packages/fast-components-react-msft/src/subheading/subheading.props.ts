@@ -1,13 +1,16 @@
 import * as React from "react";
-import { IManagedClasses, ISubheadingClassNameContract  } from "@microsoft/fast-components-class-name-contracts-msft";
+import {
+    ManagedClasses,
+    SubheadingClassNameContract,
+} from "@microsoft/fast-components-class-name-contracts-msft";
 
-export enum SubheadingLevel {
+export enum SubheadingSize {
     _1 = 1,
     _2 = 2,
     _3 = 3,
     _4 = 4,
     _5 = 5,
-    _6 = 6
+    _6 = 6,
 }
 
 export enum SubheadingTag {
@@ -17,20 +20,21 @@ export enum SubheadingTag {
     h4 = "h4",
     h5 = "h5",
     h6 = "h6",
-    p = "p"
+    p = "p",
 }
 
-export interface ISubheadingHandledProps {
-
+export interface SubheadingManagedClasses
+    extends ManagedClasses<SubheadingClassNameContract> {}
+export interface SubheadingHandledProps extends SubheadingManagedClasses {
     /**
      * The subheading content
      */
-    children?: React.ReactNode | React.ReactNode[];
+    children?: React.ReactNode;
 
     /**
-     * The subheading level used to map to typographic level
+     * The visual size (type level) which aligns to a type ramp instance
      */
-    level?: SubheadingLevel;
+    size?: SubheadingSize;
 
     /**
      * The subheading tag used to create the underlying html element
@@ -38,6 +42,6 @@ export interface ISubheadingHandledProps {
     tag?: SubheadingTag;
 }
 
-export interface ISubheadingUnhandledProps extends React.HTMLAttributes<HTMLHeadingElement | HTMLParagraphElement> {}
-export interface ISubheadingManagedClasses extends IManagedClasses<ISubheadingClassNameContract> {}
-export type SubheadingProps = ISubheadingHandledProps & ISubheadingUnhandledProps & ISubheadingManagedClasses;
+export interface SubheadingUnhandledProps
+    extends React.HTMLAttributes<HTMLHeadingElement | HTMLParagraphElement> {}
+export type SubheadingProps = SubheadingHandledProps & SubheadingUnhandledProps;

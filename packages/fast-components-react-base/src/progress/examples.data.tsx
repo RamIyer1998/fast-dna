@@ -1,22 +1,22 @@
 import * as React from "react";
 import Progress, {
-    IProgressHandledProps,
-    IProgressManagedClasses,
-    IProgressUnhandledProps,
-    ProgressType
+    ProgressHandledProps,
+    ProgressManagedClasses,
+    ProgressType,
+    ProgressUnhandledProps,
 } from "./progress";
 import schema from "./progress.schema.json";
 import Documentation from "./.tmp/documentation";
-import { IComponentFactoryExample } from "@microsoft/fast-development-site-react";
+import { ComponentFactoryExample } from "@microsoft/fast-development-site-react";
 import reactHTMLElementSchema from "../../app/components/react-html-element.schema.json";
 
-const classes: IProgressManagedClasses = {
+const classes: ProgressManagedClasses = {
     managedClasses: {
-        progress: "progress"
-    }
+        progress: "progress",
+    },
 };
 
-const examples: IComponentFactoryExample<IProgressHandledProps & IProgressManagedClasses> = {
+const examples: ComponentFactoryExample<ProgressHandledProps> = {
     name: "Progress",
     component: Progress,
     schema: schema as any,
@@ -29,17 +29,17 @@ const examples: IComponentFactoryExample<IProgressHandledProps & IProgressManage
                 id: reactHTMLElementSchema.id,
                 props: {
                     slot: ProgressType.determinate,
-                    children: "determinate"
-                }
+                    children: "determinate",
+                },
             },
             {
                 id: reactHTMLElementSchema.id,
                 props: {
                     slot: ProgressType.determinate,
-                    children: "determinate"
-                }
-            }
-        ]
+                    children: "determinate",
+                },
+            },
+        ],
     },
     data: [
         {
@@ -50,17 +50,17 @@ const examples: IComponentFactoryExample<IProgressHandledProps & IProgressManage
                     id: reactHTMLElementSchema.id,
                     props: {
                         slot: ProgressType.indeterminate,
-                        children: "indeterminate"
-                    }
+                        children: "indeterminate",
+                    },
                 },
                 {
                     id: reactHTMLElementSchema.id,
                     props: {
                         slot: ProgressType.determinate,
-                        children: "determinate"
-                    }
-                }
-            ]
+                        children: "determinate",
+                    },
+                },
+            ],
         },
         {
             ...classes,
@@ -69,19 +69,19 @@ const examples: IComponentFactoryExample<IProgressHandledProps & IProgressManage
                     id: reactHTMLElementSchema.id,
                     props: {
                         slot: ProgressType.indeterminate,
-                        children: "indeterminate"
-                    }
+                        children: "indeterminate",
+                    },
                 },
                 {
                     id: reactHTMLElementSchema.id,
                     props: {
                         slot: ProgressType.indeterminate,
-                        children: "indeterminate"
-                    }
-                }
-            ]
-        }
-    ]
+                        children: "indeterminate",
+                    },
+                },
+            ],
+        },
+    ],
 };
 
 export default examples;

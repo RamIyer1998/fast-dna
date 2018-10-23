@@ -1,27 +1,26 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import Foundation, { HandledProps } from "../foundation";
+import Foundation, { HandledProps } from "@microsoft/fast-components-foundation-react";
 import {
-    ITextFieldHandledProps,
-    ITextFieldManagedClasses,
-    ITextFieldUnhandledProps,
-    TextFieldType
+    TextFieldHandledProps,
+    TextFieldManagedClasses,
+    TextFieldType,
+    TextFieldUnhandledProps,
 } from "./text-field.props";
-import { IManagedClasses, ITextFieldClassNameContract } from "@microsoft/fast-components-class-name-contracts-base";
+import {
+    ManagedClasses,
+    TextFieldClassNameContract,
+} from "@microsoft/fast-components-class-name-contracts-base";
 import { get } from "lodash-es";
 
-class TextField extends Foundation<
-    ITextFieldHandledProps & IManagedClasses<ITextFieldClassNameContract>,
-    ITextFieldUnhandledProps,
-    {}
-> {
+class TextField extends Foundation<TextFieldHandledProps, TextFieldUnhandledProps, {}> {
     public static displayName: string = "TextField";
 
-    protected handledProps: HandledProps<ITextFieldHandledProps & IManagedClasses<ITextFieldClassNameContract>> = {
+    protected handledProps: HandledProps<TextFieldHandledProps> = {
         disabled: void 0,
         placeholder: void 0,
         managedClasses: void 0,
-        type: void 0
+        type: void 0,
     };
 
     /**
@@ -34,7 +33,7 @@ class TextField extends Foundation<
                 className={this.generateClassNames()}
                 disabled={this.props.disabled || null}
                 placeholder={this.props.placeholder || null}
-                type={this.isDeprecatedType(this.props.type || TextFieldType.text)}
+                type={this.props.type || TextFieldType.text}
             />
         );
     }
@@ -45,24 +44,8 @@ class TextField extends Foundation<
     protected generateClassNames(): string {
         return super.generateClassNames(get(this.props, "managedClasses.textField"));
     }
-
-    private isDeprecatedType(type: TextFieldType): TextFieldType {
-        switch (type) {
-            case TextFieldType.date:
-            case TextFieldType.hidden:
-            case TextFieldType.month:
-            case TextFieldType.range:
-            case TextFieldType.time:
-            case TextFieldType.week:
-                /* tslint:disable-next-line */
-                console.warn(`TextFieldType enum "${type}" has been deprecated as of version 2.3.0, and will be removed in version 3.0.0.`);
-                break;
-        }
-
-        return type;
-    }
 }
 
 export default TextField;
 export * from "./text-field.props";
-export { ITextFieldClassNameContract };
+export { TextFieldClassNameContract };

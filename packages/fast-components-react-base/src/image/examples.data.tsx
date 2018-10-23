@@ -1,40 +1,75 @@
 import * as React from "react";
-import Image, { IImageHandledProps, IImageManagedClasses, IImageUnhandledProps } from "./image";
+import Image, {
+    ImageHandledProps,
+    ImageManagedClasses,
+    ImageSlot,
+    ImageUnhandledProps,
+} from "./image";
 import schema from "./image.schema.json";
 import Documentation from "./.tmp/documentation";
-import { IComponentFactoryExample } from "@microsoft/fast-development-site-react";
+import { ComponentFactoryExample } from "@microsoft/fast-development-site-react";
 
-const examples: IComponentFactoryExample<IImageHandledProps & IImageManagedClasses> = {
+const classes: ImageManagedClasses = {
+    managedClasses: {
+        image: "image",
+        image__picture: "picture",
+        image_img: "img",
+    },
+};
+
+const sourceElements: JSX.Element[] = [
+    <source
+        key={"0"}
+        srcSet="https://placehold.it/350x350/2F2F2F/171717"
+        media="(min-width: 1400px)"
+        slot={ImageSlot.source}
+    />,
+    <source
+        key={"1"}
+        srcSet="https://placehold.it/300x300/2F2F2F/171717"
+        media="(min-width: 1084px)"
+        slot={ImageSlot.source}
+    />,
+    <source
+        key={"2"}
+        srcSet="https://placehold.it/200x200/2F2F2F/171717"
+        media="(min-width: 768px)"
+        slot={ImageSlot.source}
+    />,
+    <source
+        key={"3"}
+        srcSet="https://placehold.it/100x100/2F2F2F/171717"
+        media="(min-width: 540px)"
+        slot={ImageSlot.source}
+    />,
+    <source
+        key={"4"}
+        srcSet="https://placehold.it/75x75/2F2F2F/171717"
+        media="(min-width: 0px)"
+        slot={ImageSlot.source}
+    />,
+];
+
+const examples: ComponentFactoryExample<ImageHandledProps> = {
     name: "Image",
     component: Image,
     schema: schema as any,
     documentation: <Documentation />,
     detailData: {
-        managedClasses: {
-            picture: "picture",
-            image: "image",
-            image_round: "image-round"
-        },
-        vp1: "https://placehold.it/539x300/2F2F2F/171717",
-        alt: "Placeholder with grey background and dimension watermark without any imagery"
+        ...classes,
+        src: "https://placehold.it/539x300/2F2F2F/171717",
+        alt:
+            "Placeholder with grey background and dimension watermark without any imagery",
     },
     data: [
         {
-            managedClasses: {
-                picture: "picture",
-                image: "image",
-                image_round: "image-round"
-            },
-            round: true,
-            vp6: "https://placehold.it/2048x600/2F2F2F/171717",
-            vp5: "https://placehold.it/1778x600/2F2F2F/171717",
-            vp4: "https://placehold.it/1399x600/2F2F2F/171717",
-            vp3: "https://placehold.it/1083x500/2F2F2F/171717",
-            vp2: "https://placehold.it/767x400/2F2F2F/171717",
-            vp1: "https://placehold.it/539x300/2F2F2F/171717",
-            alt: "Placeholder with grey background and dimension watermark without any imagery"
-        }
-    ]
+            ...classes,
+            src: "https://placehold.it/75x75/2F2F2F/171717",
+            alt:
+                "Placeholder with grey background and dimension watermark without any imagery",
+            children: sourceElements,
+        },
+    ],
 };
 
 export default examples;

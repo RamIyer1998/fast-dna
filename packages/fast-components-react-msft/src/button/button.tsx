@@ -1,8 +1,12 @@
 import * as React from "react";
 import { get } from "lodash-es";
-import { Foundation, HandledProps } from "@microsoft/fast-components-react-base";
-import { ButtonAppearance, IButtonHandledProps, IButtonManagedClasses, IButtonUnhandledProps } from "./button.props";
-import { IManagedClasses, IMSFTButtonClassNameContract } from "@microsoft/fast-components-class-name-contracts-msft";
+import Foundation, { HandledProps } from "@microsoft/fast-components-foundation-react";
+import {
+    ButtonAppearance,
+    ButtonHandledProps,
+    ButtonManagedClasses,
+    ButtonUnhandledProps,
+} from "./button.props";
 import { Button as BaseButton } from "@microsoft/fast-components-react-base";
 
 /**
@@ -10,17 +14,13 @@ import { Button as BaseButton } from "@microsoft/fast-components-react-base";
  */
 export enum ButtonSlot {
     before = "before",
-    after = "after"
+    after = "after",
 }
 
-class Button extends Foundation<
-    IButtonHandledProps & IManagedClasses<IMSFTButtonClassNameContract>,
-    React.AllHTMLAttributes<HTMLElement>,
-    {}
-> {
+class Button extends Foundation<ButtonHandledProps, ButtonUnhandledProps, {}> {
     public static displayName: string = "Button";
 
-    protected handledProps: HandledProps<IButtonHandledProps & IManagedClasses<IMSFTButtonClassNameContract>> = {
+    protected handledProps: HandledProps<ButtonHandledProps> = {
         appearance: void 0,
         disabled: void 0,
         href: void 0,
@@ -40,7 +40,7 @@ class Button extends Foundation<
                 disabled={this.props.disabled}
             >
                 {this.withSlot(ButtonSlot.before)}
-                <span className={get(this.props, "managedClasses.button_span")}>
+                <span className={get(this.props, "managedClasses.button_contentRegion")}>
                     {this.withoutSlot([ButtonSlot.before, ButtonSlot.after])}
                 </span>
                 {this.withSlot(ButtonSlot.after)}
@@ -54,13 +54,21 @@ class Button extends Foundation<
     protected generateClassNames(): string {
         switch (this.props.appearance) {
             case ButtonAppearance.primary:
-                return super.generateClassNames(get(this.props, "managedClasses.button_primary"));
+                return super.generateClassNames(
+                    get(this.props, "managedClasses.button__primary")
+                );
             case ButtonAppearance.outline:
-                return super.generateClassNames(get(this.props, "managedClasses.button_outline"));
+                return super.generateClassNames(
+                    get(this.props, "managedClasses.button__outline")
+                );
             case ButtonAppearance.lightweight:
-                return super.generateClassNames(get(this.props, "managedClasses.button_lightweight"));
+                return super.generateClassNames(
+                    get(this.props, "managedClasses.button__lightweight")
+                );
             case ButtonAppearance.justified:
-                return super.generateClassNames(get(this.props, "managedClasses.button_justified"));
+                return super.generateClassNames(
+                    get(this.props, "managedClasses.button__justified")
+                );
             default:
                 return super.generateClassNames();
         }
@@ -69,4 +77,3 @@ class Button extends Foundation<
 
 export default Button;
 export * from "./button.props";
-export { IMSFTButtonClassNameContract };

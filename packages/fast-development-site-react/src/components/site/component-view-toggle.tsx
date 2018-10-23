@@ -1,13 +1,20 @@
 import * as React from "react";
 import { toPx } from "@microsoft/fast-jss-utilities";
 import { Link, withRouter } from "react-router-dom";
-import manageJss, { ComponentStyles, IJSSManagerProps, IManagedClasses } from "@microsoft/fast-jss-manager-react";
-import devSiteDesignSystemDefaults, { IDevSiteDesignSystem } from "../design-system";
+import manageJss, {
+    ComponentStyles,
+    ManagedClasses,
+    ManagedJSSProps,
+} from "@microsoft/fast-jss-manager-react";
+import devSiteDesignSystemDefaults, { DevSiteDesignSystem } from "../design-system";
 
-export interface IComponentViewToggleClassNameContract {
+export interface ComponentViewToggleClassNameContract {
     componentViewToggle: string;
 }
-const styles: ComponentStyles<IComponentViewToggleClassNameContract, IDevSiteDesignSystem> = {
+const styles: ComponentStyles<
+    ComponentViewToggleClassNameContract,
+    DevSiteDesignSystem
+> = {
     componentViewToggle: {
         width: toPx(40),
         height: toPx(38),
@@ -18,7 +25,7 @@ const styles: ComponentStyles<IComponentViewToggleClassNameContract, IDevSiteDes
         justifyContent: "center",
         borderRadius: toPx(2),
         margin: toPx(2),
-        "&[aria-current=\"page\"]": {
+        '&[aria-current="page"]': {
             "&::before": {
                 content: "''",
                 position: "absolute",
@@ -28,23 +35,24 @@ const styles: ComponentStyles<IComponentViewToggleClassNameContract, IDevSiteDes
                 bottom: toPx(-1),
                 borderRadius: `${toPx(2)} ${toPx(2)} 0 0`,
                 height: toPx(2),
-                background: (config: IDevSiteDesignSystem): string => config.brandColor
-            }
+                background: (config: DevSiteDesignSystem): string => config.brandColor,
+            },
         },
         "&:hover": {
             cursor: "pointer",
-            background: "rgba(0, 0, 0, 0.04)"
+            background: "rgba(0, 0, 0, 0.04)",
         },
         "&:focus": {
             outline: "none",
-            border: (config: IDevSiteDesignSystem): string => {
-                return `${toPx(1)} solid ${config.brandColor || devSiteDesignSystemDefaults.brandColor}`;
-            }
-        }
-    }
+            border: (config: DevSiteDesignSystem): string => {
+                return `${toPx(1)} solid ${config.brandColor ||
+                    devSiteDesignSystemDefaults.brandColor}`;
+            },
+        },
+    },
 };
 
-export interface IComponentViewToggleProps {
+export interface ComponentViewToggleProps {
     /**
      * The URL of the anchor
      */
@@ -71,8 +79,10 @@ export interface IComponentViewToggleProps {
     glyph: string;
 }
 
-class ComponentViewToggle extends React.Component<IComponentViewToggleProps & IManagedClasses<IComponentViewToggleClassNameContract>, {}> {
-
+class ComponentViewToggle extends React.Component<
+    ComponentViewToggleProps & ManagedClasses<ComponentViewToggleClassNameContract>,
+    {}
+> {
     public render(): JSX.Element {
         return (
             <Link
@@ -82,7 +92,7 @@ class ComponentViewToggle extends React.Component<IComponentViewToggleProps & IM
                 aria-label={this.props.label}
                 aria-current={this.props.current ? "page" : null}
             >
-                <span dangerouslySetInnerHTML={{__html: this.props.glyph}} />
+                <span dangerouslySetInnerHTML={{ __html: this.props.glyph }} />
             </Link>
         );
     }

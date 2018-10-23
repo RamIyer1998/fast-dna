@@ -7,12 +7,14 @@ import { Page as SketchPage } from "@brainly/html-sketchapp";
 /**
  * Store in-page script content as a string to be loaded into the browser
  */
-const aSketchPage: string = fs.readFileSync(path.resolve(__dirname, "./aSketchPage.js")).toString();
+const aSketchPage: string = fs
+    .readFileSync(path.resolve(__dirname, "./aSketchPage.js"))
+    .toString();
 
 /**
  * A configuration object used to extract symbols from a given url
  */
-export interface ISymbolLibrarySource {
+export interface SymbolLibrarySource {
     /**
      * The URL of a symbol source
      */
@@ -27,11 +29,11 @@ export interface ISymbolLibrarySource {
 /**
  * Configuration object for the extractSymbolLibrary function
  */
-export interface IExtractSymbolLibraryConfig {
+export interface ExtractSymbolLibraryConfig {
     /**
      * The sources to extract symbols from
      */
-    sources: ISymbolLibrarySource | ISymbolLibrarySource[];
+    sources: SymbolLibrarySource | SymbolLibrarySource[];
 
     /**
      * The name of the library
@@ -49,34 +51,38 @@ export interface IExtractSymbolLibraryConfig {
     pageHeight: number;
 }
 
-const extractSymbolLibraryConfigDefaults: IExtractSymbolLibraryConfig = {
+const extractSymbolLibraryConfigDefaults: ExtractSymbolLibraryConfig = {
     sources: [],
     name: "Symbol library",
     pageWidth: 1600,
-    pageHeight: 1600
+    pageHeight: 1600,
 };
 
 /**
  * Ensure our source object structure is consistent
  */
-function normalizeSources(sources: ISymbolLibrarySource | ISymbolLibrarySource[]): ISymbolLibrarySource[] {
+function normalizeSources(
+    sources: SymbolLibrarySource | SymbolLibrarySource[]
+): SymbolLibrarySource[] {
     return Array.isArray(sources) ? sources : [sources];
 }
 
 /**
  * Extracts sketch symbol library given a config
  */
-export async function extractSymbolLibrary(config: IExtractSymbolLibraryConfig): Promise<string> {
+export async function extractSymbolLibrary(
+    config: ExtractSymbolLibraryConfig
+): Promise<string> {
     // Apply defaults to config
     config = Object.assign({}, extractSymbolLibraryConfigDefaults, config);
-    const standardizedSources: ISymbolLibrarySource[] = normalizeSources(config.sources);
+    const standardizedSources: SymbolLibrarySource[] = normalizeSources(config.sources);
     const browser: Browser = await puppeteer.launch();
     const page: Page = await browser.newPage();
     let symbols: string[][] = [];
 
     await page.setViewport({
         width: config.pageWidth,
-        height: config.pageHeight
+        height: config.pageHeight,
     });
 
     page.on("console", (message: any) => {
@@ -90,45 +96,57 @@ export async function extractSymbolLibrary(config: IExtractSymbolLibraryConfig):
 
     symbols = positionSymbols(symbols, config.pageWidth);
 
-    return new Promise<string>((resolve: (result: string) => void, reject: (error: Error) => void): void => {
-        const sketchPage: SketchPage = new SketchPage({
-            width: config.pageWidth,
-            height: config.pageHeight
-        });
+    return new Promise<string>(
+        (resolve: (result: string) => void, reject: (error: Error) => void): void => {
+            const sketchPage: SketchPage = new SketchPage({
+                width: config.pageWidth,
+                height: config.pageHeight,
+            });
 
-        sketchPage.setName(config.name);
+            sketchPage.setName(config.name);
 
-        const flattenedLayers: string[] = symbols.reduce((accumulator: string[], currentValue: string[]) => {
-            return accumulator.concat(currentValue);
-        }, []);
+            const flattenedLayers: string[] = symbols.reduce(
+                (accumulator: string[], currentValue: string[]) => {
+                    return accumulator.concat(currentValue);
+                },
+                []
+            );
 
-        const sketchPageJson: any = sketchPage.toJSON();
+            const sketchPageJson: any = sketchPage.toJSON();
 
-        sketchPageJson.layers = flattenedLayers;
-        browser.close();
-        resolve(JSON.stringify(sketchPageJson));
-    });
+            sketchPageJson.layers = flattenedLayers;
+            browser.close();
+            resolve(JSON.stringify(sketchPageJson));
+        }
+    );
 }
 
 /**
  * Extract symbol data from a single source
  */
-async function getSymbolsFromSource(source: ISymbolLibrarySource, page: Page): Promise<string[]> {
+async function getSymbolsFromSource(
+    source: SymbolLibrarySource,
+    page: Page
+): Promise<string[]> {
     // Navigate to the source URL
     await page.goto(source.url, {
-        waitUntil: "domcontentloaded"
+        waitUntil: "domcontentloaded",
     });
 
     // Load the script into the browser that will allow generating sketch symbols
     await page.addScriptTag({
-        content: aSketchPage
+        content: aSketchPage,
     });
 
-    const symbols: string[] = await page.evaluate(`sketchLibrary.getAsketchSymbols(${JSON.stringify(source)})`);
+    const symbols: string[] = await page.evaluate(
+        `sketchLibrary.getAsketchSymbols(${JSON.stringify(source)})`
+    );
 
-    return new Promise<string[]>((resolve: (result: string[]) => void, reject: (error: Error) => void): void => {
-        resolve(symbols);
-    });
+    return new Promise<string[]>(
+        (resolve: (result: string[]) => void, reject: (error: Error) => void): void => {
+            resolve(symbols);
+        }
+    );
 }
 
 /**

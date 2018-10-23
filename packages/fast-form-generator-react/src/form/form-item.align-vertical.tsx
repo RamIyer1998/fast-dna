@@ -1,17 +1,20 @@
 import * as React from "react";
-import { IFormItemComponentMappingToProperyNamesProps } from "./form-item";
+import { FormItemComponentMappingToProperyNamesProps } from "./form-item";
 import styles from "./form-item.align-vertical.style";
-import { IFormItemAlignVerticalClassNameContract } from "../class-name-contracts/";
-import manageJss, { IJSSManagerProps } from "@microsoft/fast-jss-manager-react";
-import { IManagedClasses } from "@microsoft/fast-components-class-name-contracts-base";
+import { FormItemAlignVerticalClassNameContract } from "../class-name-contracts/";
+import manageJss, { ManagedJSSProps } from "@microsoft/fast-jss-manager-react";
+import { ManagedClasses } from "@microsoft/fast-components-class-name-contracts-base";
 
 /**
  * Schema form component definition
  * @extends React.Component
  */
 /* tslint:disable-next-line */
-class FormItemAlignVertical extends React.Component<IFormItemComponentMappingToProperyNamesProps & IManagedClasses<IFormItemAlignVerticalClassNameContract>, {}> {
-
+class FormItemAlignVertical extends React.Component<
+    FormItemComponentMappingToProperyNamesProps &
+        ManagedClasses<FormItemAlignVerticalClassNameContract>,
+    {}
+> {
     public render(): JSX.Element {
         return (
             <div className={this.props.managedClasses.formItemAlignVertical}>
@@ -21,7 +24,11 @@ class FormItemAlignVertical extends React.Component<IFormItemComponentMappingToP
                 >
                     {this.props.label}
                 </label>
-                <div className={this.props.managedClasses.formItemAlignVertical_inputContainer}>
+                <div
+                    className={
+                        this.props.managedClasses.formItemAlignVertical_inputContainer
+                    }
+                >
                     {this.renderInput("top", 1)}
                     {this.renderInput("center", 2)}
                     {this.renderInput("bottom", 3)}
@@ -32,10 +39,13 @@ class FormItemAlignVertical extends React.Component<IFormItemComponentMappingToP
 
     private onChange = (value: string): void => {
         this.props.onChange(this.props.dataLocation, value);
-    }
+    };
 
     private isChecked(direction: string): boolean {
-        return this.props.data === direction || (typeof this.props.data === "undefined" && this.props.default === direction);
+        return (
+            this.props.data === direction ||
+            (typeof this.props.data === "undefined" && this.props.default === direction)
+        );
     }
 
     private getInputClassName(direction: string): string {

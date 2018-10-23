@@ -1,9 +1,9 @@
 import * as React from "react";
-import { IFormItemComponentMappingToProperyNamesProps } from "./form-item";
+import { FormItemComponentMappingToProperyNamesProps } from "./form-item";
 import styles from "./form-item.align-horizontal.style";
-import { IFormItemAlignHorizontalClassNameContract } from "../class-name-contracts/";
-import manageJss, { IJSSManagerProps } from "@microsoft/fast-jss-manager-react";
-import { IManagedClasses } from "@microsoft/fast-components-class-name-contracts-base";
+import { FormItemAlignHorizontalClassNameContract } from "../class-name-contracts/";
+import manageJss, { ManagedJSSProps } from "@microsoft/fast-jss-manager-react";
+import { ManagedClasses } from "@microsoft/fast-components-class-name-contracts-base";
 import { Direction } from "@microsoft/fast-jss-utilities";
 
 /**
@@ -11,7 +11,11 @@ import { Direction } from "@microsoft/fast-jss-utilities";
  * @extends React.Component
  */
 /* tslint:disable-next-line */
-class FormItemAlignHorizontal extends React.Component<IFormItemComponentMappingToProperyNamesProps & IManagedClasses<IFormItemAlignHorizontalClassNameContract>, {}> {
+class FormItemAlignHorizontal extends React.Component<
+    FormItemComponentMappingToProperyNamesProps &
+        ManagedClasses<FormItemAlignHorizontalClassNameContract>,
+    {}
+> {
     public render(): JSX.Element {
         return (
             <div className={this.props.managedClasses.formItemAlignHorizontal}>
@@ -21,7 +25,11 @@ class FormItemAlignHorizontal extends React.Component<IFormItemComponentMappingT
                 >
                     {this.props.label}
                 </label>
-                <div className={this.props.managedClasses.formItemAlignHorizontal_inputContainer}>
+                <div
+                    className={
+                        this.props.managedClasses.formItemAlignHorizontal_inputContainer
+                    }
+                >
                     {this.renderInput("left", 1)}
                     {this.renderInput("center", 2)}
                     {this.renderInput("right", 3)}
@@ -32,10 +40,13 @@ class FormItemAlignHorizontal extends React.Component<IFormItemComponentMappingT
 
     private onChange = (value: string): void => {
         this.props.onChange(this.props.dataLocation, value);
-    }
+    };
 
     private isChecked(direction: string): boolean {
-        return this.props.data === direction || (typeof this.props.data === "undefined" && this.props.default === direction);
+        return (
+            this.props.data === direction ||
+            (typeof this.props.data === "undefined" && this.props.default === direction)
+        );
     }
 
     private getInputClassName(direction: string): string {

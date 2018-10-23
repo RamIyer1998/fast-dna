@@ -1,21 +1,25 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { get } from "lodash-es";
-import Foundation, { HandledProps } from "../foundation";
-import { DividerRoles, IDividerHandledProps, IDividerManagedClasses, IDividerUnhandledProps } from "./divider.props";
-import { IDividerClassNameContract, IManagedClasses } from "@microsoft/fast-components-class-name-contracts-base";
+import Foundation, { HandledProps } from "@microsoft/fast-components-foundation-react";
+import {
+    DividerHandledProps,
+    DividerManagedClasses,
+    DividerRoles,
+    DividerUnhandledProps,
+} from "./divider.props";
+import {
+    DividerClassNameContract,
+    ManagedClasses,
+} from "@microsoft/fast-components-class-name-contracts-base";
 
 /* tslint:disable-next-line */
-class Divider extends Foundation<
-    IDividerHandledProps & IManagedClasses<IDividerClassNameContract>,
-    React.HTMLAttributes<HTMLHRElement>,
-    {}
-> {
+class Divider extends Foundation<DividerHandledProps, DividerUnhandledProps, {}> {
     public static displayName: string = "Divider";
 
-    protected handledProps: HandledProps<IDividerHandledProps & IManagedClasses<IDividerClassNameContract>> = {
+    protected handledProps: HandledProps<DividerHandledProps> = {
         managedClasses: void 0,
-        role: void 0
+        role: void 0,
     };
 
     /**
@@ -35,10 +39,9 @@ class Divider extends Foundation<
      * Generates the attributes
      */
     protected generateAttributes(): React.HTMLAttributes<HTMLHRElement> {
-
         // Do not render role="separator" on page because it's intrinsically set.
         if (this.props.role && this.props.role !== DividerRoles.separator) {
-            return ({role: DividerRoles[this.props.role]});
+            return { role: DividerRoles[this.props.role] };
         }
     }
 
@@ -52,4 +55,4 @@ class Divider extends Foundation<
 
 export default Divider;
 export * from "./divider.props";
-export { IDividerClassNameContract };
+export { DividerClassNameContract };

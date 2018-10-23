@@ -3,27 +3,30 @@ import * as ShallowRenderer from "react-test-renderer/shallow";
 import * as Adapter from "enzyme-adapter-react-16";
 import { configure, render, shallow } from "enzyme";
 import examples from "./examples.data";
-import { generateSnapshots } from "@microsoft/fast-jest-snapshots-react";
+import {
+    generateSnapshots,
+    SnapshotTestSuite,
+} from "@microsoft/fast-jest-snapshots-react";
 import TextField, {
-    ITextFieldClassNameContract,
-    ITextFieldHandledProps,
-    ITextFieldManagedClasses,
-    ITextFieldUnhandledProps,
+    TextFieldClassNameContract,
+    TextFieldHandledProps,
+    TextFieldManagedClasses,
     TextFieldProps,
-    TextFieldType
+    TextFieldType,
+    TextFieldUnhandledProps,
 } from "./text-field";
 
-const managedClasses: ITextFieldClassNameContract = {
-    textField: "text-field-class"
+const managedClasses: TextFieldClassNameContract = {
+    textField: "text-field-class",
 };
 
 /*
  * Configure Enzyme
  */
-configure({adapter: new Adapter()});
+configure({ adapter: new Adapter() });
 
 describe("text-field snapshot", (): void => {
-    generateSnapshots(examples);
+    generateSnapshots(examples as SnapshotTestSuite<TextFieldProps>);
 });
 
 describe("text-field", (): void => {
@@ -31,28 +34,30 @@ describe("text-field", (): void => {
         expect((TextField as any).name).toBe(TextField.displayName);
     });
 
+    test("should not throw if managedClasses are not provided", () => {
+        expect(() => {
+            shallow(<TextField />);
+        }).not.toThrow();
+    });
+
     test("should return an object that includes all valid props which are not enumerated as handledProps", () => {
-        const handledProps: ITextFieldHandledProps & ITextFieldManagedClasses = {
+        const handledProps: TextFieldHandledProps = {
             managedClasses,
-            type: TextFieldType.email
+            type: TextFieldType.email,
         };
 
-        const unhandledProps: ITextFieldUnhandledProps = {
-            "aria-hidden": true
+        const unhandledProps: TextFieldUnhandledProps = {
+            "aria-hidden": true,
         };
-        const props: TextFieldProps = {...handledProps, ...unhandledProps};
-        const rendered: any = shallow(
-            <TextField {...props} />
-        );
+        const props: TextFieldProps = { ...handledProps, ...unhandledProps };
+        const rendered: any = shallow(<TextField {...props} />);
 
         expect(rendered.prop("aria-hidden")).not.toBe(undefined);
         expect(rendered.prop("aria-hidden")).toEqual(true);
     });
 
     test("should set a default type of `text` if no `type` prop is passed", () => {
-        const rendered: any = shallow(
-            <TextField managedClasses={managedClasses} />
-        );
+        const rendered: any = shallow(<TextField managedClasses={managedClasses} />);
 
         expect(rendered.prop("type")).not.toBe(undefined);
         expect(rendered.prop("type")).toEqual(TextFieldType.text);
@@ -68,9 +73,7 @@ describe("text-field", (): void => {
     });
 
     test("should NOT render with a disabled value if no `disabled` prop is passed", () => {
-        const rendered: any = shallow(
-            <TextField managedClasses={managedClasses} />
-        );
+        const rendered: any = shallow(<TextField managedClasses={managedClasses} />);
 
         expect(rendered.prop("disabled")).toBe(null);
     });
@@ -84,9 +87,7 @@ describe("text-field", (): void => {
     });
 
     test("should NOT render with a placeholder value if no `placeholder` prop is passed", () => {
-        const rendered: any = shallow(
-            <TextField managedClasses={managedClasses} />
-        );
+        const rendered: any = shallow(<TextField managedClasses={managedClasses} />);
 
         expect(rendered.prop("placeholder")).toBe(null);
     });
@@ -98,60 +99,4 @@ describe("text-field", (): void => {
 
         expect(rendered.prop("placeholder")).toEqual("Test");
     });
-});
-
-describe("text-field deprecated enum values", (): void => {
-    /* tslint:disable no-console */
-    beforeEach(() => {
-        console.warn = jest.fn();
-    });
-
-    test("should throw a warning in the console if `TextFieldType.date` is passed to the type prop", () => {
-        const rendered: any = render(
-            <TextField managedClasses={managedClasses} type={TextFieldType.date} />
-        );
-
-        expect(console.warn).toHaveBeenCalledTimes(1);
-    });
-
-    test("should throw a warning in the console if `TextFieldType.hidden` is passed to the type prop", () => {
-        const rendered: any = render(
-            <TextField managedClasses={managedClasses} type={TextFieldType.hidden} />
-        );
-
-        expect(console.warn).toHaveBeenCalledTimes(1);
-    });
-
-    test("should throw a warning in the console if `TextFieldType.month` is passed to the type prop", () => {
-        const rendered: any = render(
-            <TextField managedClasses={managedClasses} type={TextFieldType.month} />
-        );
-
-        expect(console.warn).toHaveBeenCalledTimes(1);
-    });
-
-    test("should throw a warning in the console if `TextFieldType.range` is passed to the type prop", () => {
-        const rendered: any = render(
-            <TextField managedClasses={managedClasses} type={TextFieldType.range} />
-        );
-
-        expect(console.warn).toHaveBeenCalledTimes(1);
-    });
-
-    test("should throw a warning in the console if `TextFieldType.time` is passed to the type prop", () => {
-        const rendered: any = render(
-            <TextField managedClasses={managedClasses} type={TextFieldType.time} />
-        );
-
-        expect(console.warn).toHaveBeenCalledTimes(1);
-    });
-
-    test("should throw a warning in the console if `TextFieldType.week` is passed to the type prop", () => {
-        const rendered: any = render(
-            <TextField managedClasses={managedClasses} type={TextFieldType.week} />
-        );
-
-        expect(console.warn).toHaveBeenCalledTimes(1);
-    });
-    /* tslint:enable no-console */
 });

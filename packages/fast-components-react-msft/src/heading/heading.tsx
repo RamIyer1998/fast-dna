@@ -1,28 +1,27 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { get } from "lodash-es";
-import { Foundation, HandledProps, TypeLevel, TypographyTag } from "@microsoft/fast-components-react-base";
+import Foundation, { HandledProps } from "@microsoft/fast-components-foundation-react";
+import { TypographySize, TypographyTag } from "@microsoft/fast-components-react-base";
 import {
-    AlignHeadingBaseline,
-    HeadingLevel,
-    IHeadingHandledProps,
-    IHeadingManagedClasses,
-    IHeadingUnhandledProps
+    HeadingAlignBaseline,
+    HeadingHandledProps,
+    HeadingManagedClasses,
+    HeadingUnhandledProps,
 } from "./heading.props";
 import { Typography } from "../typography";
-import { IHeadingClassNameContract, IManagedClasses } from "@microsoft/fast-components-class-name-contracts-msft";
+import {
+    HeadingClassNameContract,
+    ManagedClasses,
+} from "@microsoft/fast-components-class-name-contracts-msft";
 
-class Heading extends Foundation<
-    IHeadingHandledProps & IManagedClasses<IHeadingClassNameContract>,
-    React.HTMLAttributes<HTMLElement>,
-    {}
-> {
+class Heading extends Foundation<HeadingHandledProps, HeadingUnhandledProps, {}> {
     public static displayName: string = "Heading";
 
-    protected handledProps: HandledProps<IHeadingHandledProps & IManagedClasses<IHeadingClassNameContract>> = {
-        level: void 0,
+    protected handledProps: HandledProps<HeadingHandledProps> = {
+        size: void 0,
         managedClasses: void 0,
-        tag: void 0
+        tag: void 0,
     };
 
     /**
@@ -33,10 +32,10 @@ class Heading extends Foundation<
     }
 
     /**
-     * Stores level for use in render
+     * Stores size for use in render
      */
-    private get level(): TypeLevel {
-        return TypeLevel[`_${this.props.level}`];
+    private get size(): TypographySize {
+        return TypographySize[`_${this.props.size}`];
     }
 
     /**
@@ -47,7 +46,7 @@ class Heading extends Foundation<
             <Typography
                 {...this.unhandledProps()}
                 tag={this.tag}
-                typeLevel={this.level}
+                size={this.size}
                 className={this.generateClassNames()}
             >
                 {this.props.children}
@@ -59,13 +58,16 @@ class Heading extends Foundation<
      * Generates class names based on props
      */
     protected generateClassNames(): string {
-        const classes: string = this.props.level ?
-            get(this.props, `managedClasses.heading_${this.props.level}`) : get(this.props, "managedClasses.heading_1");
+        const classes: string = this.props.size
+            ? get(this.props, `managedClasses.heading__${this.props.size}`)
+            : get(this.props, "managedClasses.heading__1");
 
-        return super.generateClassNames(classes);
+        return super.generateClassNames(
+            `${get(this.props, "managedClasses.heading")} ${classes}`
+        );
     }
 }
 
 export default Heading;
 export * from "./heading.props";
-export { IHeadingClassNameContract };
+export { HeadingClassNameContract };

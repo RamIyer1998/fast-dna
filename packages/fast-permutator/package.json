@@ -15,18 +15,21 @@
   "main": "index.js",
   "scripts": {
     "prepare": "babel src --presets babel-preset-es2015 --out-dir dist",
+    "prettier": "prettier --config ../../.prettierrc --write '**/*.js'",
+    "prettier:diff": "prettier --config ../../.prettierrc '**/*.js' --list-different",
     "test": "npm run eslint && npm run unit-tests",
     "eslint": "eslint src/**",
     "unit-tests": "jest --maxWorkers=4"
   },
   "jest": {
+    "verbose": true,
     "collectCoverage": true,
     "coverageThreshold": {
       "global": {
         "statements": 89,
         "branches": 78,
         "functions": 96,
-        "lines": 90
+        "lines": 85
       }
     },
     "testURL": "http://localhost",
@@ -42,8 +45,9 @@
     "babel-cli": "^6.24.1",
     "babel-preset-es2015": "^6.24.1",
     "eslint": "^3.19.0",
-    "jest": "^22.4.2",
-    "lodash-es": "^4.17.10"
+    "jest": "^23.6.0",
+    "lodash-es": "^4.17.10",
+    "prettier": "1.14.3"
   },
   "peerDependencies": {
     "lodash-es": "^4.17.10"

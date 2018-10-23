@@ -1,18 +1,43 @@
 /**
  * The class name contract for the tabs component
  */
-export interface ITabsClassNameContract {
-    tabs_tabItems: string;
-    tabs_tabList: string;
-    tabs: string;
+export interface TabsClassNameContract {
+    /**
+     * The root of the tabs component
+     */
+    tabs?: string;
+
+    /**
+     * The tab panels
+     */
+    tabs_tabPanels?: string;
+
+    /**
+     * The tab list
+     */
+    tabs_tabList?: string;
 }
 
-export interface ITabClassNameContract {
-    tab: string;
-    tab__active: string;
+export interface TabClassNameContract {
+    /**
+     * The root of the tab components
+     */
+    tab?: string;
+
+    /**
+     * The active tab modifier
+     */
+    tab__active?: string;
 }
 
-export interface ITabPanelClassNameContract {
-    tabPanel: string;
-    tabPanel__hidden: string;
+export interface TabPanelClassNameContract {
+    /**
+     * The root of the tab panel component
+     */
+    tabPanel?: string;
+
+    /**
+     * The hidden tab panel modifier
+     */
+    tabPanel__hidden?: string;
 }

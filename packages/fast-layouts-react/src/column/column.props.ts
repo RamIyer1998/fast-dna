@@ -1,8 +1,11 @@
+import * as React from "react";
 import { GridGutter } from "../grid/grid.props";
-import { IColumnClassNamesContract } from "./column";
-import { IManagedClasses } from "@microsoft/fast-jss-manager-react";
+import { ColumnClassNamesContract } from "./column";
+import { ManagedClasses } from "@microsoft/fast-jss-manager-react";
 
-export interface IColumnHandledProps {
+export interface ColumnManagedClasses extends ManagedClasses<ColumnClassNamesContract> {}
+export interface ColumnUnhandledProps extends React.HTMLAttributes<HTMLDivElement> {}
+export interface ColumnHandledProps extends ColumnManagedClasses {
     /**
      * The number of columns a column should span. If an array is passed, each index of the array corresponds to
      * a break-point in ascending order.
@@ -30,4 +33,4 @@ export interface IColumnHandledProps {
     gutter?: GridGutter;
 }
 
-export type ColumnProps = IColumnHandledProps & IManagedClasses<IColumnClassNamesContract> & React.HTMLAttributes<HTMLDivElement>;
+export type ColumnProps = ColumnHandledProps & ColumnHandledProps;

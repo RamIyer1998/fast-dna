@@ -1,24 +1,27 @@
 import * as React from "react";
 import * as Adapter from "enzyme-adapter-react-16";
-import { configure, shallow } from "enzyme";
+import { configure, mount, shallow } from "enzyme";
 import examples from "./examples.data";
-import { generateSnapshots } from "@microsoft/fast-jest-snapshots-react";
+import {
+    generateSnapshots,
+    SnapshotTestSuite,
+} from "@microsoft/fast-jest-snapshots-react";
 import MSFTMetatext, {
-    IMetatextHandledProps,
-    IMetatextManagedClasses,
-    IMetatextUnhandledProps,
+    MetatextHandledProps,
+    MetatextManagedClasses,
     MetatextProps,
-    MetatextTag
+    MetatextTag,
+    MetatextUnhandledProps,
 } from "./metatext";
 import { Metatext } from "./index";
 
 /*
  * Configure Enzyme
  */
-configure({adapter: new Adapter()});
+configure({ adapter: new Adapter() });
 
 describe("metatext snapshots", (): void => {
-    generateSnapshots(examples);
+    generateSnapshots(examples as SnapshotTestSuite<MetatextProps>);
 });
 
 describe("metatext", (): void => {
@@ -26,32 +29,34 @@ describe("metatext", (): void => {
         expect((MSFTMetatext as any).name).toBe(MSFTMetatext.displayName);
     });
 
-    test("should return an object that includes all valid props which are not enumerated as handledProps", () => {
-        const handledProps: IMetatextHandledProps = {
-            tag: MetatextTag.p
+    test("should not throw if managedClasses are not provided", () => {
+        expect(() => {
+            shallow(<MSFTMetatext />);
+        }).not.toThrow();
+    });
+
+    test("should accept unhandledProps", () => {
+        const handledProps: MetatextHandledProps = {
+            tag: MetatextTag.p,
         };
 
-        const unhandledProps: IMetatextUnhandledProps = {
-            "aria-hidden": true
+        const unhandledProps: MetatextUnhandledProps = {
+            "aria-hidden": true,
         };
 
-        const props: IMetatextHandledProps & IMetatextUnhandledProps = {...handledProps, ...unhandledProps};
+        const props: MetatextHandledProps & MetatextUnhandledProps = {
+            ...handledProps,
+            ...unhandledProps,
+        };
 
-        const rendered: any = shallow(
-            <Metatext {...props} />
-        );
+        const rendered: any = mount(<Metatext {...props} />);
 
-        const paragraph: any = rendered.first().shallow();
-
-        expect(paragraph.prop("aria-hidden")).toEqual(true);
+        expect(rendered.find(MetatextTag.p).prop("aria-hidden")).toEqual(true);
     });
 
     test("should render the correct `tag` when `tag` prop is passed", () => {
-        const rendered: any = shallow(
-            <Metatext tag={MetatextTag.p} />
-        );
-        const paragraph: any = rendered.first().shallow();
+        const rendered: any = mount(<Metatext tag={MetatextTag.p} />);
 
-        expect(paragraph.instance().props.tag).toEqual(MetatextTag.p);
+        expect(rendered.exists(MetatextTag.p)).toBe(true);
     });
 });

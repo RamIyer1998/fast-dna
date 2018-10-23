@@ -1,13 +1,6 @@
 import * as React from "react";
-import { IComponentFactoryExample } from "@microsoft/fast-development-site-react";
-import { Paragraph } from "./index";
-import {
-    IParagraphHandledProps,
-    IParagraphManagedClasses,
-    IParagraphUnhandledProps,
-    ParagraphLevel,
-    ParagraphProps
-} from "./paragraph.props";
+import { ComponentFactoryExample } from "@microsoft/fast-development-site-react";
+import { Paragraph, ParagraphProps, ParagraphSize } from "./index";
 import schema from "./paragraph.schema.json";
 import Documentation from "./.tmp/documentation";
 
@@ -19,26 +12,26 @@ export default {
     schema: schema as any,
     documentation: <Documentation />,
     detailData: {
-        children: "Paragraph"
+        children: "Paragraph",
     },
     data: [
         {
-            children: testString
+            children: testString,
         },
         {
-            level: ParagraphLevel._1,
+            size: ParagraphSize._1,
             children: testString,
-            "data-sketch-symbol": "Paragraph 1"
+            "data-sketch-symbol": "Paragraph 1",
         },
         {
-            level: ParagraphLevel._2,
+            size: ParagraphSize._2,
             children: testString,
-            "data-sketch-symbol": "Paragraph 2"
+            "data-sketch-symbol": "Paragraph 2",
         },
         {
-            level: ParagraphLevel._3,
+            size: ParagraphSize._3,
             children: testString,
-            "data-sketch-symbol": "Paragraph 3"
-        }
-    ]
-} as IComponentFactoryExample<IParagraphHandledProps>;
+            "data-sketch-symbol": "Paragraph 3",
+        },
+    ],
+} as ComponentFactoryExample<ParagraphProps>;

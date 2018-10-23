@@ -1,14 +1,31 @@
 import Chroma from "chroma-js";
-import { IDesignSystem, withDesignSystemDefaults } from "../design-system";
-import { adjustContrast, contrast, ensureContrast, scaleContrast, WCAGElementContrastRatios } from "@microsoft/fast-jss-utilities";
+import { DesignSystem, withDesignSystemDefaults } from "../design-system";
+import {
+    adjustContrast,
+    contrast,
+    ensureContrast,
+    scaleContrast,
+    WCAGElementContrastRatios,
+} from "@microsoft/fast-jss-utilities";
 import { curry } from "lodash-es";
 
-export function applyMixedColor(color1: string, color2: string, mixValue: number, alpha: number = 1): string {
-    return Chroma.mix(color1, color2, mixValue).alpha(alpha).css();
+export function applyMixedColor(
+    color1: string,
+    color2: string,
+    mixValue: number,
+    alpha: number = 1
+): string {
+    return Chroma.mix(color1, color2, mixValue)
+        .alpha(alpha)
+        .css();
 }
 
-const scaleContrastNormal: (contrast: number) => number = curry(scaleContrast)(WCAGElementContrastRatios.normal);
-const scaleContrastLarge: (contrast: number) => number = curry(scaleContrast)(WCAGElementContrastRatios.large);
+const scaleContrastNormal: (contrast: number) => number = curry(scaleContrast)(
+    WCAGElementContrastRatios.normal
+);
+const scaleContrastLarge: (contrast: number) => number = curry(scaleContrast)(
+    WCAGElementContrastRatios.large
+);
 
 export { scaleContrastNormal, scaleContrastLarge };
 
@@ -22,73 +39,125 @@ export { scaleContrastNormal, scaleContrastLarge };
 /**
  * Adjusts contrast for normal elements by a contrast scale value
  */
-export function normalContrast(contrastScale: number, operandColor: string, referenceColor: string): string {
+export function normalContrast(
+    contrastScale: number,
+    operandColor: string,
+    referenceColor: string
+): string {
     return contrast(scaleContrastNormal(contrastScale), operandColor, referenceColor);
 }
 
 /**
  * Ensures a color contrast for normal elements where contrast is scaled
  */
-export function ensureNormalContrast(contrastScale: number, operandColor: string, referenceColor: string): string {
-    return ensureContrast(scaleContrastNormal(contrastScale), operandColor, referenceColor);
+export function ensureNormalContrast(
+    contrastScale: number,
+    operandColor: string,
+    referenceColor: string
+): string {
+    return ensureContrast(
+        scaleContrastNormal(contrastScale),
+        operandColor,
+        referenceColor
+    );
 }
 
 /**
  * Adjusts contrast for large elements by a contrast scale value
  */
-export function largeContrast(contrastScale: number, operandColor: string, referenceColor: string): string {
+export function largeContrast(
+    contrastScale: number,
+    operandColor: string,
+    referenceColor: string
+): string {
     return contrast(scaleContrastLarge(contrastScale), operandColor, referenceColor);
 }
 
 /**
  * Ensures a color contrast for large elements where contrast is scaled
  */
-export function ensureLargeContrast(contrastScale: number, operandColor: string, referenceColor: string): string {
-    return ensureContrast(scaleContrastLarge(contrastScale), operandColor, referenceColor);
+export function ensureLargeContrast(
+    contrastScale: number,
+    operandColor: string,
+    referenceColor: string
+): string {
+    return ensureContrast(
+        scaleContrastLarge(contrastScale),
+        operandColor,
+        referenceColor
+    );
 }
 
 /**
  * Returns a low-contrast disabled color
  */
-export function disabledContrast(contrastScale: number, operandColor: string, referenceColor: string): string {
+export function disabledContrast(
+    contrastScale: number,
+    operandColor: string,
+    referenceColor: string
+): string {
     return contrast(scaleContrast(1.75, contrastScale), operandColor, referenceColor);
 }
 
 /**
  * Apply a hover treatment to a color
  */
-export function hoverContrast(contrastScale: number, operandColor: string, referenceColor: string): string {
-    return adjustContrast(scaleContrast(1, contrastScale) * -1, operandColor, referenceColor);
+export function hoverContrast(
+    contrastScale: number,
+    operandColor: string,
+    referenceColor: string
+): string {
+    return adjustContrast(
+        scaleContrast(1, contrastScale) * -1,
+        operandColor,
+        referenceColor
+    );
 }
 
 /**
  * Ensure the foreground color meets normal contrast ratios against a background color
  */
-export function ensureForegroundNormal(config: IDesignSystem): string {
-    const designSystem: IDesignSystem = withDesignSystemDefaults(config);
-    return ensureNormalContrast(designSystem.contrast, designSystem.foregroundColor, designSystem.backgroundColor);
+export function ensureForegroundNormal(config: DesignSystem): string {
+    const designSystem: DesignSystem = withDesignSystemDefaults(config);
+    return ensureNormalContrast(
+        designSystem.contrast,
+        designSystem.foregroundColor,
+        designSystem.backgroundColor
+    );
 }
 
 /**
  * Set the foreground color to meet normal contrast ratios against a background color
  */
-export function foregroundNormal(config: IDesignSystem): string {
-    const designSystem: IDesignSystem = withDesignSystemDefaults(config);
-    return normalContrast(designSystem.contrast, designSystem.foregroundColor, designSystem.backgroundColor);
+export function foregroundNormal(config: DesignSystem): string {
+    const designSystem: DesignSystem = withDesignSystemDefaults(config);
+    return normalContrast(
+        designSystem.contrast,
+        designSystem.foregroundColor,
+        designSystem.backgroundColor
+    );
 }
 
 /**
  * Ensure the brand color meets normal contrast ratios against a background color
  */
-export function ensureBrandNormal(config: IDesignSystem): string {
-    const designSystem: IDesignSystem = withDesignSystemDefaults(config);
-    return ensureNormalContrast(designSystem.contrast, designSystem.brandColor, designSystem.backgroundColor);
+export function ensureBrandNormal(config: DesignSystem): string {
+    const designSystem: DesignSystem = withDesignSystemDefaults(config);
+    return ensureNormalContrast(
+        designSystem.contrast,
+        designSystem.brandColor,
+        designSystem.backgroundColor
+    );
 }
 
 /**
  * Ensure the background color meets normal contrast ratios against a background color
  */
-export function ensuresBackgroundNormal(config: IDesignSystem): string {
-    const designSystem: IDesignSystem = withDesignSystemDefaults(config);
-    return ensureNormalContrast(designSystem.contrast, designSystem.backgroundColor, designSystem.foregroundColor);
+export function ensuresBackgroundNormal(config: DesignSystem): string {
+    const designSystem: DesignSystem = withDesignSystemDefaults(config);
+    return ensureNormalContrast(
+        designSystem.contrast,
+        designSystem.backgroundColor,
+        designSystem.foregroundColor
+    );
 }

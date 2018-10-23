@@ -1,13 +1,13 @@
 import { Component, ElementRef, Input, SimpleChanges } from "@angular/core";
 import { SheetsManager, StyleSheet } from "jss";
-import { ClassNames, ComponentStyles } from "@microsoft/fast-jss-manager";
+import { ComponentStyles } from "@microsoft/fast-jss-manager";
 import { eventNames } from "./utilities/get-event-names";
 import jss, { stylesheetManager } from "./jss";
 
 /**
  * State interface for JSS manager
  */
-export interface IJSSManagerState {
+export interface JSSManagerState {
     /**
      * Stores a JSS stylesheet containing all style rules for a component
      */
@@ -16,7 +16,6 @@ export interface IJSSManagerState {
 
 function manageJss<S, C>(styles?: ComponentStyles<S, C>): <T>(BaseComponent: any) => any {
     return function(BaseComponent: any): any {
-
         class JSSManager extends BaseComponent {
             /**
              * The style manager is responsible for attaching and detaching style elements when
@@ -41,23 +40,36 @@ function manageJss<S, C>(styles?: ComponentStyles<S, C>): <T>(BaseComponent: any
 
                 this.state = {};
 
-                this.el.nativeElement.addEventListener(eventNames.getConfig, (e: CustomEvent) => {
-                    this.config = e.detail;
+                this.el.nativeElement.addEventListener(
+                    eventNames.getConfig,
+                    (e: CustomEvent) => {
+                        this.config = e.detail;
 
-                    if (this.state.styleSheet) {
-                        this.state.styleSheet.update(this.designSystem);
-                    }
-                }, true);
+                        if (this.state.styleSheet) {
+                            this.state.styleSheet.update(this.designSystem);
+                        }
+                    },
+                    true
+                );
 
-                const registerComponentEvent: CustomEvent = new CustomEvent(eventNames.registerComponent);
+                const registerComponentEvent: CustomEvent = new CustomEvent(
+                    eventNames.registerComponent
+                );
                 this.el.nativeElement.dispatchEvent(registerComponentEvent);
 
-                const updateStylesEvent: CustomEvent = new CustomEvent(eventNames.getConfig, {detail: {}});
+                const updateStylesEvent: CustomEvent = new CustomEvent(
+                    eventNames.getConfig,
+                    { detail: {} }
+                );
                 this.el.nativeElement.dispatchEvent(updateStylesEvent);
 
-                this.el.nativeElement.addEventListener(eventNames.update, (e: CustomEvent) => {
-                    this.el.nativeElement.dispatchEvent(updateStylesEvent);
-                }, true);
+                this.el.nativeElement.addEventListener(
+                    eventNames.update,
+                    (e: CustomEvent) => {
+                        this.el.nativeElement.dispatchEvent(updateStylesEvent);
+                    },
+                    true
+                );
             }
 
             private ngAfterContentInit(): void {
@@ -65,18 +77,17 @@ function manageJss<S, C>(styles?: ComponentStyles<S, C>): <T>(BaseComponent: any
                     super.ngAfterContentInit();
                 }
 
-                const state: IJSSManagerState = {};
+                const state: JSSManagerState = {};
 
                 if (Boolean(styles)) {
-                    state.styleSheet = jss.createStyleSheet(
-                        styles,
-                        { link: true }
-                    );
+                    state.styleSheet = jss.createStyleSheet(styles, {
+                        link: true,
+                    });
                 }
 
                 this.state = state;
 
-                this.className = this.getClassNames()[(Object.keys(styles)[0] as any)];
+                this.className = this.getClassNames()[Object.keys(styles)[0] as any];
             }
 
             private ngAfterViewInit(): void {
@@ -97,7 +108,9 @@ function manageJss<S, C>(styles?: ComponentStyles<S, C>): <T>(BaseComponent: any
                     jss.removeStyleSheet(this.state.styleSheet);
                 }
 
-                const deregisterComponentEvent: CustomEvent = new CustomEvent(eventNames.deregisterComponent);
+                const deregisterComponentEvent: CustomEvent = new CustomEvent(
+                    eventNames.deregisterComponent
+                );
                 this.el.nativeElement.dispatchEvent(deregisterComponentEvent);
             }
 
@@ -115,20 +128,25 @@ function manageJss<S, C>(styles?: ComponentStyles<S, C>): <T>(BaseComponent: any
             /**
              * Merges static and dynamic stylesheet classnames into one object
              */
-            private getClassNames(): ClassNames<S> {
-                const classNames: Partial<ClassNames<S>> = {};
+            private getClassNames(): { [className in keyof S]?: string } {
+                const classNames: Partial<{ [className in keyof S]?: string }> = {};
 
                 if (this.hasStyleSheet()) {
                     for (const key in this.state.styleSheet.classes) {
-                        if (this.state.styleSheet.classes.hasOwnProperty(key as keyof S)) {
-                            classNames[key as keyof S] = typeof classNames[key as keyof S] !== "undefined"
-                                ? `${classNames[key as keyof S]} ${this.state.styleSheet.classes[key as keyof S]}`
-                                : this.state.styleSheet.classes[key as keyof S];
+                        if (
+                            this.state.styleSheet.classes.hasOwnProperty(key as keyof S)
+                        ) {
+                            classNames[key as keyof S] =
+                                typeof classNames[key as keyof S] !== "undefined"
+                                    ? `${classNames[key as keyof S]} ${
+                                          this.state.styleSheet.classes[key as keyof S]
+                                      }`
+                                    : this.state.styleSheet.classes[key as keyof S];
                         }
                     }
                 }
 
-                return classNames as ClassNames<S>;
+                return classNames as { [className in keyof S]?: string };
             }
         }
 

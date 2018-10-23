@@ -1,12 +1,11 @@
 import * as React from "react";
-import IFormItemCommon from "./form-item";
+import FormItemCommon from "./form-item";
 import styles from "./form-item.textarea.style";
-import { IFormItemTextareaClassNameContract } from "../class-name-contracts/";
-import manageJss, { IJSSManagerProps } from "@microsoft/fast-jss-manager-react";
-import { IManagedClasses } from "@microsoft/fast-components-class-name-contracts-base";
+import { FormItemTextareaClassNameContract } from "../class-name-contracts/";
+import manageJss, { ManagedJSSProps } from "@microsoft/fast-jss-manager-react";
+import { ManagedClasses } from "@microsoft/fast-components-class-name-contracts-base";
 
-export interface IFormItemTextareaProps extends IFormItemCommon {
-
+export interface FormItemTextareaProps extends FormItemCommon {
     /**
      * The unique index for the section
      */
@@ -22,8 +21,10 @@ export interface IFormItemTextareaProps extends IFormItemCommon {
  * Schema form component definition
  * @extends React.Component
  */
-class FormItemTextarea extends React.Component<IFormItemTextareaProps & IManagedClasses<IFormItemTextareaClassNameContract>, {}> {
-
+class FormItemTextarea extends React.Component<
+    FormItemTextareaProps & ManagedClasses<FormItemTextareaClassNameContract>,
+    {}
+> {
     public render(): JSX.Element {
         return (
             <div className={this.props.managedClasses.formItemTextarea}>
@@ -45,9 +46,9 @@ class FormItemTextarea extends React.Component<IFormItemTextareaProps & IManaged
         );
     }
 
-    private handleChange = ({target: { value }}: any): any => {
+    private handleChange = ({ target: { value } }: any): any => {
         return this.props.onChange(this.props.dataLocation, value);
-    }
+    };
 }
 
 export default manageJss(styles)(FormItemTextarea);

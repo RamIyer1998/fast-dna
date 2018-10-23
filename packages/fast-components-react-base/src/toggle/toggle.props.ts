@@ -1,11 +1,16 @@
 import * as React from "react";
-import { IManagedClasses, IToggleClassNameContract } from "@microsoft/fast-components-class-name-contracts-base";
+import {
+    ManagedClasses,
+    ToggleClassNameContract,
+} from "@microsoft/fast-components-class-name-contracts-base";
 
-export interface IToggleHandledProps {
+export interface ToggleManagedClasses extends ManagedClasses<ToggleClassNameContract> {}
+export interface ToggleUnhandledProps extends React.HTMLAttributes<HTMLDivElement> {}
+export interface ToggleHandledProps extends ToggleManagedClasses {
     /**
      * The label content
      */
-    children?: React.ReactNode | React.ReactNode[];
+    children?: React.ReactNode;
 
     /**
      * The disabled state
@@ -25,7 +30,7 @@ export interface IToggleHandledProps {
     /**
      * The onChange event handler
      */
-    onChange?: ToggleOnChange;
+    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 
     /**
      * The toggle selected state
@@ -35,20 +40,17 @@ export interface IToggleHandledProps {
     /**
      * The text to display when selected
      */
-    selectedString: string;
+    selectedMessage: string;
 
     /**
      * The status label HTML id attribute
      */
-    statusLabelId: string;
+    statusMessageId: string;
 
     /**
      * The text to display when unselected
      */
-    unselectedString: string;
+    unselectedMessage: string;
 }
 
-export interface IToggleUnhandledProps extends React.AllHTMLAttributes<HTMLElement> {}
-export type ToggleOnChange = (event?: React.ChangeEvent<HTMLElement>) => void;
-export interface IToggleManagedClasses extends IManagedClasses<IToggleClassNameContract> {}
-export type ToggleProps = IToggleHandledProps & IToggleUnhandledProps & IToggleManagedClasses;
+export type ToggleProps = ToggleHandledProps & ToggleUnhandledProps;

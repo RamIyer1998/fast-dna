@@ -9,26 +9,19 @@ export enum ContextMenuType {
     radio = "radio",
     checkbox = "checkbox",
     normal = "normal",
-    separator = "separator"
+    separator = "separator",
 }
 
 /**
  * The interface describing a single menu item
  */
-export interface IContextMenuItem {
+export interface ContextMenuItemConfig {
     title?: string;
     type?: ContextMenuType;
 }
 
-/**
- * Describes a collection of menus related to eachother
- */
-export interface IContextMenus {
-    [key: string]: IContextMenuItem[];
-}
-
 // Store menu ids for later reference
-let menuIdStore: {[key: string]: IContextMenuItem} = {};
+let menuIdStore: { [key: string]: ContextMenuItemConfig } = {};
 const rootId: string = createContextMenu();
 
 /**
@@ -37,22 +30,27 @@ const rootId: string = createContextMenu();
  */
 function createContextMenu(): string {
     return ExtensionApi.contextMenus.create({
-        title: "Fluent Web",
+        title: "FAST DNA",
         contexts: ["all"],
-        documentUrlPatterns: validDomains
+        documentUrlPatterns: validDomains,
     });
 }
 
 /**
  * Create submenu items for a root menu
  */
-function createSubmenuItems(config: IContextMenus, id: string): void {
+function createSubmenuItems(
+    config: { [key: string]: ContextMenuItemConfig[] },
+    id: string
+): void {
     Object.keys(config).map((key: string, index: number) => {
-        const menuConfigs: IContextMenuItem[] = config[key].slice(0);
+        const menuConfigs: ContextMenuItemConfig[] = config[key].slice(0);
 
         if (index !== 0) {
             // Add a separator before all groups
-            const separator: IContextMenuItem = { type: ContextMenuType.separator };
+            const separator: ContextMenuItemConfig = {
+                type: ContextMenuType.separator,
+            };
             menuConfigs.unshift(separator);
         }
 
@@ -60,7 +58,7 @@ function createSubmenuItems(config: IContextMenus, id: string): void {
             .map((menuConfig: any) => {
                 return Object.assign({}, menuConfig, {
                     parentId: id,
-                    onclick: handleContextMenuItemClick
+                    onclick: handleContextMenuItemClick,
                 });
             })
             .forEach((menuConfig: any) => {
@@ -74,12 +72,12 @@ function createSubmenuItems(config: IContextMenus, id: string): void {
  * Handles menu item click events
  */
 function handleContextMenuItemClick(info: any): void {
-    ExtensionApi.tabs.query({active: true, currentWindow: true}, (tabs: any[]) => {
+    ExtensionApi.tabs.query({ active: true, currentWindow: true }, (tabs: any[]) => {
         if (!Array.isArray(tabs) || !tabs.length) {
             return;
         }
 
-        const clickedMenuConfig: IContextMenuItem = menuIdStore[info.menuItemId];
+        const clickedMenuConfig: ContextMenuItemConfig = menuIdStore[info.menuItemId];
 
         if (clickedMenuConfig !== undefined) {
             ExtensionApi.tabs.sendMessage(tabs[0].id, clickedMenuConfig);
@@ -98,7 +96,11 @@ function removeAllContextMenuItems(): void {
     menuIdStore = {};
 }
 
-function handleExternalMessages(message: CreateMessage, sender: any, sendResponse: any): void {
+function handleExternalMessages(
+    message: CreateMessage,
+    sender: any,
+    sendResponse: any
+): void {
     switch (message.type) {
         case CREATE_MENUS_MESSAGE:
             removeAllContextMenuItems();

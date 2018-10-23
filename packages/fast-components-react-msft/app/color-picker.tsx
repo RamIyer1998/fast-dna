@@ -1,34 +1,40 @@
 import * as React from "react";
-import manageJss, { ComponentStyles, IJSSManagerProps, IManagedClasses } from "@microsoft/fast-jss-manager-react";
-import { IDesignSystem } from "@microsoft/fast-components-styles-msft";
+import manageJss, {
+    ComponentStyles,
+    ManagedClasses,
+} from "@microsoft/fast-jss-manager-react";
+import { DesignSystem } from "@microsoft/fast-components-styles-msft";
 
-export interface IColorConfig {
+export interface ColorConfig {
     foregroundColor: string;
     backgroundColor: string;
     accentColor: string;
 }
 
-export interface IColorPickerProps extends IColorConfig {
-    onColorUpdate: (colors: IColorConfig) => void;
+export interface ColorPickerProps extends ColorConfig {
+    onColorUpdate: (colors: ColorConfig) => void;
 }
 
-export interface IColorPickerManagedClasses {
+export interface ColorPickerManagedClasses {
     colorPicker: string;
     colorPicker_label: string;
 }
 
-const styles: ComponentStyles<IColorPickerManagedClasses, IDesignSystem> = {
+const styles: ComponentStyles<ColorPickerManagedClasses, DesignSystem> = {
     colorPicker: {
         display: "flex",
         height: "100%",
-        alignItems: "center"
+        alignItems: "center",
     },
     colorPicker_label: {
-        margin: "0 12px"
-    }
+        margin: "0 12px",
+    },
 };
 
-class ColorPicker extends React.Component<IColorPickerProps & IManagedClasses<IColorPickerManagedClasses>, undefined> {
+class ColorPicker extends React.Component<
+    ColorPickerProps & ManagedClasses<ColorPickerManagedClasses>,
+    undefined
+> {
     /**
      * Ref object for foreground color input
      */
@@ -44,7 +50,7 @@ class ColorPicker extends React.Component<IColorPickerProps & IManagedClasses<IC
      */
     private accentRef: React.RefObject<HTMLInputElement>;
 
-    constructor(props: IColorPickerProps) {
+    constructor(props: ColorPickerProps) {
         super(props);
 
         this.foregroundRef = React.createRef();
@@ -55,9 +61,24 @@ class ColorPicker extends React.Component<IColorPickerProps & IManagedClasses<IC
     public render(): JSX.Element {
         return (
             <div className={this.props.managedClasses.colorPicker}>
-                {this.createColorInput("foreground", this.props.foregroundColor, "foregroundInput", this.foregroundRef)}
-                {this.createColorInput("background", this.props.backgroundColor, "backgroundInput", this.backgroundRef)}
-                {this.createColorInput("accent", this.props.accentColor, "accentInput", this.accentRef)}
+                {this.createColorInput(
+                    "foreground",
+                    this.props.foregroundColor,
+                    "foregroundInput",
+                    this.foregroundRef
+                )}
+                {this.createColorInput(
+                    "background",
+                    this.props.backgroundColor,
+                    "backgroundInput",
+                    this.backgroundRef
+                )}
+                {this.createColorInput(
+                    "accent",
+                    this.props.accentColor,
+                    "accentInput",
+                    this.accentRef
+                )}
             </div>
         );
     }
@@ -65,7 +86,12 @@ class ColorPicker extends React.Component<IColorPickerProps & IManagedClasses<IC
     /**
      * Creates individual label/input elements
      */
-    private createColorInput(name: string, value: string, id: string, ref: React.RefObject<HTMLInputElement>): JSX.Element {
+    private createColorInput(
+        name: string,
+        value: string,
+        id: string,
+        ref: React.RefObject<HTMLInputElement>
+    ): JSX.Element {
         return (
             <React.Fragment>
                 <label
@@ -91,16 +117,19 @@ class ColorPicker extends React.Component<IColorPickerProps & IManagedClasses<IC
      */
     private handleColorPickerChange = (e: React.FormEvent<HTMLInputElement>): void => {
         const value: string = e.currentTarget.value;
-        const updatedColorKey: keyof IColorConfig = e.currentTarget === this.foregroundRef.current
-            ? "foregroundColor"
-            : e.currentTarget === this.backgroundRef.current
-            ? "backgroundColor"
-            : "accentColor";
+        const updatedColorKey: keyof ColorConfig =
+            e.currentTarget === this.foregroundRef.current
+                ? "foregroundColor"
+                : e.currentTarget === this.backgroundRef.current
+                    ? "backgroundColor"
+                    : "accentColor";
 
         if (typeof this.props.onColorUpdate === "function") {
-            this.props.onColorUpdate(Object.assign({}, this.props, { [updatedColorKey]: value}));
+            this.props.onColorUpdate(
+                Object.assign({}, this.props, { [updatedColorKey]: value })
+            );
         }
-    }
+    };
 
     /**
      * Ensures that colors are properly formatted
@@ -111,7 +140,10 @@ class ColorPicker extends React.Component<IColorPickerProps & IManagedClasses<IC
         const match: string[] | null = threeDigitHex.exec(color);
 
         return Array.isArray(match)
-            ? `#${match[1].split("").map((character: string) => character + character).join("")}`
+            ? `#${match[1]
+                  .split("")
+                  .map((character: string) => character + character)
+                  .join("")}`
             : color;
     }
 }

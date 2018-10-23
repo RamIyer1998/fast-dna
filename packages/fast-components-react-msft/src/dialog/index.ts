@@ -1,13 +1,15 @@
 import * as React from "react";
 import {
     Dialog as BaseDialog,
-    IDialogClassNameContract,
-    IDialogHandledProps,
-    IDialogUnhandledProps,
-    IFoundationProps
+    DialogClassNameContract,
+    DialogHandledProps as BaseDialogHandledProps,
+    DialogManagedClasses,
+    DialogProps as BaseDialogProps,
+    DialogUnhandledProps,
 } from "@microsoft/fast-components-react-base";
-import manageJss, { IJSSManagerProps } from "@microsoft/fast-jss-manager-react";
-import { DialogStyles, IDesignSystem } from "@microsoft/fast-components-styles-msft";
+import manageJss, { ManagedJSSProps } from "@microsoft/fast-jss-manager-react";
+import { DesignSystem, DialogStyles } from "@microsoft/fast-components-styles-msft";
+import { Subtract } from "utility-types";
 
 /*
  * The type returned by manageJss type is very complicated so we'll let the
@@ -15,6 +17,20 @@ import { DialogStyles, IDesignSystem } from "@microsoft/fast-components-styles-m
  */
 /* tslint:disable-next-line:typedef */
 const Dialog = manageJss(DialogStyles)(BaseDialog);
-type Dialog = InstanceType<typeof Dialog>;
+type Dialog = typeof Dialog;
 
-export { Dialog };
+interface DialogHandledProps
+    extends Subtract<BaseDialogHandledProps, DialogManagedClasses> {}
+type DialogProps = ManagedJSSProps<
+    BaseDialogProps,
+    DialogClassNameContract,
+    DesignSystem
+>;
+
+export {
+    Dialog,
+    DialogProps,
+    DialogHandledProps,
+    DialogUnhandledProps,
+    DialogClassNameContract,
+};

@@ -1,5 +1,10 @@
 import * as React from "react";
-import { IManagedClasses } from "@microsoft/fast-jss-manager-react";
-import { IContainerClassNamesContract } from "./container";
+import { ManagedClasses } from "@microsoft/fast-jss-manager-react";
+import { ContainerClassNamesContract } from "./container";
 
-export type ContainerProps = IManagedClasses<IContainerClassNamesContract> & React.HTMLAttributes<HTMLDivElement>;
+export interface ContainerManagedClasses
+    extends ManagedClasses<ContainerClassNamesContract> {}
+export interface ContainerUnhandledProps extends React.HTMLAttributes<HTMLDivElement> {}
+/* tslint:disable-next-line:no-empty-interface */
+export interface ContainerHandledProps extends ContainerManagedClasses {}
+export type ContainerProps = ContainerHandledProps & ContainerUnhandledProps;

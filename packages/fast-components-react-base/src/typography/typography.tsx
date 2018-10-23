@@ -1,31 +1,35 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { get } from "lodash-es";
-import Foundation, { HandledProps } from "../foundation";
+import Foundation, { HandledProps } from "@microsoft/fast-components-foundation-react";
 import {
-    ITypographyHandledProps,
-    ITypographyManagedClasses,
-    ITypographyUnhandledProps,
-    TypeLevel,
-    TypographyTag
+    TypographyHandledProps,
+    TypographyManagedClasses,
+    TypographyProps,
+    TypographySize,
+    TypographyTag,
+    TypographyUnhandledProps,
 } from "./typography.props";
-import { IManagedClasses, ITypographyClassNameContract } from "@microsoft/fast-components-class-name-contracts-base";
+import {
+    ManagedClasses,
+    TypographyClassNameContract,
+} from "@microsoft/fast-components-class-name-contracts-base";
 
 class Typography extends Foundation<
-    ITypographyHandledProps & IManagedClasses<ITypographyClassNameContract>,
-    ITypographyUnhandledProps,
+    TypographyHandledProps,
+    TypographyUnhandledProps,
     {}
 > {
-    public static defaultProps: Partial<ITypographyHandledProps> = {
-        tag: TypographyTag.p
+    public static defaultProps: Partial<TypographyProps> = {
+        tag: TypographyTag.p,
     };
 
     public static displayName: string = "Typography";
 
-    protected handledProps: HandledProps<ITypographyHandledProps & IManagedClasses<ITypographyClassNameContract>> = {
+    protected handledProps: HandledProps<TypographyHandledProps> = {
         managedClasses: void 0,
         tag: void 0,
-        typeLevel: void 0
+        size: void 0,
     };
 
     /**
@@ -38,12 +42,14 @@ class Typography extends Foundation<
     /**
      * Renders the component
      */
-    public render(): React.ReactElement<HTMLHeadingElement | HTMLParagraphElement | HTMLSpanElement | HTMLTableCaptionElement> {
+    public render(): React.ReactElement<
+        | HTMLHeadingElement
+        | HTMLParagraphElement
+        | HTMLSpanElement
+        | HTMLTableCaptionElement
+    > {
         return (
-            <this.tag
-                {...this.unhandledProps()}
-                className={this.generateClassNames()}
-            >
+            <this.tag {...this.unhandledProps()} className={this.generateClassNames()}>
                 {this.props.children}
             </this.tag>
         );
@@ -53,10 +59,13 @@ class Typography extends Foundation<
      * Generates class names based on props
      */
     protected generateClassNames(): string {
-        const classes: string = this.props.typeLevel ?
-            get(this.props, `managedClasses.typography_${this.props.typeLevel}`) : get(this.props, "managedClasses.typography_1");
+        const classes: string = this.props.size
+            ? get(this.props, `managedClasses.typography__${this.props.size}`)
+            : get(this.props, "managedClasses.typography__1");
 
-        return super.generateClassNames(classes);
+        return super.generateClassNames(
+            `${get(this.props, "managedClasses.typography")} ${classes}`
+        );
     }
 
     /**
@@ -69,4 +78,4 @@ class Typography extends Foundation<
 
 export default Typography;
 export * from "./typography.props";
-export { ITypographyClassNameContract };
+export { TypographyClassNameContract };

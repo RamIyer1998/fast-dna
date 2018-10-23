@@ -1,19 +1,28 @@
 import * as React from "react";
 import { toPx } from "@microsoft/fast-jss-utilities";
-import devSiteDesignSystemDefaults, { IDevSiteDesignSystem } from "../design-system";
+import devSiteDesignSystemDefaults, { DevSiteDesignSystem } from "../design-system";
 import { Link, withRouter } from "react-router-dom";
 import { RouteComponentProps } from "react-router";
 import { ComponentViewTypes } from "./component-view";
-import { glyphBuildingblocks, glyphExamples, glyphPage } from "@microsoft/fast-glyphs-msft";
+import {
+    glyphBuildingblocks,
+    glyphExamples,
+    glyphPage,
+} from "@microsoft/fast-glyphs-msft";
 import ComponentViewToggle from "./component-view-toggle";
-import manageJss, { ComponentStyles, ICSSRules, IJSSManagerProps, IManagedClasses } from "@microsoft/fast-jss-manager-react";
+import manageJss, {
+    ComponentStyles,
+    CSSRules,
+    ManagedClasses,
+    ManagedJSSProps,
+} from "@microsoft/fast-jss-manager-react";
 
 export enum ActionEnum {
     configure = "configure",
-    view = "view"
+    view = "view",
 }
 
-export interface IActionBarProps extends RouteComponentProps<any> {
+export interface ActionBarProps extends RouteComponentProps<any> {
     /*
      * The current ComponentView of the app
      */
@@ -45,7 +54,7 @@ export interface IActionBarProps extends RouteComponentProps<any> {
     onDevToolsToggle: () => void;
 }
 
-export interface IActionBarClassNameContract {
+export interface ActionBarClassNameContract {
     actionBar: string;
     actionBar_componentViewToggles: string;
     actionBar_menu: string;
@@ -53,7 +62,7 @@ export interface IActionBarClassNameContract {
     actionBar_menu_button__active: string;
 }
 
-function menuButtonBase(): ICSSRules<IDevSiteDesignSystem> {
+function menuButtonBase(): CSSRules<DevSiteDesignSystem> {
     return {
         position: "relative",
         border: `${toPx(1)} solid transparent`,
@@ -69,37 +78,38 @@ function menuButtonBase(): ICSSRules<IDevSiteDesignSystem> {
             marginRight: toPx(5),
             display: "inline-block",
             fontSize: toPx(16),
-            verticalAlign: "text-bottom"
+            verticalAlign: "text-bottom",
         },
         "&:hover": {
             cursor: "pointer",
-            background: "rgba(0, 0, 0, 0.04)"
+            background: "rgba(0, 0, 0, 0.04)",
         },
         "&:focus": {
             outline: "none",
-            border: (config: IDevSiteDesignSystem): string => {
-                return `${toPx(1)} solid ${config.brandColor || devSiteDesignSystemDefaults.brandColor}`;
-            }
-        }
+            border: (config: DevSiteDesignSystem): string => {
+                return `${toPx(1)} solid ${config.brandColor ||
+                    devSiteDesignSystemDefaults.brandColor}`;
+            },
+        },
     };
 }
 
-const styles: ComponentStyles<IActionBarClassNameContract, IDevSiteDesignSystem> = {
+const styles: ComponentStyles<ActionBarClassNameContract, DevSiteDesignSystem> = {
     actionBar: {
         display: "flex",
         flexBasis: "100%",
-        borderBottom: `${toPx(1)} solid #CCCCCC`
+        borderBottom: `${toPx(1)} solid #CCCCCC`,
     },
     actionBar_componentViewToggles: {
         display: "flex",
         justifyContent: "flex-end",
-        flexGrow: "1"
+        flexGrow: "1",
     },
     actionBar_menu: {
-        flexGrow: "1"
+        flexGrow: "1",
     },
     actionBar_menu_button: {
-        ...menuButtonBase()
+        ...menuButtonBase(),
     },
     actionBar_menu_button__active: {
         ...menuButtonBase(),
@@ -111,37 +121,58 @@ const styles: ComponentStyles<IActionBarClassNameContract, IDevSiteDesignSystem>
             borderRadius: `${toPx(2)} ${toPx(2)} 0 0`,
             left: toPx(12),
             right: toPx(12),
-            background: (config: IDevSiteDesignSystem): string => {
+            background: (config: DevSiteDesignSystem): string => {
                 return config.brandColor;
-            }
-        }
-    }
+            },
+        },
+    },
 };
 
-class ActionBar extends React.Component<IActionBarProps & IManagedClasses<IActionBarClassNameContract>, {}> {
+class ActionBar extends React.Component<
+    ActionBarProps & ManagedClasses<ActionBarClassNameContract>,
+    {}
+> {
     public render(): JSX.Element {
         return (
             <div className={this.props.managedClasses.actionBar}>
                 <div className={this.props.managedClasses.actionBar_menu}>
-                    <button className={this.getActionBarMenuButtonClassNames(ActionEnum.configure)} onClick={this.props.onFormToggle}>
-                        <span dangerouslySetInnerHTML={{__html: glyphBuildingblocks}} />
+                    <button
+                        className={this.getActionBarMenuButtonClassNames(
+                            ActionEnum.configure
+                        )}
+                        onClick={this.props.onFormToggle}
+                    >
+                        <span
+                            dangerouslySetInnerHTML={{
+                                __html: glyphBuildingblocks,
+                            }}
+                        />
                         Configure
                     </button>
-                    <button className={this.getActionBarMenuButtonClassNames(ActionEnum.view)} onClick={this.props.onDevToolsToggle}>
+                    <button
+                        className={this.getActionBarMenuButtonClassNames(ActionEnum.view)}
+                        onClick={this.props.onDevToolsToggle}
+                    >
                         Dev Tools
                     </button>
                 </div>
                 <div className={this.props.managedClasses.actionBar_componentViewToggles}>
                     <ComponentViewToggle
                         to={this.normalizePath()}
-                        onClick={this.onComponentViewChangeCallback(ComponentViewTypes.detail)}
+                        onClick={this.onComponentViewChangeCallback(
+                            ComponentViewTypes.detail
+                        )}
                         label="View detail"
                         current={this.isAriaCurrent(ComponentViewTypes.detail)}
                         glyph={glyphPage}
                     />
                     <ComponentViewToggle
-                        to={`${this.normalizePath()}${ComponentViewTypes[ComponentViewTypes.examples]}/`}
-                        onClick={this.onComponentViewChangeCallback(ComponentViewTypes.examples)}
+                        to={`${this.normalizePath()}${
+                            ComponentViewTypes[ComponentViewTypes.examples]
+                        }/`}
+                        onClick={this.onComponentViewChangeCallback(
+                            ComponentViewTypes.examples
+                        )}
                         label="View examples"
                         current={this.isAriaCurrent(ComponentViewTypes.examples)}
                         glyph={glyphExamples}
@@ -177,7 +208,9 @@ class ActionBar extends React.Component<IActionBarProps & IManagedClasses<IActio
     /**
      * Get a function to call callback with a passed param
      */
-    private onComponentViewChangeCallback(type: ComponentViewTypes): (e: React.MouseEvent<HTMLAnchorElement>) => void {
+    private onComponentViewChangeCallback(
+        type: ComponentViewTypes
+    ): (e: React.MouseEvent<HTMLAnchorElement>) => void {
         return (e: React.MouseEvent<HTMLAnchorElement>): void => {
             if (typeof this.props.onComponentViewChange === "function") {
                 this.props.onComponentViewChange(type);

@@ -1,37 +1,41 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { get, isUndefined } from "lodash-es";
-import Foundation, { HandledProps } from "../foundation";
+import Foundation, { HandledProps } from "@microsoft/fast-components-foundation-react";
 import {
-    ILabelHandledProps,
-    ILabelManagedClasses,
-    ILabelUnhandledProps,
-    LabelTag
+    LabelHandledProps,
+    LabelManagedClasses,
+    LabelProps,
+    LabelTag,
+    LabelUnhandledProps,
 } from "./label.props";
-import { ILabelClassNameContract, IManagedClasses } from "@microsoft/fast-components-class-name-contracts-base";
+import {
+    LabelClassNameContract,
+    ManagedClasses,
+} from "@microsoft/fast-components-class-name-contracts-base";
 
-class Label extends Foundation<
-    ILabelHandledProps & IManagedClasses<ILabelClassNameContract>,
-    React.HTMLAttributes<HTMLLabelElement>,
-    {}
-> {
+class Label extends Foundation<LabelHandledProps, LabelUnhandledProps, {}> {
     public static displayName: string = "Label";
 
-    public static defaultProps: Partial<ILabelHandledProps> = {
-        tag: LabelTag.label
+    public static defaultProps: Partial<LabelProps> = {
+        tag: LabelTag.label,
     };
 
-    protected handledProps: HandledProps<ILabelHandledProps & IManagedClasses<ILabelClassNameContract>> = {
+    protected handledProps: HandledProps<
+        LabelHandledProps & ManagedClasses<LabelClassNameContract>
+    > = {
         hidden: void 0,
         managedClasses: void 0,
-        tag: void 0
+        tag: void 0,
     };
 
     /**
      * Stores HTML tag for use in render
      */
     private get tag(): string {
-        return isUndefined(LabelTag[this.props.tag]) ? LabelTag.label : LabelTag[this.props.tag];
+        return isUndefined(LabelTag[this.props.tag])
+            ? LabelTag.label
+            : LabelTag[this.props.tag];
     }
 
     /**
@@ -39,10 +43,7 @@ class Label extends Foundation<
      */
     public render(): React.ReactElement<HTMLLabelElement | HTMLFieldSetElement> {
         return (
-            <this.tag
-                {...this.unhandledProps()}
-                className={this.generateClassNames()}
-            >
+            <this.tag {...this.unhandledProps()} className={this.generateClassNames()}>
                 {this.props.children}
             </this.tag>
         );
@@ -55,7 +56,7 @@ class Label extends Foundation<
         let className: string = get(this.props, "managedClasses.label");
 
         if (this.props.hidden) {
-            className = `${className} ${get(this.props, "managedClasses.label_hidden")}`;
+            className = `${className} ${get(this.props, "managedClasses.label__hidden")}`;
         }
 
         return super.generateClassNames(className);
@@ -64,4 +65,4 @@ class Label extends Foundation<
 
 export default Label;
 export * from "./label.props";
-export {ILabelClassNameContract};
+export { LabelClassNameContract };

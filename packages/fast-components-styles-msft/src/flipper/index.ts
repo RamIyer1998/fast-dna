@@ -1,8 +1,18 @@
-import { IDesignSystem, withDesignSystemDefaults } from "../design-system";
+import { DesignSystem, withDesignSystemDefaults } from "../design-system";
 import { ComponentStyles, ComponentStyleSheet } from "@microsoft/fast-jss-manager";
-import { IFlipperClassNameContract } from "@microsoft/fast-components-class-name-contracts-msft";
-import { applyLocalizedProperty, contrast, Direction, toPx } from "@microsoft/fast-jss-utilities";
-import { applyMixedColor, ensureNormalContrast, hoverContrast, normalContrast } from "../utilities/colors";
+import { FlipperClassNameContract } from "@microsoft/fast-components-class-name-contracts-msft";
+import {
+    applyLocalizedProperty,
+    contrast,
+    Direction,
+    toPx,
+} from "@microsoft/fast-jss-utilities";
+import {
+    applyMixedColor,
+    ensureNormalContrast,
+    hoverContrast,
+    normalContrast,
+} from "../utilities/colors";
 import { get } from "lodash-es";
 import Chroma from "chroma-js";
 
@@ -10,9 +20,11 @@ const eastFlipperTransform: string = "translateX(-3px) rotate(45deg)";
 const westFlipperTransform: string = "translateX(3px) rotate(-135deg)";
 
 /* tslint:disable:max-line-length */
-const styles: ComponentStyles<IFlipperClassNameContract, IDesignSystem> = (config: IDesignSystem): ComponentStyleSheet<IFlipperClassNameContract, IDesignSystem> => {
-/* tslint:enable:max-line-length */
-    const designSystem: IDesignSystem = withDesignSystemDefaults(config);
+const styles: ComponentStyles<FlipperClassNameContract, DesignSystem> = (
+    config: DesignSystem
+): ComponentStyleSheet<FlipperClassNameContract, DesignSystem> => {
+    /* tslint:enable:max-line-length */
+    const designSystem: DesignSystem = withDesignSystemDefaults(config);
 
     const backgroundColor: string = designSystem.backgroundColor;
     const direction: Direction = designSystem.direction;
@@ -28,11 +40,19 @@ const styles: ComponentStyles<IFlipperClassNameContract, IDesignSystem> = (confi
         designSystem.backgroundColor
     );
 
-    const borderColorHover: string = hoverContrast(config.contrast, borderColor, backgroundColor);
-    const glyphColorHover: string = hoverContrast(config.contrast, foregroundColor, backgroundColor);
+    const borderColorHover: string = hoverContrast(
+        config.contrast,
+        borderColor,
+        backgroundColor
+    );
+    const glyphColorHover: string = hoverContrast(
+        config.contrast,
+        foregroundColor,
+        backgroundColor
+    );
 
     return {
-        button: {
+        flipper: {
             width: "40px",
             height: "40px",
             margin: "0",
@@ -46,14 +66,14 @@ const styles: ComponentStyles<IFlipperClassNameContract, IDesignSystem> = (confi
                 "& $flipper_glyph": {
                     "&::before": {
                         borderRightColor: glyphColorHover,
-                        borderTopColor: glyphColorHover
-                    }
-                }
+                        borderTopColor: glyphColorHover,
+                    },
+                },
             },
             "&:focus": {
                 boxShadow: `0 0 0 1px inset ${borderColor}`,
-                outline: "none"
-            }
+                outline: "none",
+            },
         },
         flipper_glyph: {
             display: "inline-flex",
@@ -65,21 +85,29 @@ const styles: ComponentStyles<IFlipperClassNameContract, IDesignSystem> = (confi
                 boxSizing: "border-box",
                 height: "12px",
                 width: "12px",
-                content: "\"\"",
+                content: '""',
                 borderRight: `1px solid ${foregroundColor}`,
-                borderTop: `1px solid ${foregroundColor}`
-            }
+                borderTop: `1px solid ${foregroundColor}`,
+            },
         },
-        flipper_next: {
+        flipper__next: {
             "& $flipper_glyph": {
-                transform: applyLocalizedProperty(eastFlipperTransform, westFlipperTransform, direction)
-            }
+                transform: applyLocalizedProperty(
+                    eastFlipperTransform,
+                    westFlipperTransform,
+                    direction
+                ),
+            },
         },
-        flipper_previous: {
+        flipper__previous: {
             "& $flipper_glyph": {
-                transform: applyLocalizedProperty(westFlipperTransform, eastFlipperTransform, direction)
-            }
-        }
+                transform: applyLocalizedProperty(
+                    westFlipperTransform,
+                    eastFlipperTransform,
+                    direction
+                ),
+            },
+        },
     };
 };
 

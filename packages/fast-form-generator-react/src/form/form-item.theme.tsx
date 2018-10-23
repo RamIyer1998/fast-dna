@@ -1,17 +1,20 @@
 import * as React from "react";
-import { IFormItemComponentMappingToProperyNamesProps } from "./form-item";
+import { FormItemComponentMappingToProperyNamesProps } from "./form-item";
 import styles from "./form-item.theme.style";
-import { IFormItemThemeClassNameContract } from "../class-name-contracts/";
-import manageJss, { IJSSManagerProps } from "@microsoft/fast-jss-manager-react";
-import { IManagedClasses } from "@microsoft/fast-components-class-name-contracts-base";
+import { FormItemThemeClassNameContract } from "../class-name-contracts/";
+import manageJss, { ManagedJSSProps } from "@microsoft/fast-jss-manager-react";
+import { ManagedClasses } from "@microsoft/fast-components-class-name-contracts-base";
 
 /**
  * Schema form component definition
  * @extends React.Component
  */
 /* tslint:disable-next-line */
-class FormItemTheme extends React.Component<IFormItemComponentMappingToProperyNamesProps & IManagedClasses<IFormItemThemeClassNameContract>, {}> {
-
+class FormItemTheme extends React.Component<
+    FormItemComponentMappingToProperyNamesProps &
+        ManagedClasses<FormItemThemeClassNameContract>,
+    {}
+> {
     public render(): JSX.Element {
         return (
             <div className={this.props.managedClasses.formItemTheme}>
@@ -31,10 +34,13 @@ class FormItemTheme extends React.Component<IFormItemComponentMappingToProperyNa
 
     private onChange = (value: string): void => {
         this.props.onChange(this.props.dataLocation, value);
-    }
+    };
 
     private isChecked(theme: string): boolean {
-        return this.props.data === theme || (typeof this.props.data === "undefined" && this.props.default === theme);
+        return (
+            this.props.data === theme ||
+            (typeof this.props.data === "undefined" && this.props.default === theme)
+        );
     }
 
     private getInputClassName(theme: string): string {
@@ -45,9 +51,11 @@ class FormItemTheme extends React.Component<IFormItemComponentMappingToProperyNa
 
     private renderInput(theme: string, index: number): JSX.Element {
         if (this.props.options && Array.isArray(this.props.options)) {
-            const option: any = this.props.options.find((item: string): any => {
-                return item === theme;
-            });
+            const option: any = this.props.options.find(
+                (item: string): any => {
+                    return item === theme;
+                }
+            );
 
             if (typeof option !== "undefined") {
                 const className: string = this.getInputClassName(theme);

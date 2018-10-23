@@ -1,13 +1,16 @@
 import * as React from "react";
+import { FoundationProps } from "@microsoft/fast-components-foundation-react";
 import {
-    IFoundationProps,
-    IToggleClassNameContract,
-    IToggleHandledProps,
-    IToggleUnhandledProps,
-    Toggle as BaseToggle
+    Toggle as BaseToggle,
+    ToggleClassNameContract,
+    ToggleHandledProps as BaseToggleHandledProps,
+    ToggleManagedClasses,
+    ToggleProps as BaseToggleProps,
+    ToggleUnhandledProps,
 } from "@microsoft/fast-components-react-base";
-import manageJss, { IJSSManagerProps } from "@microsoft/fast-jss-manager-react";
-import { IDesignSystem, ToggleStyles } from "@microsoft/fast-components-styles-msft";
+import manageJss, { ManagedJSSProps } from "@microsoft/fast-jss-manager-react";
+import { DesignSystem, ToggleStyles } from "@microsoft/fast-components-styles-msft";
+import { Subtract } from "utility-types";
 
 /*
  * The type returned by manageJss type is very complicated so we'll let the
@@ -15,6 +18,20 @@ import { IDesignSystem, ToggleStyles } from "@microsoft/fast-components-styles-m
  */
 /* tslint:disable-next-line:typedef */
 const Toggle = manageJss(ToggleStyles)(BaseToggle);
-type Toggle = InstanceType<typeof Toggle>;
+type Toggle = typeof Toggle;
 
-export { Toggle };
+interface ToggleHandledProps
+    extends Subtract<BaseToggleHandledProps, ToggleManagedClasses> {}
+type ToggleProps = ManagedJSSProps<
+    BaseToggleProps,
+    ToggleClassNameContract,
+    DesignSystem
+>;
+
+export {
+    Toggle,
+    ToggleProps,
+    ToggleHandledProps,
+    ToggleUnhandledProps,
+    ToggleClassNameContract,
+};

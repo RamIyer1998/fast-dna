@@ -1,36 +1,43 @@
 import * as React from "react";
-import { CanvasProps, ICanvasHandledProps, ICanvasUnhandledProps } from "./canvas.props";
-import manageJss, { ComponentStyles, IJSSManagerProps, IManagedClasses } from "@microsoft/fast-jss-manager-react";
-import Foundation, { IFoundationProps } from "../foundation";
+import { CanvasHandledProps, CanvasProps, CanvasUnhandledProps } from "./canvas.props";
+import manageJss, {
+    ComponentStyles,
+    ManagedClasses,
+    ManagedJSSProps,
+} from "@microsoft/fast-jss-manager-react";
+import Foundation, {
+    FoundationProps,
+    HandledProps,
+} from "@microsoft/fast-components-foundation-react";
 
-export interface ICanvasClassNamesContract {
+export interface CanvasClassNamesContract {
     canvas: string;
 }
 
-const styles: ComponentStyles<ICanvasClassNamesContract, undefined> = {
+export const canvasStyleSheet: ComponentStyles<CanvasClassNamesContract, undefined> = {
     canvas: {
         flex: "1",
         overflow: "hidden",
-    }
+    },
 };
 
 /**
  * Grid Canvas - this is the main content area of the grid.
  */
-class Canvas extends Foundation<CanvasProps, undefined> {
+export class Canvas extends Foundation<CanvasHandledProps, CanvasUnhandledProps, {}> {
     /**
      * Default props for the Canvas component
      */
-    public static defaultProps: ICanvasHandledProps = {
-        minWidth: 300
+    public static defaultProps: CanvasHandledProps = {
+        minWidth: 300,
     };
 
     /**
      * Handled prop enumeration
      */
-    protected handledProps: ICanvasHandledProps & IManagedClasses<ICanvasClassNamesContract> = {
+    protected handledProps: HandledProps<CanvasProps> = {
         minWidth: void 0,
-        managedClasses: void 0
+        managedClasses: void 0,
     };
 
     /**
@@ -38,7 +45,7 @@ class Canvas extends Foundation<CanvasProps, undefined> {
      */
     public renderStyleAttribute(): object {
         return {
-            minWidth: `${this.props.minWidth}px`
+            minWidth: `${this.props.minWidth}px`,
         };
     }
 
@@ -59,4 +66,4 @@ class Canvas extends Foundation<CanvasProps, undefined> {
     }
 }
 
-export default manageJss(styles)(Canvas);
+export * from "./canvas.props";

@@ -1,13 +1,20 @@
 import * as React from "react";
+import { FoundationProps } from "@microsoft/fast-components-foundation-react";
 import {
-    IButtonHandledProps as IBaseButtonHandledProps,
-    IButtonUnhandledProps,
-    IFoundationProps
+    ButtonHandledProps as BaseButtonHandledProps,
+    ButtonUnhandledProps,
 } from "@microsoft/fast-components-react-base";
-import { IFlipperClassNameContract } from "@microsoft/fast-components-class-name-contracts-msft";
-import manageJss, { IJSSManagerProps } from "@microsoft/fast-jss-manager-react";
-import { FlipperStyles, IDesignSystem } from "@microsoft/fast-components-styles-msft";
-import MSFTFlipper, { IFlipperHandledProps } from "./flipper";
+import { FlipperClassNameContract } from "@microsoft/fast-components-class-name-contracts-msft";
+import manageJss, { ManagedJSSProps } from "@microsoft/fast-jss-manager-react";
+import { DesignSystem, FlipperStyles } from "@microsoft/fast-components-styles-msft";
+import MSFTFlipper, {
+    FlipperDirection,
+    FlipperHandledProps as MSFTFlipperHandledProps,
+    FlipperManagedClasses,
+    FlipperProps as MSFTFlipperProps,
+    FlipperUnhandledProps,
+} from "./flipper";
+import { Subtract } from "utility-types";
 
 /*
  * The type returned by manageJss type is very complicated so we'll let the
@@ -15,6 +22,21 @@ import MSFTFlipper, { IFlipperHandledProps } from "./flipper";
  */
 /* tslint:disable-next-line:typedef */
 const Flipper = manageJss(FlipperStyles)(MSFTFlipper);
-type Flipper = InstanceType<typeof Flipper>;
+type Flipper = typeof Flipper;
 
-export { Flipper };
+interface FlipperHandledProps
+    extends Subtract<MSFTFlipperHandledProps, FlipperManagedClasses> {}
+type FlipperProps = ManagedJSSProps<
+    MSFTFlipperProps,
+    FlipperClassNameContract,
+    DesignSystem
+>;
+
+export {
+    Flipper,
+    FlipperProps,
+    FlipperDirection,
+    FlipperHandledProps,
+    FlipperUnhandledProps,
+    FlipperClassNameContract,
+};

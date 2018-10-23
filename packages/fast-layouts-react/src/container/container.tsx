@@ -1,34 +1,47 @@
 import * as React from "react";
-import manageJss, { ComponentStyles, IJSSManagerProps } from "@microsoft/fast-jss-manager-react";
-import { ContainerProps } from "./container.props";
-import Foundation, { IFoundationProps } from "../foundation";
+import { ComponentStyles } from "@microsoft/fast-jss-manager-react";
+import {
+    ContainerHandledProps,
+    ContainerProps,
+    ContainerUnhandledProps,
+} from "./container.props";
+import Foundation, {
+    FoundationProps,
+    HandledProps,
+} from "@microsoft/fast-components-foundation-react";
 
-export interface IContainerClassNamesContract {
-    "@global": string;
-    container: string;
+export interface ContainerClassNamesContract {
+    container?: string;
 }
 
-const styles: ComponentStyles<IContainerClassNamesContract, undefined> = {
+export const containerStyleSheet: ComponentStyles<
+    ContainerClassNamesContract,
+    undefined
+> = {
     "@global": {
         "html, body": {
             padding: 0,
-            margin: 0
-        }
+            margin: 0,
+        },
     },
     container: {
         display: "flex",
         width: "100vw",
         height: "100vh",
-        flexDirection: "column"
-    }
+        flexDirection: "column",
+    },
 };
 
 /**
  * The Grid Container. This element wraps all other grid elements.
  */
-class Container extends Foundation<ContainerProps, undefined> {
-    protected handledProps: ContainerProps = {
-        managedClasses: void 0
+export class Container extends Foundation<
+    ContainerHandledProps,
+    ContainerUnhandledProps,
+    undefined
+> {
+    protected handledProps: HandledProps<ContainerHandledProps> = {
+        managedClasses: void 0,
     };
 
     /**
@@ -46,4 +59,4 @@ class Container extends Foundation<ContainerProps, undefined> {
     }
 }
 
-export default manageJss(styles)(Container);
+export * from "./container.props";

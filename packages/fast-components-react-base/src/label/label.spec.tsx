@@ -3,47 +3,55 @@ import * as ShallowRenderer from "react-test-renderer/shallow";
 import * as Adapter from "enzyme-adapter-react-16";
 import { configure, shallow } from "enzyme";
 import examples from "./examples.data";
-import { generateSnapshots } from "@microsoft/fast-jest-snapshots-react";
+import {
+    generateSnapshots,
+    SnapshotTestSuite,
+} from "@microsoft/fast-jest-snapshots-react";
 import Label, {
-    ILabelClassNameContract,
-    ILabelHandledProps,
-    ILabelManagedClasses,
-    ILabelUnhandledProps,
+    LabelClassNameContract,
+    LabelHandledProps,
+    LabelManagedClasses,
     LabelProps,
-    LabelTag
+    LabelTag,
+    LabelUnhandledProps,
 } from "./label";
 
 /*
  * Configure Enzyme
  */
-configure({adapter: new Adapter()});
+configure({ adapter: new Adapter() });
 
 describe("label snapshot", (): void => {
-    generateSnapshots(examples);
+    generateSnapshots(examples as SnapshotTestSuite<LabelProps>);
 });
 
 describe("label", (): void => {
-    const managedClasses: ILabelClassNameContract = {
+    const managedClasses: LabelClassNameContract = {
         label: "label-class",
-        label_hidden: "label-hidden-class"
+        label__hidden: "label-hidden-class",
     };
 
     test("should have a displayName that matches the component name", () => {
         expect((Label as any).name).toBe(Label.displayName);
     });
 
+    test("should not throw if managedClasses are not provided", () => {
+        expect(() => {
+            shallow(<Label />);
+            shallow(<Label hidden={true} />);
+        }).not.toThrow();
+    });
+
     test("should return an object that includes all valid props which are not enumerated as handledProps", () => {
-        const handledProps: ILabelHandledProps & ILabelManagedClasses = {
+        const handledProps: LabelHandledProps = {
             managedClasses,
-            tag: LabelTag.label
+            tag: LabelTag.label,
         };
-        const unhandledProps: ILabelUnhandledProps = {
-            "aria-hidden": true
+        const unhandledProps: LabelUnhandledProps = {
+            "aria-hidden": true,
         };
-        const props: LabelProps = {...handledProps, ...unhandledProps};
-        const rendered: any = shallow(
-            <Label {...props} />
-        );
+        const props: LabelProps = { ...handledProps, ...unhandledProps };
+        const rendered: any = shallow(<Label {...props} />);
 
         expect(rendered.prop("aria-hidden")).not.toBe(undefined);
         expect(rendered.prop("aria-hidden")).toEqual(true);
@@ -61,9 +69,7 @@ describe("label", (): void => {
     });
 
     test("should render with a default tag of `label` if no `tag` prop is passed", () => {
-        const rendered: any = shallow(
-            <Label managedClasses={managedClasses} />
-        );
+        const rendered: any = shallow(<Label managedClasses={managedClasses} />);
 
         expect(rendered.prop("tag")).toBe(undefined);
         expect(rendered.instance().props.tag).toEqual(LabelTag.label);
@@ -81,9 +87,7 @@ describe("label", (): void => {
     });
 
     test("should add the base className", () => {
-        const rendered: any = shallow(
-            <Label managedClasses={managedClasses} />
-        );
+        const rendered: any = shallow(<Label managedClasses={managedClasses} />);
 
         expect(rendered.hasClass("label-class")).toBe(true);
     });

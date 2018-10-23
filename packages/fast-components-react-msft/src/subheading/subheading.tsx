@@ -1,49 +1,54 @@
 import * as React from "react";
 import { get } from "lodash-es";
-import { Foundation, HandledProps, TypeLevel, TypographyTag  } from "@microsoft/fast-components-react-base";
+import Foundation, { HandledProps } from "@microsoft/fast-components-foundation-react";
+import { TypographySize, TypographyTag } from "@microsoft/fast-components-react-base";
 import {
-    ISubheadingHandledProps,
-    ISubheadingManagedClasses,
-    ISubheadingUnhandledProps,
-    SubheadingLevel,
-    SubheadingTag
+    SubheadingHandledProps,
+    SubheadingManagedClasses,
+    SubheadingProps,
+    SubheadingSize,
+    SubheadingTag,
+    SubheadingUnhandledProps,
 } from "./subheading.props";
 
 import { Typography } from "../typography";
-import { IManagedClasses, ISubheadingClassNameContract } from "@microsoft/fast-components-class-name-contracts-msft";
+import {
+    ManagedClasses,
+    SubheadingClassNameContract,
+} from "@microsoft/fast-components-class-name-contracts-msft";
 
 class Subheading extends Foundation<
-    ISubheadingHandledProps & IManagedClasses<ISubheadingClassNameContract>,
-    React.HTMLAttributes<HTMLElement>,
+    SubheadingHandledProps,
+    SubheadingUnhandledProps,
     {}
 > {
-    public static defaultProps: Partial<ISubheadingHandledProps> = {
-        level: SubheadingLevel._1,
-        tag: SubheadingTag.h3
+    public static defaultProps: Partial<SubheadingProps> = {
+        size: SubheadingSize._1,
+        tag: SubheadingTag.h3,
     };
 
     public static displayName: string = "Subheading";
 
-    protected handledProps: HandledProps<ISubheadingHandledProps & IManagedClasses<ISubheadingClassNameContract>> = {
-        level: void 0,
+    protected handledProps: HandledProps<SubheadingHandledProps> = {
+        size: void 0,
         managedClasses: void 0,
-        tag: void 0
+        tag: void 0,
     };
 
-    private get level(): TypeLevel {
-        switch (this.props.level) {
-            case SubheadingLevel._1:
-                return TypeLevel._3;
-            case SubheadingLevel._2:
-                return TypeLevel._4;
-            case SubheadingLevel._3:
-                return TypeLevel._5;
-            case SubheadingLevel._4:
-                return TypeLevel._6;
-            case SubheadingLevel._5:
-                return TypeLevel._7;
-            case SubheadingLevel._6:
-                return TypeLevel._8;
+    private get size(): TypographySize {
+        switch (this.props.size) {
+            case SubheadingSize._1:
+                return TypographySize._3;
+            case SubheadingSize._2:
+                return TypographySize._4;
+            case SubheadingSize._3:
+                return TypographySize._5;
+            case SubheadingSize._4:
+                return TypographySize._6;
+            case SubheadingSize._5:
+                return TypographySize._7;
+            case SubheadingSize._6:
+                return TypographySize._8;
         }
     }
 
@@ -52,7 +57,7 @@ class Subheading extends Foundation<
             <Typography
                 {...this.unhandledProps()}
                 tag={TypographyTag[this.props.tag]}
-                typeLevel={this.level}
+                size={this.size}
                 className={this.generateClassNames()}
             >
                 {this.props.children}
@@ -61,11 +66,15 @@ class Subheading extends Foundation<
     }
 
     protected generateClassNames(): string {
-        /* tslint:disable-next-line */
-        return super.generateClassNames(`${get(this.props, "managedClasses.subheading")} ${get(this.props, `managedClasses.subheading_${this.props.level}`)}`);
+        return super.generateClassNames(
+            `${get(this.props, "managedClasses.subheading")} ${get(
+                this.props,
+                `managedClasses.subheading__${this.props.size}`
+            )}`
+        );
     }
 }
 
 export default Subheading;
 export * from "./subheading.props";
-export { ISubheadingClassNameContract };
+export { SubheadingClassNameContract };

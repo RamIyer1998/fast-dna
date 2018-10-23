@@ -1,8 +1,13 @@
 import * as React from "react";
-import { IManagedClasses, ITabsClassNameContract } from "@microsoft/fast-components-class-name-contracts-base";
+import {
+    ManagedClasses,
+    TabsClassNameContract,
+} from "@microsoft/fast-components-class-name-contracts-base";
 import { Orientation } from "@microsoft/fast-web-utilities";
 
-export interface ITabsHandledProps {
+export interface TabsManagedClasses extends ManagedClasses<TabsClassNameContract> {}
+export interface TabsUnhandledProps extends React.AllHTMLAttributes<HTMLElement> {}
+export interface TabsHandledProps extends TabsManagedClasses {
     /**
      * The active tab item id
      */
@@ -11,7 +16,7 @@ export interface ITabsHandledProps {
     /**
      * The tabs content
      */
-    children?: React.ReactNode | React.ReactNode[];
+    children?: React.ReactNode;
 
     /**
      * The aria-label applied to the tablist for the tab items
@@ -22,7 +27,7 @@ export interface ITabsHandledProps {
      * The tab update callback which is fired when a tab
      * is clicked or when the focus is switched to it on keyboard action
      */
-    onUpdateTab?: (activeTab: string) => void;
+    onUpdate?: (activeTab: string) => void;
 
     /**
      * The orientation for the tablist
@@ -45,6 +50,4 @@ export interface ITabsHandledProps {
     tabSlot?: string;
 }
 
-export interface ITabsUnhandledProps extends React.AllHTMLAttributes<HTMLElement> {}
-export interface ITabsManagedClasses extends IManagedClasses<ITabsClassNameContract> {}
-export type TabsProps = ITabsHandledProps & ITabsUnhandledProps & ITabsManagedClasses;
+export type TabsProps = TabsHandledProps & TabsUnhandledProps;

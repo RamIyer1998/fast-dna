@@ -4,7 +4,7 @@ export type BezierCurvePoint = [number, number];
 /**
  * Defines interface for a cubic bezier curve
  */
-export interface IBezierCurve {
+export interface BezierCurve {
     /**
      * Control point 1 (P0)
      */
@@ -23,8 +23,12 @@ export function cubicBezier(name: string): string {
 /**
  * Formats a cubic bezier config into a cubic bezier string
  */
-export function formatCubicBezier(points: IBezierCurve): string {
-    if (!Array.isArray(points) || !Array.isArray(points[0]) || !Array.isArray(points[1])) {
+export function formatCubicBezier(points: BezierCurve): string {
+    if (
+        !Array.isArray(points) ||
+        !Array.isArray(points[0]) ||
+        !Array.isArray(points[1])
+    ) {
         return "";
     }
 

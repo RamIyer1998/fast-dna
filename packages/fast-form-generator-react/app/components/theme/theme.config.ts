@@ -1,9 +1,5 @@
-import {
-    IFormComponentMappingToPropertyNamesProps
-} from "../../../src/form/form.props";
+import { FormComponentMappingToPropertyNamesProps } from "../../../src/form/form.props";
 
 export default {
-    theme: [
-        "theme"
-    ]
-} as IFormComponentMappingToPropertyNamesProps;
+    theme: ["theme"],
+} as FormComponentMappingToPropertyNamesProps;

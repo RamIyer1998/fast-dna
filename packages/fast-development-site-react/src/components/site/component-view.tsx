@@ -1,28 +1,32 @@
 import * as React from "react";
 import { Route, Switch, withRouter } from "react-router-dom";
 import { RouteComponentProps } from "react-router";
-import { IDevSiteDesignSystem } from "../design-system";
+import { DevSiteDesignSystem } from "../design-system";
 import { toPx } from "@microsoft/fast-jss-utilities";
-import manageJss, { ComponentStyles, IJSSManagerProps, IManagedClasses } from "@microsoft/fast-jss-manager-react";
+import manageJss, {
+    ComponentStyles,
+    ManagedClasses,
+    ManagedJSSProps,
+} from "@microsoft/fast-jss-manager-react";
 
 /**
  * Describes the possible views for a component
  */
 export enum ComponentViewTypes {
     examples,
-    detail
+    detail,
 }
 
-export interface IComponentViewManagedClasses {
+export interface ComponentViewManagedClasses {
     componentExampleView: string;
     componentDetailView: string;
 }
 
-export interface IComponentViewProps extends RouteComponentProps<{}> {
+export interface ComponentViewProps extends RouteComponentProps<{}> {
     viewType: ComponentViewTypes;
 }
 
-const style: ComponentStyles<IComponentViewManagedClasses, IDevSiteDesignSystem> = {
+const style: ComponentStyles<ComponentViewManagedClasses, DevSiteDesignSystem> = {
     componentExampleView: {
         overflow: "auto",
         flexGrow: "1",
@@ -32,11 +36,14 @@ const style: ComponentStyles<IComponentViewManagedClasses, IDevSiteDesignSystem>
     },
     componentDetailView: {
         overflow: "auto",
-        flexGrow: "1"
-    }
+        flexGrow: "1",
+    },
 };
 
-class ComponentView extends React.Component<IComponentViewProps & IManagedClasses<IComponentViewManagedClasses>, {}> {
+class ComponentView extends React.Component<
+    ComponentViewProps & ManagedClasses<ComponentViewManagedClasses>,
+    {}
+> {
     public render(): React.ReactElement<HTMLDivElement> {
         return (
             <div className={this.getClassName()}>
@@ -48,7 +55,9 @@ class ComponentView extends React.Component<IComponentViewProps & IManagedClasse
                         component={this.renderView}
                     />
                     <Route
-                        path={`${this.props.match.url}/${ComponentViewTypes[ComponentViewTypes.examples]}`}
+                        path={`${this.props.match.url}/${
+                            ComponentViewTypes[ComponentViewTypes.examples]
+                        }`}
                         exact={true}
                         component={this.renderView}
                     />
@@ -64,12 +73,8 @@ class ComponentView extends React.Component<IComponentViewProps & IManagedClasse
     }
 
     private renderView = (): React.ReactElement<HTMLElement> => {
-        return (
-            <React.Fragment>
-                {this.props.children}
-            </React.Fragment>
-        );
-    }
+        return <React.Fragment>{this.props.children}</React.Fragment>;
+    };
 }
 
 export default manageJss(style)(withRouter(ComponentView));

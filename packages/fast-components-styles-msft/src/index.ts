@@ -26,7 +26,7 @@ export { HypertextStyles };
 /**
  * Export design system defaults and typings
  */
-import DesignSystemDefaults, { IDesignSystem } from "./design-system";
+import DesignSystemDefaults, { DesignSystem } from "./design-system";
 export * from "./design-system";
 export { DesignSystemDefaults };
 
@@ -77,6 +77,12 @@ export { ParagraphStyles };
  */
 import ProgressStyles from "./progress";
 export { ProgressStyles };
+
+/**
+ * Export radio styles
+ */
+import RadioStyles from "./radio";
+export { RadioStyles };
 
 /**
  * Export subheading styles

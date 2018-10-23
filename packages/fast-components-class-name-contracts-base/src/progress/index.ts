@@ -1,6 +1,9 @@
 /**
  * The class name contract for the progress component
  */
-export interface IProgressClassNameContract {
-    progress: string;
+export interface ProgressClassNameContract {
+    /**
+     * The root of the progress component
+     */
+    progress?: string;
 }

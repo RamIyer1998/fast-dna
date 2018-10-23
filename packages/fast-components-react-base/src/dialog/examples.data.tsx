@@ -1,10 +1,14 @@
 import * as React from "react";
-import Dialog, { IDialogHandledProps, IDialogManagedClasses, IDialogUnhandledProps } from "./dialog";
+import Dialog, {
+    DialogHandledProps,
+    DialogManagedClasses,
+    DialogUnhandledProps,
+} from "./dialog";
 import schema from "./dialog.schema.json";
 import Documentation from "./.tmp/documentation";
-import { IComponentFactoryExample } from "@microsoft/fast-development-site-react";
+import { ComponentFactoryExample } from "@microsoft/fast-development-site-react";
 
-const examples: IComponentFactoryExample<IDialogHandledProps & IDialogManagedClasses> = {
+const examples: ComponentFactoryExample<DialogHandledProps> = {
     name: "Dialog",
     component: Dialog,
     schema: schema as any,
@@ -14,8 +18,8 @@ const examples: IComponentFactoryExample<IDialogHandledProps & IDialogManagedCla
         managedClasses: {
             dialog: "dialog",
             dialog_modalOverlay: "dialog-modal-overlay",
-            dialog_contentRegion: "dialog-content-region"
-        }
+            dialog_contentRegion: "dialog-content-region",
+        },
     },
     data: [
         {
@@ -24,8 +28,8 @@ const examples: IComponentFactoryExample<IDialogHandledProps & IDialogManagedCla
             managedClasses: {
                 dialog: "dialog",
                 dialog_modalOverlay: "dialog-modal-overlay",
-                dialog_contentRegion: "dialog-content-region"
-            }
+                dialog_contentRegion: "dialog-content-region",
+            },
         },
         {
             contentHeight: "350px",
@@ -34,10 +38,10 @@ const examples: IComponentFactoryExample<IDialogHandledProps & IDialogManagedCla
             managedClasses: {
                 dialog: "dialog",
                 dialog_modalOverlay: "dialog-modal-overlay",
-                dialog_contentRegion: "dialog-content-region"
-            }
-        }
-    ]
+                dialog_contentRegion: "dialog-content-region",
+            },
+        },
+    ],
 };
 
 export default examples;

@@ -3,24 +3,27 @@ import * as ShallowRenderer from "react-test-renderer/shallow";
 import * as Adapter from "enzyme-adapter-react-16";
 import { configure, shallow } from "enzyme";
 import examples from "./examples.data";
-import { generateSnapshots } from "@microsoft/fast-jest-snapshots-react";
+import {
+    generateSnapshots,
+    SnapshotTestSuite,
+} from "@microsoft/fast-jest-snapshots-react";
 import Divider, {
+    DividerClassNameContract,
+    DividerHandledProps,
+    DividerManagedClasses,
     DividerProps,
     DividerRoles,
-    IDividerClassNameContract,
-    IDividerHandledProps,
-    IDividerManagedClasses,
-    IDividerUnhandledProps
+    DividerUnhandledProps,
 } from "./divider";
 
 describe("divider snapshot", (): void => {
-    generateSnapshots(examples);
+    generateSnapshots(examples as SnapshotTestSuite<DividerProps>);
 });
 
-configure({adapter: new Adapter()});
+configure({ adapter: new Adapter() });
 
 describe("divider", (): void => {
-    const managedClasses: IDividerClassNameContract = {
+    const managedClasses: DividerClassNameContract = {
         divider: "divider-class",
     };
 
@@ -28,17 +31,21 @@ describe("divider", (): void => {
         expect((Divider as any).name).toBe(Divider.displayName);
     });
 
+    test("should not throw if managedClasses are not provided", () => {
+        expect(() => {
+            shallow(<Divider />);
+        }).not.toThrow();
+    });
+
     test("should return an object that includes all valid props which are not enumerated as handledProps", () => {
-        const handledProps: IDividerHandledProps & IDividerManagedClasses = {
-            managedClasses
+        const handledProps: DividerHandledProps = {
+            managedClasses,
         };
-        const unhandledProps: IDividerUnhandledProps = {
-            "aria-hidden": true
+        const unhandledProps: DividerUnhandledProps = {
+            "aria-hidden": true,
         };
-        const props: DividerProps = {...handledProps, ...unhandledProps};
-        const rendered: any = shallow(
-            <Divider {...props} />
-        );
+        const props: DividerProps = { ...handledProps, ...unhandledProps };
+        const rendered: any = shallow(<Divider {...props} />);
 
         expect(rendered.prop("aria-hidden")).not.toBe(undefined);
         expect(rendered.prop("aria-hidden")).toEqual(true);

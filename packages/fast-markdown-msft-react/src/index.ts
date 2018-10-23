@@ -1,21 +1,21 @@
 import CreateRule from "./rule";
 import { MarkdownIt } from "markdown-it";
-import { TypeLevel } from "@microsoft/fast-components-react-base";
-import { HeadingLevel, HeadingTag } from "@microsoft/fast-components-react-msft";
+import { TypographySize } from "@microsoft/fast-components-react-base";
+import { HeadingSize, HeadingTag } from "@microsoft/fast-components-react-msft";
 
 enum ComponentType {
     heading = "heading",
     hyperlink = "hyperlink",
     list = "list",
-    paragraph = "paragraph"
+    paragraph = "paragraph",
 }
 
-export interface ITokens<T> extends Array<T> {
+export interface Tokens<T> extends Array<T> {
     [idx: number]: T;
 }
 
-export interface IToken {
-    children: ITokens<IToken>;
+export interface Token {
+    children: Tokens<Token>;
     tag: string;
     content: string;
     info: string;
@@ -26,20 +26,32 @@ export interface IToken {
 
 class FastMarkdownIt {
     constructor(md: MarkdownIt) {
-        md.core.ruler.push("fast", (new CreateRule(md) as any));
+        md.core.ruler.push("fast", new CreateRule(md) as any);
         md.renderer.rules.paragraph_open = function(): string {
-            return `<Typography typeLevel={${TypeLevel._7}}>`;
+            return `<Typography size={${TypographySize._7}}>`;
         };
-        md.renderer.rules.heading_open = function(tokens: ITokens<IToken>, idx: number): string {
-            const id: string = tokens[idx + 1].children[0].content.toLowerCase().replace(/\s/g, "-").replace(/[^a-z\-]/g, "");
+        md.renderer.rules.heading_open = function(
+            tokens: Tokens<Token>,
+            idx: number
+        ): string {
+            const id: string = tokens[idx + 1].children[0].content
+                .toLowerCase()
+                .replace(/\s/g, "-")
+                .replace(/[^a-z\-]/g, "");
             /*tslint:disable-next-line */
-            return `<Heading id="${id}" tag="${HeadingTag[(tokens[idx].tag)]}" level={${HeadingLevel["_" + (parseInt(tokens[idx].tag.charAt(1), 10) + 2).toString()]}}>`;
+            return `<Heading id="${id}" tag="${HeadingTag[tokens[idx].tag]}" size={${
+                HeadingSize[
+                    "_" + (parseInt(tokens[idx].tag.charAt(1), 10) + 2).toString()
+                ]
+            }}>`;
         };
-        md.renderer.rules.text = (tokens: ITokens<IToken>, idx: number): string => {
+        md.renderer.rules.text = (tokens: Tokens<Token>, idx: number): string => {
             return this.replaceSpecialCharacters(tokens[idx].content);
         };
-        md.renderer.rules.fence = function(tokens: ITokens<IToken>, idx: number): string {
-            let codeSnippet: string = `<pre${tokens[idx].info ? ` className="language-${tokens[idx].info}"` : ""}><code>`;
+        md.renderer.rules.fence = function(tokens: Tokens<Token>, idx: number): string {
+            let codeSnippet: string = `<pre${
+                tokens[idx].info ? ` className="language-${tokens[idx].info}"` : ""
+            }><code>`;
             codeSnippet += `{${JSON.stringify(tokens[idx].content, null, 2)}}`;
             codeSnippet += `</code></pre>`;
 
@@ -52,8 +64,12 @@ class FastMarkdownIt {
      * as meaningful characters, these are replaced with the HTML code versions
      */
     private replaceSpecialCharacters = (content: string): string => {
-        return content.replace(/{/g, "&#123;").replace(/}/g, "&#125;").replace(/</g, "&#60;").replace(/>/g, "&#62;");
-    }
+        return content
+            .replace(/{/g, "&#123;")
+            .replace(/}/g, "&#125;")
+            .replace(/</g, "&#60;")
+            .replace(/>/g, "&#62;");
+    };
 }
 
 function plugin(md: MarkdownIt): void {

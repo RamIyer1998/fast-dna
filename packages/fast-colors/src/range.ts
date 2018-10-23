@@ -3,7 +3,7 @@ import Chroma from "chroma-js";
 /**
  * Interface that describes the configuration options of the color algorithm .
  */
-export interface IColorOptions {
+export interface ColorConfig {
     /**
      * The number of colors to generate
      */
@@ -68,7 +68,11 @@ export type Color = string;
 /**
  * A function that applies a filter to a color
  */
-export type FilterFunction = (background: Color, foreground: Color, amount: number) => Chroma;
+export type FilterFunction = (
+    background: Color,
+    foreground: Color,
+    amount: number
+) => Chroma;
 
 const white: Color = "#FFF";
 const black: Color = "#000";
@@ -76,9 +80,17 @@ const black: Color = "#000";
 /**
  * Saturates a color by a given value. If the value is lower than the lowpass it will not make an adjustment
  */
-function saturate(color: Chroma, referenceColor: Color, value: number, lowpass: number = 0.05, highpass: number = 1): Chroma {
+function saturate(
+    color: Chroma,
+    referenceColor: Color,
+    value: number,
+    lowpass: number = 0.05,
+    highpass: number = 1
+): Chroma {
     const saturation: number = Chroma(referenceColor).get("hsl.s");
-    return saturation >= lowpass && saturation <= highpass ? color.saturate(value) : color;
+    return saturation >= lowpass && saturation <= highpass
+        ? color.saturate(value)
+        : color;
 }
 
 /**
@@ -114,10 +126,10 @@ function adjustThreshold(
  * Algorithm to generate a range of color variants based on a single color, where the input color is the middle
  * of the returned color range.
  */
-export function range(color: Color, options: Partial<IColorOptions> = {}): Color[] {
+export function range(color: Color, options: Partial<ColorConfig> = {}): Color[] {
     color = Chroma(color).hex("rgb");
 
-    const defaults: IColorOptions = {
+    const defaults: ColorConfig = {
         count: 7,
         paddingLight: 0.185,
         paddingDark: 0.16,
@@ -128,14 +140,13 @@ export function range(color: Color, options: Partial<IColorOptions> = {}): Color
         filterOverlayLight: 0,
         filterOverlayDark: 0.25,
         filterMultiplyLight: 0,
-        filterMultiplyDark: 0
+        filterMultiplyDark: 0,
     };
 
-    const normalizedOptions: IColorOptions = Object.assign({}, defaults, options);
+    const normalizedOptions: ColorConfig = Object.assign({}, defaults, options);
 
     // Create the color-range to derive the color variants from
-    const colorRange: Color[] = Chroma
-        .scale([white, color, black])
+    const colorRange: Color[] = Chroma.scale([white, color, black])
         .padding([normalizedOptions.paddingLight, normalizedOptions.paddingDark])
         .colors(3);
 
@@ -157,7 +168,5 @@ export function range(color: Color, options: Partial<IColorOptions> = {}): Color
         normalizedOptions.filterOverlayDark
     );
 
-    return Chroma
-        .scale([lightest, color, darkest])
-        .colors(normalizedOptions.count);
+    return Chroma.scale([lightest, color, darkest]).colors(normalizedOptions.count);
 }

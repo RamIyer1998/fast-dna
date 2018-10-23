@@ -1,18 +1,22 @@
 import * as React from "react";
-import { IHeadingClassNameContract, IManagedClasses } from "@microsoft/fast-components-class-name-contracts-msft";
+import { TypographyUnhandledProps } from "../typography";
+import {
+    HeadingClassNameContract,
+    ManagedClasses,
+} from "@microsoft/fast-components-class-name-contracts-msft";
 
-export enum AlignHeadingBaseline {
+export enum HeadingAlignBaseline {
     small = "small",
-    large = "large"
+    large = "large",
 }
 
-export enum HeadingLevel {
+export enum HeadingSize {
     _1 = 1,
     _2 = 2,
     _3 = 3,
     _4 = 4,
     _5 = 5,
-    _6 = 6
+    _6 = 6,
 }
 
 export enum HeadingTag {
@@ -22,19 +26,20 @@ export enum HeadingTag {
     h4 = "h4",
     h5 = "h5",
     h6 = "h6",
-    p = "p"
+    p = "p",
 }
 
-export interface IHeadingHandledProps {
+export interface HeadingManagedClasses extends ManagedClasses<HeadingClassNameContract> {}
+export interface HeadingHandledProps extends HeadingManagedClasses {
     /**
      * The heading content
      */
-    children?: React.ReactNode | React.ReactNode[];
+    children?: React.ReactNode;
 
     /**
-     * The heading level
+     * The heading size
      */
-    level?: HeadingLevel;
+    size?: HeadingSize;
 
     /**
      * The heading tag
@@ -42,6 +47,6 @@ export interface IHeadingHandledProps {
     tag: HeadingTag;
 }
 
-export interface IHeadingUnhandledProps extends React.HTMLAttributes<HTMLHeadingElement | HTMLParagraphElement> {}
-export interface IHeadingManagedClasses extends IManagedClasses<IHeadingClassNameContract> {}
-export type HeadingProps = IHeadingHandledProps & IHeadingUnhandledProps & IHeadingManagedClasses;
+/* tslint:disable-next-line:no-empty-interface */
+export interface HeadingUnhandledProps extends TypographyUnhandledProps {}
+export type HeadingProps = HeadingHandledProps & HeadingUnhandledProps;

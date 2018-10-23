@@ -1,19 +1,21 @@
 import * as React from "react";
-import { ICheckboxClassNameContract, IManagedClasses } from "@microsoft/fast-components-class-name-contracts-base";
+import {
+    CheckboxClassNameContract,
+    ManagedClasses,
+} from "@microsoft/fast-components-class-name-contracts-base";
 
-/**
- * Button HTML tags
- */
-export enum CheckboxHTMLTags {
-    div = "div",
-    label = "label"
+export enum CheckboxSlot {
+    label = "label",
 }
 
-export interface ICheckboxHandledProps {
+export interface CheckboxManagedClasses
+    extends ManagedClasses<CheckboxClassNameContract> {}
+export interface CheckboxUnhandledProps extends React.AllHTMLAttributes<HTMLElement> {}
+export interface CheckboxHandledProps extends CheckboxManagedClasses {
     /**
-     * The HTML tag (defaults to CheckboxHTMLTags.checkbox)
+     * The id of the checkbox input element
      */
-    tag?: string;
+    inputId: string;
 
     /**
      * The checked state
@@ -33,15 +35,12 @@ export interface ICheckboxHandledProps {
     /**
      * The onChange event handler
      */
-    onChange?: CheckboxOnChange;
+    onChange?: (event?: React.ChangeEvent<HTMLInputElement>) => void;
 
     /**
-     * The textual content
+     * The checkbox content
      */
-    text?: string;
+    children?: React.ReactNode;
 }
 
-export interface ICheckboxUnhandledProps extends React.AllHTMLAttributes<HTMLElement> {}
-export type CheckboxOnChange = (event?: React.ChangeEvent<HTMLElement>) => void;
-export interface ICheckboxManagedClasses extends IManagedClasses<ICheckboxClassNameContract> {}
-export type CheckboxProps = ICheckboxHandledProps & ICheckboxUnhandledProps & ICheckboxManagedClasses;
+export type CheckboxProps = CheckboxHandledProps & CheckboxUnhandledProps;

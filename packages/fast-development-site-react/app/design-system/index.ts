@@ -1,11 +1,11 @@
 import { Direction } from "@microsoft/fast-application-utilities";
 
-export interface IDesignSystem {
+export interface DesignSystem {
     ltr: Direction;
 }
 
-const designSystemDefaults: IDesignSystem = {
-    ltr: Direction.ltr
+const designSystemDefaults: DesignSystem = {
+    ltr: Direction.ltr,
 };
 
 export default designSystemDefaults;

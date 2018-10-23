@@ -1,19 +1,28 @@
 import * as React from "react";
 import { get } from "lodash-es";
-import { IManagedClasses, ITabClassNameContract } from "@microsoft/fast-components-class-name-contracts-base";
-import Foundation, { HandledProps } from "../foundation";
-import { ITabHandledProps, ITabManagedClasses, ITabUnhandledProps } from "./tab.props";
+import {
+    ManagedClasses,
+    TabClassNameContract,
+} from "@microsoft/fast-components-class-name-contracts-base";
+import Foundation, { HandledProps } from "@microsoft/fast-components-foundation-react";
+import {
+    TabHandledProps,
+    TabManagedClasses,
+    TabProps,
+    TabUnhandledProps,
+} from "./tab.props";
 
-class Tab extends Foundation<
-    ITabHandledProps & ITabManagedClasses,
-    ITabUnhandledProps,
-    {}
-> {
+class Tab extends Foundation<TabHandledProps, TabUnhandledProps, {}> {
+    public static defaultProps: Partial<TabProps> = {
+        active: false,
+    };
+
     public static displayName: string = "Tab";
 
-    protected handledProps: HandledProps<ITabHandledProps & IManagedClasses<ITabClassNameContract>> = {
+    protected handledProps: HandledProps<TabHandledProps> = {
         managedClasses: void 0,
-        slot: void 0
+        active: void 0,
+        slot: void 0,
     };
 
     /**
@@ -24,6 +33,7 @@ class Tab extends Foundation<
             <div
                 {...this.unhandledProps()}
                 role="tab"
+                aria-selected={this.props.active}
                 className={this.generateClassNames()}
             >
                 {this.props.children}
@@ -35,8 +45,13 @@ class Tab extends Foundation<
      * Generates class names based on props
      */
     protected generateClassNames(): string {
-        return this.unhandledProps()["aria-selected"]
-            ? super.generateClassNames(`${get(this.props, "managedClasses.tab")} ${get(this.props, "managedClasses.tab__active")}`)
+        return this.props.active
+            ? super.generateClassNames(
+                  `${get(this.props, "managedClasses.tab")} ${get(
+                      this.props,
+                      "managedClasses.tab__active"
+                  )}`
+              )
             : super.generateClassNames(get(this.props, "managedClasses.tab"));
     }
 }

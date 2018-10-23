@@ -1,17 +1,13 @@
 import * as React from "react";
 import { omit } from "lodash-es";
-import CSSPosition, { ICSSPositionProps, Location } from "./position";
+import CSSPosition, { CSSPositionProps, Location } from "./position";
 
 /*tslint:disable-next-line*/
-export interface ICSSEditorProps extends ICSSPositionProps {}
+export interface CSSEditorProps extends CSSPositionProps {}
 
-class CSSEditor extends React.Component<ICSSEditorProps, {}> {
+class CSSEditor extends React.Component<CSSEditorProps, {}> {
     public render(): JSX.Element {
-        return (
-            <div>
-                {this.renderPosition()}
-            </div>
-        );
+        return <div>{this.renderPosition()}</div>;
     }
 
     private renderPosition(): JSX.Element {
@@ -27,15 +23,22 @@ class CSSEditor extends React.Component<ICSSEditorProps, {}> {
         );
     }
 
-    private handlePositionUpdate = (position: Partial<ICSSEditorProps>): void => {
+    private handlePositionUpdate = (position: Partial<CSSEditorProps>): void => {
         this.props.onChange(
             Object.assign(
                 {},
-                omit(this.props, ["position", "onChange", Location.top, Location.bottom, Location.left, Location.right]),
+                omit(this.props, [
+                    "position",
+                    "onChange",
+                    Location.top,
+                    Location.bottom,
+                    Location.left,
+                    Location.right,
+                ]),
                 { ...position }
             )
         );
-    }
+    };
 }
 
 export default CSSEditor;

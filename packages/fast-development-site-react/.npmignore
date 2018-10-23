@@ -1,0 +1,10 @@
+# Source files
+app/
+src/
+www/
+
+# config
+.babelrc
+tslint.json
+tsconfig.json
+webpack.config.js

@@ -1,28 +1,33 @@
 import * as React from "react";
-import { ICaptionClassNameContract, IManagedClasses  } from "@microsoft/fast-components-class-name-contracts-msft";
+import {
+    CaptionClassNameContract,
+    ManagedClasses,
+} from "@microsoft/fast-components-class-name-contracts-msft";
+import { Subtract } from "utility-types";
 
-export enum CaptionLevel {
+export enum CaptionSize {
     _1 = 1,
-    _2 = 2
+    _2 = 2,
 }
 
 export enum CaptionTag {
     p = "p",
     span = "span",
     caption = "caption",
-    figcaption = "figcaption"
+    figcaption = "figcaption",
 }
 
-export interface ICaptionHandledProps {
+export interface CaptionManagedClasses extends ManagedClasses<CaptionClassNameContract> {}
+export interface CaptionHandledProps extends CaptionManagedClasses {
     /**
      * The caption content
      */
-    children?: React.ReactNode | React.ReactNode[];
+    children?: React.ReactNode;
 
     /**
-     * The caption level maps to the type ramp
+     * The visual size (type level) which aligns to a type ramp instance
      */
-    level?: CaptionLevel;
+    size?: CaptionSize;
 
     /**
      * The caption tag maps to appropriate HTML tag type depending on context
@@ -30,7 +35,8 @@ export interface ICaptionHandledProps {
     tag?: CaptionTag;
 }
 
-export interface ICaptionUnhandledProps extends
-    React.HTMLAttributes<HTMLHeadingElement | HTMLParagraphElement | HTMLSpanElement | HTMLElement> {}
-export interface ICaptionManagedClasses extends IManagedClasses<ICaptionClassNameContract> {}
-export type CaptionProps = ICaptionHandledProps & ICaptionUnhandledProps & ICaptionManagedClasses;
+export interface CaptionUnhandledProps
+    extends React.HTMLAttributes<
+            HTMLHeadingElement | HTMLParagraphElement | HTMLSpanElement | HTMLElement
+        > {}
+export type CaptionProps = CaptionHandledProps & CaptionUnhandledProps;

@@ -1,6 +1,6 @@
 import * as React from "react";
-import { IManagedClasses } from "@microsoft/fast-jss-manager-react";
-import { IGridClassNamesContract } from "./grid";
+import { ManagedClasses } from "@microsoft/fast-jss-manager-react";
+import { GridClassNamesContract } from "./grid";
 /**
  * The HTML tag for the Grid column: 'div' | 'section' | 'form' | 'article' | 'main';
  * @name GridTag
@@ -12,7 +12,7 @@ export enum GridTag {
     section = "section",
     form = "form",
     article = "article",
-    main = "main"
+    main = "main",
 }
 
 /**
@@ -22,7 +22,7 @@ export enum GridAlignment {
     start = "start",
     center = "center",
     end = "end",
-    stretch = "stretch"
+    stretch = "stretch",
 }
 
 /**
@@ -30,7 +30,9 @@ export enum GridAlignment {
  */
 export type GridGutter = 0 | 2 | 3 | 6 | 12;
 
-export interface IGridHandledProps {
+export interface GridManagedClasses extends ManagedClasses<GridClassNamesContract> {}
+export interface GridUnhandledProps extends React.HTMLAttributes<HTMLElement> {}
+export interface GridHandledProps extends GridManagedClasses {
     /**
      * The html tag for the grid container
      */
@@ -69,4 +71,4 @@ export interface IGridHandledProps {
     row?: number;
 }
 
-export type GridProps = IGridHandledProps & IManagedClasses<IGridClassNamesContract> & React.HTMLAttributes<HTMLDivElement>;
+export type GridProps = GridHandledProps & GridUnhandledProps;

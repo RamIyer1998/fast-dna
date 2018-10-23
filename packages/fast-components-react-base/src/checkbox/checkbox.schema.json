@@ -5,15 +5,6 @@
     "type": "object",
     "id": "checkbox",
     "properties": {
-        "tag": {
-            "title": "HTML tag",
-            "type": "string",
-            "enum": [
-                "div",
-                "label"
-            ],
-            "default": "label"
-        },
         "checked": {
             "title": "Checked",
             "type": "boolean"
@@ -26,9 +17,15 @@
             "title": "Indeterminate",
             "type": "boolean"
         },
-        "text": {
-            "title": "Text",
+        "inputId": {
+            "title": "Input element ID",
             "type": "string"
+        }
+    },
+    "reactProperties": {
+        "children": {
+            "title": "Building blocks",
+            "type": "children"
         }
     }
 }

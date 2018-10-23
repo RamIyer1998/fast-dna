@@ -1,23 +1,36 @@
 import * as React from "react";
-import manageJss, { ComponentStyles, ICSSRules, IJSSManagerProps } from "@microsoft/fast-jss-manager-react";
+import manageJss, {
+    ComponentStyles,
+    CSSRules,
+    ManagedJSSProps,
+} from "@microsoft/fast-jss-manager-react";
 import BreakpointTracker from "../utilities/breakpoint-tracker";
 import { getValueByBreakpoint } from "../utilities/breakpoints";
-import { GridAlignment, GridProps, GridTag, IGridHandledProps } from "./grid.props";
-import Foundation, { IFoundationProps } from "../foundation";
-import Column from "../column";
+import {
+    GridAlignment,
+    GridHandledProps,
+    GridProps,
+    GridTag,
+    GridUnhandledProps,
+} from "./grid.props";
+import Foundation, {
+    FoundationProps,
+    HandledProps,
+} from "@microsoft/fast-components-foundation-react";
+import { Column } from "../column";
 
-export interface IGridClassNamesContract {
-    grid: string;
+export interface GridClassNamesContract {
+    grid?: string;
 }
 
-const styles: ComponentStyles<IGridClassNamesContract, undefined> = {
+export const gridStyleSheet: ComponentStyles<GridClassNamesContract, undefined> = {
     grid: {
         display: "grid",
-        gridAutoRows: "auto"
-    }
+        gridAutoRows: "auto",
+    },
 };
 
-class Grid extends Foundation<GridProps, {}> {
+export class Grid extends Foundation<GridHandledProps, GridUnhandledProps, {}> {
     /**
      * Stores HTML tag for use in render
      */
@@ -25,22 +38,22 @@ class Grid extends Foundation<GridProps, {}> {
         return this.generateHTMLTag();
     }
 
-    public static defaultProps: IGridHandledProps = {
+    public static defaultProps: Partial<GridProps> = {
         tag: GridTag.div,
         gridColumn: 2,
         gutter: 8,
         verticalAlign: GridAlignment.stretch,
-        horizontalAlign: GridAlignment.stretch
+        horizontalAlign: GridAlignment.stretch,
     };
 
-    protected handledProps: GridProps = {
+    protected handledProps: HandledProps<GridHandledProps> = {
         columnCount: void 0,
         gridColumn: void 0,
         gutter: void 0,
         horizontalAlign: void 0,
         managedClasses: void 0,
         tag: void 0,
-        verticalAlign: void 0
+        verticalAlign: void 0,
     };
 
     /**
@@ -78,10 +91,16 @@ class Grid extends Foundation<GridProps, {}> {
      * Component has updated
      */
     public componentDidUpdate(previousProps: GridProps): void {
-        if (this.shouldTrackBreakpoints(this.props) && !this.shouldTrackBreakpoints(previousProps)) {
+        if (
+            this.shouldTrackBreakpoints(this.props) &&
+            !this.shouldTrackBreakpoints(previousProps)
+        ) {
             // If we should be tracking breakpoints but previously weren't, subscribe to changes
             BreakpointTracker.subscribe(this.update);
-        } else if (!this.shouldTrackBreakpoints(this.props) && this.shouldTrackBreakpoints(previousProps)) {
+        } else if (
+            !this.shouldTrackBreakpoints(this.props) &&
+            this.shouldTrackBreakpoints(previousProps)
+        ) {
             // If we were tracking breakpoints but we shouldn't be now, unsubscribe from changes
             BreakpointTracker.unsubscribe(this.update);
         }
@@ -122,7 +141,7 @@ class Grid extends Foundation<GridProps, {}> {
      */
     private update = (): void => {
         this.forceUpdate();
-    }
+    };
 
     private generateStyleAttributes(): React.HTMLAttributes<HTMLDivElement> {
         return Object.assign({}, this.unhandledProps().style, {
@@ -132,8 +151,9 @@ class Grid extends Foundation<GridProps, {}> {
             gridRow: this.props.row,
             justifyItems: this.generateAlignment(this.props.horizontalAlign),
             alignItems: this.generateAlignment(this.props.verticalAlign),
-            msGridColumns: `1fr (${this.generateGutter()})[${this.props.columnCount - 1}]`,
-            ["msGridRow" as any]: this.props.row
+            msGridColumns: `1fr (${this.generateGutter()})[${this.props.columnCount -
+                1}]`,
+            ["msGridRow" as any]: this.props.row,
         });
     }
 
@@ -145,14 +165,21 @@ class Grid extends Foundation<GridProps, {}> {
     }
 
     private renderChildren(): React.ReactNode | React.ReactNode[] {
-        return React.Children.map(this.props.children, (child: React.ReactNode | React.ReactNode[]) => {
-            if ((child as any).type !== Column || (child as any).props.gutter) {
-                return child;
-            }
+        return React.Children.map(
+            this.props.children,
+            (child: React.ReactNode | React.ReactNode[]) => {
+                if ((child as any).type !== Column || (child as any).props.gutter) {
+                    return child;
+                }
 
-            return React.cloneElement(child as any, { gutter: this.props.gutter }, (child as any).props.children);
-        });
+                return React.cloneElement(
+                    child as any,
+                    { gutter: this.props.gutter },
+                    (child as any).props.children
+                );
+            }
+        );
     }
 }
 
-export default manageJss(styles)(Grid);
+export * from "./grid.props";

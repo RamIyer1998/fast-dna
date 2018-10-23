@@ -1,48 +1,55 @@
 import * as React from "react";
 import { toPx } from "@microsoft/fast-jss-utilities";
-import { IDevSiteDesignSystem } from "../../src/components/design-system";
-import manageJss, { ComponentStyles, IJSSManagerProps, IManagedClasses } from "@microsoft/fast-jss-manager-react";
+import { DevSiteDesignSystem } from "../../src/components/design-system";
+import manageJss, {
+    ComponentStyles,
+    ManagedClasses,
+    ManagedJSSProps,
+} from "@microsoft/fast-jss-manager-react";
 
 /* tslint:disable:no-empty-interface */
-export interface IErrorBoundaryProps {}
+export interface ErrorBoundaryProps {}
 /* tslint:enable:no-empty-interface */
 
-export interface IErrorBoundaryState {
+export interface ErrorBoundaryState {
     hasError: boolean;
     error: Error | null | undefined;
 }
 
-export interface IErrorBoundaryManagedClasses {
+export interface ErrorBoundaryManagedClasses {
     errorBoundary: string;
     errorBoundary_error: string;
     errorBoundary_notification: string;
 }
 
-const styles: ComponentStyles<IErrorBoundaryManagedClasses, IDevSiteDesignSystem> = {
+const styles: ComponentStyles<ErrorBoundaryManagedClasses, DevSiteDesignSystem> = {
     errorBoundary: {
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
-        height: "100%"
+        height: "100%",
     },
     errorBoundary_error: {
         fontSize: toPx(15),
         marginTop: "0",
-        color: "red"
+        color: "red",
     },
     errorBoundary_notification: {
         fontSize: toPx(18),
-        fontWeight: "700"
-    }
+        fontWeight: "700",
+    },
 };
 
-class ErrorBoundary extends React.Component<IErrorBoundaryProps & IManagedClasses<IErrorBoundaryManagedClasses>, IErrorBoundaryState> {
-    constructor(props: IErrorBoundaryProps & IManagedClasses<IErrorBoundaryManagedClasses>) {
+class ErrorBoundary extends React.Component<
+    ErrorBoundaryProps & ManagedClasses<ErrorBoundaryManagedClasses>,
+    ErrorBoundaryState
+> {
+    constructor(props: ErrorBoundaryProps & ManagedClasses<ErrorBoundaryManagedClasses>) {
         super(props);
 
         this.state = {
             hasError: false,
-            error: void 0
+            error: void 0,
         };
     }
 
@@ -51,7 +58,7 @@ class ErrorBoundary extends React.Component<IErrorBoundaryProps & IManagedClasse
 
         this.setState({
             hasError: true,
-            error: error || new Error(MISSING_ERROR)
+            error: error || new Error(MISSING_ERROR),
         });
     }
 
@@ -59,8 +66,12 @@ class ErrorBoundary extends React.Component<IErrorBoundaryProps & IManagedClasse
         if (this.state.hasError && this.state.error) {
             return (
                 <div className={this.props.managedClasses.errorBoundary}>
-                    <p className={this.props.managedClasses.errorBoundary_notification}>Something went wrong.</p>
-                    <p className={this.props.managedClasses.errorBoundary_error}>{`${this.state.error}`}</p>
+                    <p className={this.props.managedClasses.errorBoundary_notification}>
+                        Something went wrong.
+                    </p>
+                    <p className={this.props.managedClasses.errorBoundary_error}>{`${
+                        this.state.error
+                    }`}</p>
                 </div>
             );
         }

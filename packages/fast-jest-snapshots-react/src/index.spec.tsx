@@ -1,19 +1,17 @@
 import * as React from "react";
-import { generateSnapshots,  ISnapshotTestSuite } from "./index";
+import { generateSnapshots, SnapshotTestSuite } from "./index";
 
-interface ITestComponentProps {
+interface TestComponentProps {
     name: string;
 }
 
-class TestComponent extends React.Component<ITestComponentProps, {}> {
+class TestComponent extends React.Component<TestComponentProps, {}> {
     public render(): React.ReactNode {
-        return (
-            <div>{this.props.name}</div>
-        );
+        return <div>{this.props.name}</div>;
     }
 }
 
-const testSuite: ISnapshotTestSuite<ITestComponentProps> = {
+const testSuite: SnapshotTestSuite<TestComponentProps> = {
     name: "TestComponent",
     component: TestComponent,
     data: [
@@ -21,10 +19,10 @@ const testSuite: ISnapshotTestSuite<ITestComponentProps> = {
         [
             "should render with a snapshot title",
             {
-                name: "hello pluto"
-            }
-        ]
-    ]
+                name: "hello pluto",
+            },
+        ],
+    ],
 };
 
 /*

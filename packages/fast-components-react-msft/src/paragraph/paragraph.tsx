@@ -1,30 +1,31 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { get } from "lodash-es";
-import { Foundation, HandledProps, TypeLevel, TypographyTag } from "@microsoft/fast-components-react-base";
+import Foundation, { HandledProps } from "@microsoft/fast-components-foundation-react";
+import { TypographySize, TypographyTag } from "@microsoft/fast-components-react-base";
 import {
-    IParagraphHandledProps,
-    IParagraphManagedClasses,
-    IParagraphUnhandledProps,
-    ParagraphLevel
+    ParagraphHandledProps,
+    ParagraphManagedClasses,
+    ParagraphProps,
+    ParagraphSize,
+    ParagraphUnhandledProps,
 } from "./paragraph.props";
 import { Typography } from "../typography";
-import { IManagedClasses, IParagraphClassNameContract } from "@microsoft/fast-components-class-name-contracts-msft";
+import {
+    ManagedClasses,
+    ParagraphClassNameContract,
+} from "@microsoft/fast-components-class-name-contracts-msft";
 
-class Paragraph extends Foundation<
-    IParagraphHandledProps & IManagedClasses<IParagraphClassNameContract>,
-    React.HTMLAttributes<HTMLParagraphElement>,
-    {}
-> {
-    public static defaultProps: Partial<IParagraphHandledProps> = {
-        level: ParagraphLevel._3
+class Paragraph extends Foundation<ParagraphHandledProps, ParagraphUnhandledProps, {}> {
+    public static defaultProps: Partial<ParagraphProps> = {
+        size: ParagraphSize._3,
     };
 
     public static displayName: string = "Paragraph";
 
-    protected handledProps: HandledProps<IParagraphHandledProps & IManagedClasses<IParagraphClassNameContract>> = {
-        level: void 0,
-        managedClasses: void 0
+    protected handledProps: HandledProps<ParagraphHandledProps> = {
+        size: void 0,
+        managedClasses: void 0,
     };
 
     /**
@@ -35,7 +36,7 @@ class Paragraph extends Foundation<
             <Typography
                 {...this.unhandledProps()}
                 tag={TypographyTag.p}
-                typeLevel={this.getTypeLevel()}
+                size={this.size}
                 className={this.generateClassNames()}
             >
                 {this.props.children}
@@ -47,27 +48,31 @@ class Paragraph extends Foundation<
      * Generates class names based on props
      */
     protected generateClassNames(): string {
-        const classes: string =
-            `${get(this.props, `managedClasses.paragraph`)} ${get(this.props, `managedClasses.paragraph_${this.props.level}`)}`;
+        const classes: string = `${get(this.props, `managedClasses.paragraph`)} ${get(
+            this.props,
+            `managedClasses.paragraph__${this.props.size}`
+        )}`;
 
-        return super.generateClassNames(classes);
+        return super.generateClassNames(
+            `${get(this.props, "managedClasses.paragraph")} ${classes}`
+        );
     }
 
     /**
-     * Stores level for use in render
+     * Stores size for use in render
      */
-    private getTypeLevel(): TypeLevel {
-        switch (this.props.level) {
-            case ParagraphLevel._1:
-                return TypeLevel._5;
-            case ParagraphLevel._2:
-                return TypeLevel._6;
+    private get size(): TypographySize {
+        switch (this.props.size) {
+            case ParagraphSize._1:
+                return TypographySize._5;
+            case ParagraphSize._2:
+                return TypographySize._6;
             default:
-                return TypeLevel._7;
+                return TypographySize._7;
         }
     }
 }
 
 export default Paragraph;
 export * from "./paragraph.props";
-export { IParagraphClassNameContract };
+export { ParagraphClassNameContract };

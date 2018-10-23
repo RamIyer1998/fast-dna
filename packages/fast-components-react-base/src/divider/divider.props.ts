@@ -1,21 +1,26 @@
 import * as React from "react";
-import { IDividerClassNameContract, IManagedClasses } from "@microsoft/fast-components-class-name-contracts-base";
+import {
+    DividerClassNameContract,
+    ManagedClasses,
+} from "@microsoft/fast-components-class-name-contracts-base";
+import { Omit } from "utility-types";
 
 /**
  * Divider HTML Roles
  */
 export enum DividerRoles {
     presentation = "presentation",
-    separator = "separator"
+    separator = "separator",
 }
 
-export interface IDividerHandledProps {
+export interface DividerManagedClasses extends ManagedClasses<DividerClassNameContract> {}
+export interface DividerUnhandledProps
+    extends Omit<React.HTMLAttributes<HTMLHRElement>, "role"> {}
+export interface DividerHandledProps extends DividerManagedClasses {
     /**
      * The HTML role attribute
      */
     role?: DividerRoles;
 }
 
-export interface IDividerUnhandledProps extends React.HTMLAttributes<HTMLHRElement> {}
-export interface IDividerManagedClasses extends IManagedClasses<IDividerClassNameContract> {}
-export type DividerProps = IDividerHandledProps & IDividerUnhandledProps & IDividerManagedClasses;
+export type DividerProps = DividerHandledProps & DividerUnhandledProps;

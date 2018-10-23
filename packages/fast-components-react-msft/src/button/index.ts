@@ -1,14 +1,16 @@
 import * as React from "react";
-import {
-    IButtonClassNameContract,
-    IButtonHandledProps as IBaseButtonHandledProps,
-    IButtonUnhandledProps,
-    IFoundationProps
-} from "@microsoft/fast-components-react-base";
-import { IMSFTButtonClassNameContract } from "@microsoft/fast-components-class-name-contracts-msft";
-import manageJss, { IJSSManagerProps } from "@microsoft/fast-jss-manager-react";
-import { ButtonStyles, IDesignSystem } from "@microsoft/fast-components-styles-msft";
-import MSFTButton, { IButtonHandledProps } from "./button";
+import { ButtonClassNameContract } from "@microsoft/fast-components-class-name-contracts-msft";
+import manageJss, { ManagedJSSProps } from "@microsoft/fast-jss-manager-react";
+import { ButtonStyles, DesignSystem } from "@microsoft/fast-components-styles-msft";
+import MSFTButton, {
+    ButtonAppearance,
+    ButtonHandledProps as MSFTButtonHandledProps,
+    ButtonManagedClasses,
+    ButtonProps as MSFTButtonProps,
+    ButtonSlot,
+    ButtonUnhandledProps,
+} from "./button";
+import { Subtract } from "utility-types";
 
 /*
  * The type returned by manageJss type is very complicated so we'll let the
@@ -16,6 +18,22 @@ import MSFTButton, { IButtonHandledProps } from "./button";
  */
 /* tslint:disable-next-line:typedef */
 const Button = manageJss(ButtonStyles)(MSFTButton);
-type Button = InstanceType<typeof Button>;
+type Button = typeof Button;
 
-export { Button };
+interface ButtonHandledProps
+    extends Subtract<MSFTButtonHandledProps, ButtonManagedClasses> {}
+type ButtonProps = ManagedJSSProps<
+    MSFTButtonProps,
+    ButtonClassNameContract,
+    DesignSystem
+>;
+
+export {
+    Button,
+    ButtonAppearance,
+    ButtonSlot,
+    ButtonProps,
+    ButtonClassNameContract,
+    ButtonHandledProps,
+    ButtonUnhandledProps,
+};

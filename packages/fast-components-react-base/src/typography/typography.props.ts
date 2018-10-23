@@ -1,5 +1,8 @@
 import * as React from "react";
-import { IManagedClasses, ITypographyClassNameContract } from "@microsoft/fast-components-class-name-contracts-base";
+import {
+    ManagedClasses,
+    TypographyClassNameContract,
+} from "@microsoft/fast-components-class-name-contracts-base";
 
 export enum TypographyTag {
     caption = "caption",
@@ -11,10 +14,10 @@ export enum TypographyTag {
     h6 = "h6",
     p = "p",
     span = "span",
-    figcaption = "figcaption"
+    figcaption = "figcaption",
 }
 
-export enum TypeLevel {
+export enum TypographySize {
     _1 = 1,
     _2 = 2,
     _3 = 3,
@@ -23,14 +26,23 @@ export enum TypeLevel {
     _6 = 6,
     _7 = 7,
     _8 = 8,
-    _9 = 9
+    _9 = 9,
 }
 
-export interface ITypographyHandledProps {
+export interface TypographyUnhandledProps
+    extends React.BaseHTMLAttributes<
+            | HTMLHeadingElement
+            | HTMLParagraphElement
+            | HTMLSpanElement
+            | HTMLTableCaptionElement
+        > {}
+export interface TypographyManagedClasses
+    extends ManagedClasses<TypographyClassNameContract> {}
+export interface TypographyHandledProps extends TypographyManagedClasses {
     /**
      * The typographic content
      */
-    children?: React.ReactNode | React.ReactNode[];
+    children?: React.ReactNode;
 
     /**
      * Use the appropriate HTML tag type depending on context
@@ -38,12 +50,9 @@ export interface ITypographyHandledProps {
     tag?: TypographyTag;
 
     /**
-     * The type level which aligns to a type ramp instance
+     * The visual size (type level) which aligns to a type ramp instance
      */
-    typeLevel?: TypeLevel;
+    size?: TypographySize;
 }
 
-export interface ITypographyUnhandledProps extends
-    React.HTMLAttributes<HTMLHeadingElement | HTMLParagraphElement | HTMLSpanElement | HTMLTableCaptionElement> {}
-export interface ITypographyManagedClasses extends IManagedClasses<ITypographyClassNameContract> {}
-export type TypographyProps = ITypographyHandledProps & ITypographyUnhandledProps & ITypographyManagedClasses;
+export type TypographyProps = TypographyHandledProps & TypographyUnhandledProps;

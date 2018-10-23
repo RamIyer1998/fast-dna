@@ -1,8 +1,7 @@
 /**
  * Children class name contract
  */
-export default interface IFormItemChildrenClassNameContract {
-    "@global": string;
+export default interface FormItemChildrenClassNameContract {
     formItemChildren: string;
     formItemChildren_inputWrapper: string;
     formItemChildren_childOptionsMenu: string;

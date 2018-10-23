@@ -1,7 +1,6 @@
 import * as React from "react";
-import { IComponentFactoryExample } from "@microsoft/fast-development-site-react";
-import { TextField } from "./index";
-import { ITextFieldHandledProps, TextFieldType } from "@microsoft/fast-components-react-base";
+import { ComponentFactoryExample } from "@microsoft/fast-development-site-react";
+import { TextField, TextFieldProps, TextFieldType } from "./index";
 import schema from "@microsoft/fast-components-react-base/dist/text-field/text-field.schema.json";
 import Documentation from "./.tmp/documentation";
 
@@ -12,7 +11,7 @@ export default {
     documentation: <Documentation />,
     detailData: {
         type: TextFieldType.email,
-        placeholder: "name@email.com"
+        placeholder: "name@email.com",
     },
     data: [
         {
@@ -21,24 +20,24 @@ export default {
         },
         {
             type: TextFieldType.email,
-            defaultValue: "name@email.com"
+            defaultValue: "name@email.com",
         },
         {
             type: TextFieldType.number,
-            defaultValue: "12345"
+            defaultValue: "12345",
         },
         {
             type: TextFieldType.tel,
-            defaultValue: "(201) 867-5309"
+            defaultValue: "(201) 867-5309",
         },
         {
             disabled: true,
             type: TextFieldType.text,
-            defaultValue: "Disabled"
+            defaultValue: "Disabled",
         },
         {
             placeholder: "Enter Password",
-            type: TextFieldType.password
-        }
-    ]
-} as IComponentFactoryExample<ITextFieldHandledProps>;
+            type: TextFieldType.password,
+        },
+    ],
+} as ComponentFactoryExample<TextFieldProps>;

@@ -1,13 +1,6 @@
 import * as React from "react";
-import { IComponentFactoryExample } from "@microsoft/fast-development-site-react";
-import { Metatext } from "./index";
-import {
-    IMetatextHandledProps,
-    IMetatextManagedClasses,
-    IMetatextUnhandledProps,
-    MetatextProps,
-    MetatextTag
-} from "./metatext.props";
+import { ComponentFactoryExample } from "@microsoft/fast-development-site-react";
+import { Metatext, MetatextProps, MetatextTag } from "./index";
 import schema from "./metatext.schema.json";
 import Documentation from "./.tmp/documentation";
 
@@ -19,20 +12,20 @@ export default {
     schema: schema as any,
     documentation: <Documentation />,
     detailData: {
-        children: "Metatext"
+        children: "Metatext",
     },
     data: [
         {
-            children: testString
+            children: testString,
         },
         {
             tag: MetatextTag.p,
             children: testString,
-            "data-sketch-symbol": "Metatext"
+            "data-sketch-symbol": "Metatext",
         },
         {
             tag: MetatextTag.span,
-            children: testString
-        }
-    ]
-} as IComponentFactoryExample<IMetatextHandledProps>;
+            children: testString,
+        },
+    ],
+} as ComponentFactoryExample<MetatextProps>;

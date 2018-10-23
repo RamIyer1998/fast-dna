@@ -1,9 +1,8 @@
 import * as React from "react";
 import { getStringValue } from "./form-item.utilities";
-import IFormItemCommon from "./form-item";
+import FormItemCommon from "./form-item";
 
-export interface IFormItemTextFieldProps extends IFormItemCommon {
-
+export interface FormItemTextFieldProps extends FormItemCommon {
     /**
      * The type of text field
      */
@@ -14,16 +13,13 @@ export interface IFormItemTextFieldProps extends IFormItemCommon {
  * Schema form component definition
  * @extends React.Component
  */
-class FormItemTextField extends React.Component<IFormItemTextFieldProps, {}> {
-
+class FormItemTextField extends React.Component<FormItemTextFieldProps, {}> {
     public render(): JSX.Element {
         const value: string = getStringValue(this.props.data, this.props.default);
 
         return (
             <div>
-                <label htmlFor={this.props.dataLocation}>
-                    {this.props.label}
-                </label>
+                <label htmlFor={this.props.dataLocation}>{this.props.label}</label>
                 <input
                     id={this.props.dataLocation}
                     type={this.props.type}
@@ -51,10 +47,10 @@ class FormItemTextField extends React.Component<IFormItemTextFieldProps, {}> {
     /**
      * Handles the onChange of the input element
      */
-    private handleChange = ({target: { value }}: any): any => {
+    private handleChange = ({ target: { value } }: any): any => {
         const normalizedValue: number | string = value;
         return this.props.onChange(this.props.dataLocation, normalizedValue);
-    }
+    };
 }
 
 export default FormItemTextField;

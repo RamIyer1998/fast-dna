@@ -1,20 +1,23 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import Foundation, { HandledProps } from "../foundation";
-import { IHypertextHandledProps, IHypertextManagedClasses, IHypertextUnhandledProps } from "./hypertext.props";
-import { IHypertextClassNameContract, IManagedClasses } from "@microsoft/fast-components-class-name-contracts-base";
+import Foundation, { HandledProps } from "@microsoft/fast-components-foundation-react";
+import {
+    HypertextHandledProps,
+    HypertextManagedClasses,
+    HypertextUnhandledProps,
+} from "./hypertext.props";
+import {
+    HypertextClassNameContract,
+    ManagedClasses,
+} from "@microsoft/fast-components-class-name-contracts-base";
 import { get } from "lodash-es";
 
-class Hypertext extends Foundation<
-    IHypertextHandledProps & IManagedClasses<IHypertextClassNameContract>,
-    React.AnchorHTMLAttributes<HTMLAnchorElement>,
-    {}
-> {
+class Hypertext extends Foundation<HypertextHandledProps, HypertextUnhandledProps, {}> {
     public static displayName: string = "Hypertext";
 
-    protected handledProps: HandledProps<IHypertextHandledProps & IManagedClasses<IHypertextClassNameContract>> = {
+    protected handledProps: HandledProps<HypertextHandledProps> = {
         href: void 0,
-        managedClasses: void 0
+        managedClasses: void 0,
     };
 
     /**
@@ -42,4 +45,4 @@ class Hypertext extends Foundation<
 
 export default Hypertext;
 export * from "./hypertext.props";
-export { IHypertextClassNameContract };
+export { HypertextClassNameContract };

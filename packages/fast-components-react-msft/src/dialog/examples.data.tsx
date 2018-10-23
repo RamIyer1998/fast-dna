@@ -1,7 +1,6 @@
 import * as React from "react";
-import { IComponentFactoryExample } from "@microsoft/fast-development-site-react";
-import { Dialog } from "./index";
-import { IDialogHandledProps, IDialogManagedClasses, IDialogUnhandledProps } from "@microsoft/fast-components-react-base";
+import { ComponentFactoryExample } from "@microsoft/fast-development-site-react";
+import { Dialog, DialogProps } from "./index";
 import schema from "@microsoft/fast-components-react-base/dist/dialog/dialog.schema.json";
 import Documentation from "./.tmp/documentation";
 
@@ -13,17 +12,17 @@ export default {
     detailData: {
         contentHeight: "300px",
         contentWidth: "500px",
-        modal: true
+        modal: true,
     },
     data: [
         {
             contentHeight: "300px",
-            contentWidth: "500px"
+            contentWidth: "500px",
         },
         {
             contentHeight: "350px",
             contentWidth: "500px",
-            modal: true
-        }
-    ]
-} as IComponentFactoryExample<IDialogHandledProps>;
+            modal: true,
+        },
+    ],
+} as ComponentFactoryExample<DialogProps>;

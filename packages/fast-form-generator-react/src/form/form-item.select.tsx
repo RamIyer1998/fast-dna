@@ -1,15 +1,14 @@
 import * as React from "react";
-import IFormItemCommon from "./form-item";
+import FormItemCommon from "./form-item";
 import styles from "./form-item.select.style";
-import { IFormItemSelectClassNameContract } from "../class-name-contracts/";
-import manageJss, { IJSSManagerProps } from "@microsoft/fast-jss-manager-react";
-import { IManagedClasses } from "@microsoft/fast-components-class-name-contracts-base";
+import { FormItemSelectClassNameContract } from "../class-name-contracts/";
+import manageJss, { ManagedJSSProps } from "@microsoft/fast-jss-manager-react";
+import { ManagedClasses } from "@microsoft/fast-components-class-name-contracts-base";
 
 /**
  * Select state interface
  */
-export interface IFormItemSelectProps extends IFormItemCommon {
-
+export interface FormItemSelectProps extends FormItemCommon {
     /**
      * The select options
      */
@@ -21,8 +20,10 @@ export interface IFormItemSelectProps extends IFormItemCommon {
  * @extends React.Component
  */
 /* tslint:disable-next-line */
-class FormItemSelect extends React.Component<IFormItemSelectProps & IManagedClasses<IFormItemSelectClassNameContract>, {}> {
-
+class FormItemSelect extends React.Component<
+    FormItemSelectProps & ManagedClasses<FormItemSelectClassNameContract>,
+    {}
+> {
     /**
      * Renders the component
      */
@@ -31,9 +32,10 @@ class FormItemSelect extends React.Component<IFormItemSelectProps & IManagedClas
             return null;
         }
 
-        const value: any = (typeof this.props.data !== "undefined")
-            ? this.props.data
-            : this.props.default || this.props.options[0];
+        const value: any =
+            typeof this.props.data !== "undefined"
+                ? this.props.data
+                : this.props.default || this.props.options[0];
 
         return (
             <div className={this.props.managedClasses.formItemSelect}>
@@ -57,8 +59,11 @@ class FormItemSelect extends React.Component<IFormItemSelectProps & IManagedClas
      * Handles the onChange of the select element
      */
     private handleChange = (event: React.FormEvent<HTMLSelectElement>): void => {
-        this.props.onChange(this.props.dataLocation, this.parse((event.target as HTMLSelectElement).value));
-    }
+        this.props.onChange(
+            this.props.dataLocation,
+            this.parse((event.target as HTMLSelectElement).value)
+        );
+    };
 
     /**
      * Stringify the select value
@@ -89,11 +94,10 @@ class FormItemSelect extends React.Component<IFormItemSelectProps & IManagedClas
         return this.props.options.map((item: any, index: number) => {
             const stringifiedItem: string = this.stringify(item);
             return (
-                <option
-                    key={index}
-                    value={stringifiedItem}
-                >
-                    {typeof item === "string" || typeof item === "number" ? item : stringifiedItem}
+                <option key={index} value={stringifiedItem}>
+                    {typeof item === "string" || typeof item === "number"
+                        ? item
+                        : stringifiedItem}
                 </option>
             );
         });

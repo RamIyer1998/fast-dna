@@ -3,16 +3,12 @@
  */
 export enum Direction {
     ltr = "ltr",
-    rtl = "rtl"
+    rtl = "rtl",
 }
 
-export interface ILocaleDirectionMapping {
-    [key: string]: Direction;
-}
-
-export const localeDirectionMapping: ILocaleDirectionMapping = {
-    "en": Direction.ltr,
-    "en-rtl": Direction.rtl
+export const localeDirectionMapping: { [key: string]: Direction } = {
+    en: Direction.ltr,
+    "en-rtl": Direction.rtl,
 };
 
 export default function isRTL(locale: string): boolean {

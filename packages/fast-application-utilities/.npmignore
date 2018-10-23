@@ -1,0 +1,7 @@
+# Source files
+coverage/
+src/
+
+# Configs
+tsconfig.json
+tslint.json

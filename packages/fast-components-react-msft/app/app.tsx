@@ -1,60 +1,78 @@
+import { ComponentStyles, CSSRules } from "@microsoft/fast-jss-manager";
 import Site, {
     componentFactory,
     formChildFromExamplesFactory,
-    IFormChildOption,
-    ISiteProps,
-    ITheme,
+    FormChildOption,
     ShellSlot,
     SiteCategory,
     SiteCategoryIcon,
     SiteCategoryItem,
     SiteMenu,
     SiteMenuItem,
+    SiteProps,
     SiteTitle,
-    SiteTitleBrand
+    SiteTitleBrand,
+    Theme,
 } from "@microsoft/fast-development-site-react";
-import * as React from "react";
 import manageJss, { DesignSystemProvider } from "@microsoft/fast-jss-manager-react";
-import { DesignSystemDefaults, IDesignSystem } from "@microsoft/fast-components-styles-msft";
-import { IHypertextClassNameContract, IManagedClasses } from "@microsoft/fast-components-class-name-contracts-base";
+import {
+    DesignSystem,
+    DesignSystemDefaults,
+} from "@microsoft/fast-components-styles-msft";
+import {
+    HypertextClassNameContract,
+    ManagedClasses,
+} from "@microsoft/fast-components-class-name-contracts-base";
 import { glyphBuildingblocks } from "@microsoft/fast-glyphs-msft";
-import { ComponentStyles, ICSSRules } from "@microsoft/fast-jss-manager";
+import * as React from "react";
 import { Direction } from "@microsoft/fast-application-utilities";
 import * as examples from "./examples";
 import { Hypertext } from "../src/hypertext";
-import ColorPicker, { IColorConfig } from "./color-picker";
+import ColorPicker, { ColorConfig } from "./color-picker";
 import reactHTMLElementExamples from "./components/examples.data";
+import { Label } from "../src/label";
 
 /* tslint:disable-next-line */
 const sketchDesignKit = require("./fast-dna-msft-design-kit.sketch");
 
-const formChildOptions: IFormChildOption[] = [reactHTMLElementExamples].concat(formChildFromExamplesFactory(examples));
+const formChildOptions: FormChildOption[] = [reactHTMLElementExamples].concat(
+    formChildFromExamplesFactory(examples)
+);
 
-const hypertextStyles: ComponentStyles<IHypertextClassNameContract, undefined> = {
+const hypertextStyles: ComponentStyles<HypertextClassNameContract, undefined> = {
     hypertext: {
         margin: "0 8px",
         display: "inline-block",
         lineHeight: "1",
-        whiteSpace: "nowrap"
-    }
+        whiteSpace: "nowrap",
+    },
 };
 
-enum Theme {
+enum ThemeName {
     dark = "dark",
     light = "light",
-    custom = "custom"
+    custom = "custom",
 }
 
-export interface IAppState extends IColorConfig {
-    theme: Theme;
+export interface AppState extends ColorConfig {
+    theme: ThemeName;
     direction: Direction;
+    density: number;
 }
 
-export default class App extends React.Component<{}, IAppState> {
-    private themes: ITheme[] = [
-        {id: Theme.light, displayName: Theme.light, background: DesignSystemDefaults.backgroundColor},
-        {id: Theme.dark, displayName: Theme.dark, background: DesignSystemDefaults.foregroundColor},
-        {id: Theme.custom, displayName: Theme.custom}
+export default class App extends React.Component<{}, AppState> {
+    private themes: Theme[] = [
+        {
+            id: ThemeName.light,
+            displayName: ThemeName.light,
+            background: DesignSystemDefaults.backgroundColor,
+        },
+        {
+            id: ThemeName.dark,
+            displayName: ThemeName.dark,
+            background: DesignSystemDefaults.foregroundColor,
+        },
+        { id: ThemeName.custom, displayName: ThemeName.custom },
     ];
 
     constructor(props: {}) {
@@ -65,7 +83,8 @@ export default class App extends React.Component<{}, IAppState> {
             foregroundColor: DesignSystemDefaults.foregroundColor,
             backgroundColor: DesignSystemDefaults.backgroundColor,
             accentColor: DesignSystemDefaults.brandColor,
-            theme: Theme.light
+            theme: ThemeName.light,
+            density: DesignSystemDefaults.density,
         };
     }
 
@@ -81,10 +100,7 @@ export default class App extends React.Component<{}, IAppState> {
             >
                 <SiteMenu slot={"header"}>
                     <SiteMenuItem>
-                        <Hypertext
-                            jssStyleSheet={hypertextStyles}
-                            href={sketchDesignKit}
-                        >
+                        <Hypertext jssStyleSheet={hypertextStyles} href={sketchDesignKit}>
                             Download design kit - sketch
                         </Hypertext>
                     </SiteMenuItem>
@@ -94,86 +110,137 @@ export default class App extends React.Component<{}, IAppState> {
                 </SiteTitle>
                 <SiteCategory slot={"category"} name={"Building blocks"}>
                     <SiteCategoryIcon slot="category-icon">
-                        <div dangerouslySetInnerHTML={{__html: glyphBuildingblocks}} />
+                        <div
+                            dangerouslySetInnerHTML={{
+                                __html: glyphBuildingblocks,
+                            }}
+                        />
                     </SiteCategoryIcon>
                 </SiteCategory>
                 <SiteCategory slot={"category"} name={"Components"}>
-                    {this.sortExamples(componentFactory(examples, {...this.generateDesignSystem()}))}
+                    {this.sortExamples(
+                        componentFactory(examples, {
+                            ...this.generateDesignSystem(),
+                        })
+                    )}
                 </SiteCategory>
                 <div slot={ShellSlot.infoBar}>
-                    <ColorPicker
-                        foregroundColor={this.state.foregroundColor}
-                        backgroundColor={this.state.backgroundColor}
-                        accentColor={this.state.accentColor}
-                        onColorUpdate={this.handleColorUpdate}
-                    />
+                    <div
+                        style={{
+                            display: "flex",
+                            alignItems: "center",
+                            height: "100%",
+                        }}
+                    >
+                        <Label style={{ marginRight: "8px" }}>density</Label>
+                        <input
+                            type="range"
+                            name="density"
+                            defaultValue="1"
+                            min="0"
+                            max="2"
+                            onChange={this.handleDensityUpdate}
+                        />
+                        <ColorPicker
+                            foregroundColor={this.state.foregroundColor}
+                            backgroundColor={this.state.backgroundColor}
+                            accentColor={this.state.accentColor}
+                            onColorUpdate={this.handleColorUpdate}
+                        />
+                    </div>
                 </div>
             </Site>
         );
     }
 
-    private getThemeById(id: Theme): ITheme {
-        return this.themes.find((theme: ITheme): boolean => {
-            return theme.id === id;
-        });
+    private getThemeById(id: ThemeName): Theme {
+        return this.themes.find(
+            (theme: Theme): boolean => {
+                return theme.id === id;
+            }
+        );
     }
 
-    private generateDesignSystem(): IDesignSystem {
-        const designSystem: Partial<IDesignSystem> = {
+    private generateDesignSystem(): DesignSystem {
+        const designSystem: Partial<DesignSystem> = {
             direction: this.state.direction,
             foregroundColor: this.state.foregroundColor,
             backgroundColor: this.state.backgroundColor,
-            brandColor: this.state.accentColor
+            brandColor: this.state.accentColor,
+            density: this.state.density,
         };
 
         return Object.assign({}, DesignSystemDefaults, designSystem);
     }
 
     private handleUpdateDirection = (direction: Direction): void => {
-        const newDir: Direction = this.state.direction === Direction.ltr ? Direction.rtl : Direction.ltr;
+        const newDir: Direction =
+            this.state.direction === Direction.ltr ? Direction.rtl : Direction.ltr;
 
-        if (this.state.direction === newDir) { return; }
+        if (this.state.direction === newDir) {
+            return;
+        }
 
         this.setState({
-            direction: newDir
+            direction: newDir,
         });
-    }
+    };
 
-    private handleUpdateTheme = (theme: Theme): void => {
-        if (theme !== Theme.custom) {
+    private handleUpdateTheme = (theme: ThemeName): void => {
+        if (theme !== ThemeName.custom) {
             this.setState({
                 theme,
-                foregroundColor: theme === Theme.dark ? DesignSystemDefaults.backgroundColor : DesignSystemDefaults.foregroundColor,
-                backgroundColor: theme === Theme.dark ? DesignSystemDefaults.foregroundColor : DesignSystemDefaults.backgroundColor
+                foregroundColor:
+                    theme === ThemeName.dark
+                        ? DesignSystemDefaults.backgroundColor
+                        : DesignSystemDefaults.foregroundColor,
+                backgroundColor:
+                    theme === ThemeName.dark
+                        ? DesignSystemDefaults.foregroundColor
+                        : DesignSystemDefaults.backgroundColor,
             });
         } else {
             this.setCustomThemeBackground(this.state.backgroundColor);
             this.setState({
-                theme
+                theme,
             });
         }
-    }
+    };
 
     /**
      * Handles any changes made by the user to the color picker inputs
      */
-    private handleColorUpdate = (config: IColorConfig): void => {
+    private handleColorUpdate = (config: ColorConfig): void => {
         this.setCustomThemeBackground(config.backgroundColor);
-        this.setState(
-            config.backgroundColor !== this.state.backgroundColor || config.foregroundColor !== this.state.foregroundColor
-            ? { theme: Theme.custom, ...config }
-            : config
-        );
-    }
+        const updates: Partial<AppState> = { ...config };
 
+        if (
+            config.backgroundColor !== this.state.backgroundColor ||
+            config.foregroundColor !== this.state.foregroundColor
+        ) {
+            updates.theme = ThemeName.custom;
+        }
+
+        this.setState(updates as AppState);
+    };
+
+    private handleDensityUpdate = (e: React.ChangeEvent<HTMLInputElement>): void => {
+        this.setState({
+            density: parseInt(e.target.value, 10),
+        });
+    };
     /**
      * Assign a background color to the custom theme so that it can be applied to the background of the examples view
      * @param value The color to assign
      */
     private setCustomThemeBackground(value: string): void {
-        this.themes = this.themes.map((theme: ITheme): ITheme => {
-            return theme.id !== Theme.custom ? theme : Object.assign({}, theme, { background: value});
-        });
+        this.themes = this.themes.map(
+            (theme: Theme): Theme => {
+                return theme.id !== ThemeName.custom
+                    ? theme
+                    : Object.assign({}, theme, { background: value });
+            }
+        );
     }
 
     /**
@@ -181,7 +248,8 @@ export default class App extends React.Component<{}, IAppState> {
      */
     private sortExamples(categoryExamples: JSX.Element[]): JSX.Element[] {
         return categoryExamples.sort(
-           (a: JSX.Element, b: JSX.Element): number => a.props.name.localeCompare(b.props.name)
+            (a: JSX.Element, b: JSX.Element): number =>
+                a.props.name.localeCompare(b.props.name)
         );
     }
 }

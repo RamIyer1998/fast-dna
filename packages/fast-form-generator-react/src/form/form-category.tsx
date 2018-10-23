@@ -1,15 +1,14 @@
 import * as React from "react";
-import IFormItemCommon from "./form-item";
+import FormItemCommon from "./form-item";
 import styles from "./form-category.style";
-import { IFormCategoryClassNameContract } from "../class-name-contracts/";
-import manageJss, { IJSSManagerProps } from "@microsoft/fast-jss-manager-react";
-import { IManagedClasses } from "@microsoft/fast-components-class-name-contracts-base";
+import { FormCategoryClassNameContract } from "../class-name-contracts/";
+import manageJss, { ManagedJSSProps } from "@microsoft/fast-jss-manager-react";
+import { ManagedClasses } from "@microsoft/fast-components-class-name-contracts-base";
 
 /**
  * Select state interface
  */
-export interface IFormCategoryProps {
-
+export interface FormCategoryProps {
     /**
      * Passes the category item
      */
@@ -31,7 +30,7 @@ export interface IFormCategoryProps {
     id?: string;
 }
 
-export interface IFormCategoryState {
+export interface FormCategoryState {
     expanded?: boolean;
 }
 
@@ -40,9 +39,13 @@ export interface IFormCategoryState {
  * @extends React.Component
  */
 /* tslint:disable-next-line */
-class FormCategory extends React.Component<IFormCategoryProps & IManagedClasses<IFormCategoryClassNameContract>, IFormCategoryState> {
-
-    constructor(props: IFormCategoryProps & IManagedClasses<IFormCategoryClassNameContract>) {
+class FormCategory extends React.Component<
+    FormCategoryProps & ManagedClasses<FormCategoryClassNameContract>,
+    FormCategoryState
+> {
+    constructor(
+        props: FormCategoryProps & ManagedClasses<FormCategoryClassNameContract>
+    ) {
         super(props);
 
         if (this.props.expandable) {
@@ -56,14 +59,19 @@ class FormCategory extends React.Component<IFormCategoryProps & IManagedClasses<
      */
     public render(): JSX.Element {
         // Exit if the array is only one item long and that item is null or undefined
-        if (this.props.categoryItem.length < 1 && this.props.categoryItem[0] === null ||
-            this.props.categoryItem.length < 1 && this.props.categoryItem[0] === undefined) {
+        if (
+            (this.props.categoryItem.length < 1 && this.props.categoryItem[0] === null) ||
+            (this.props.categoryItem.length < 1 &&
+                this.props.categoryItem[0] === undefined)
+        ) {
             return;
         }
 
         return (
             <div key={this.props.id}>
-                {this.props.expandable ? this.renderHeaderButton() : this.renderHeaderTitle()}
+                {this.props.expandable
+                    ? this.renderHeaderButton()
+                    : this.renderHeaderTitle()}
                 <div
                     className={this.getClassNames()}
                     {...this.generateContainerAttributes()}
@@ -76,7 +84,7 @@ class FormCategory extends React.Component<IFormCategoryProps & IManagedClasses<
 
     private generateContainerAttributes(): React.HtmlHTMLAttributes<HTMLDivElement> {
         const attributes: Partial<React.HtmlHTMLAttributes<HTMLDivElement>> = {
-            id: this.props.id
+            id: this.props.id,
         };
 
         if (this.props.expandable) {
@@ -88,12 +96,14 @@ class FormCategory extends React.Component<IFormCategoryProps & IManagedClasses<
 
     private handleCategoryCollapse = (): void => {
         this.setState({
-            expanded: !this.state.expanded
+            expanded: !this.state.expanded,
         });
-    }
+    };
 
     private getClassNames(): string | null {
-        return this.props.expandable && !this.state.expanded ? this.props.managedClasses.formCategory__collapsed : null;
+        return this.props.expandable && !this.state.expanded
+            ? this.props.managedClasses.formCategory__collapsed
+            : null;
     }
 
     private renderHeaderButton(): JSX.Element {
@@ -110,7 +120,11 @@ class FormCategory extends React.Component<IFormCategoryProps & IManagedClasses<
     }
 
     private renderHeaderTitle(): JSX.Element {
-        return <h3 className={this.props.managedClasses.formCategory_header}>{this.props.title}</h3>;
+        return (
+            <h3 className={this.props.managedClasses.formCategory_header}>
+                {this.props.title}
+            </h3>
+        );
     }
 }
 
